@@ -10,8 +10,8 @@ import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
 import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
 import dev.detekt.rules.style.ForbiddenMethodCall.ForbiddenMethod
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 
@@ -68,10 +68,11 @@ class ForbiddenNamedParam(config: Config) :
         check(expression)
     }
 
+    @OptIn(KaExperimentalApi::class)
     private fun check(expression: KtCallExpression) {
         if (expression.valueArguments.none { it.isNamed() }) return
         analyze(expression) {
-            expression.resolveToCall()?.singleFunctionCallOrNull()?.let {
+            expression.resolveCall()?.let {
                 sequence {
                     yield(it.symbol)
                     yieldAll(it.symbol.allOverriddenSymbols)

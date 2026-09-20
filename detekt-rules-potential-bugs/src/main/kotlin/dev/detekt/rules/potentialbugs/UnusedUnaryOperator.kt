@@ -43,6 +43,7 @@ class UnusedUnaryOperator(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
     @Suppress("ReturnCount")
     override fun visitPrefixExpression(expression: KtPrefixExpression) {
         super.visitPrefixExpression(expression)

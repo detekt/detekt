@@ -6,9 +6,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -57,10 +57,10 @@ class SuspendFunInFinallySection(config: Config) :
         }
     }
 
+    @OptIn(KaExperimentalApi::class)
     private fun shouldReport(expression: KtCallExpression, topParent: KtFinallySection): Boolean =
         analyze(expression) {
-            val isSuspend = expression.resolveToCall()
-                ?.successfulFunctionCallOrNull()
+            val isSuspend = expression.resolveCall()
                 ?.isSuspendCall()
                 ?: false
             if (!isSuspend) return false
@@ -78,11 +78,11 @@ class SuspendFunInFinallySection(config: Config) :
             .takeWhile { it != topParent }
             .filterIsInstance<KtCallExpression>()
 
+    @OptIn(KaExperimentalApi::class)
     private fun Sequence<KtCallExpression>.findFunction(fqName: String) =
         firstOrNull {
             analyze(it) {
-                it.resolveToCall()
-                    ?.successfulFunctionCallOrNull()
+                it.resolveCall()
                     ?.symbol
                     ?.callableId
                     ?.run { asSingleFqName().asString() } == fqName

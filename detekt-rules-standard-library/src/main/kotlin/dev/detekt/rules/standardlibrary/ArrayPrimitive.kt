@@ -6,8 +6,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -55,10 +55,11 @@ class ArrayPrimitive(config: Config) :
     // Workaround for KT-77222: analyze() throws InvalidFirElementTypeException
     // when PSI elements have no FIR representation (e.g. unresolved types).
     // Remove runCatching once the upstream issue is fixed.
+    @OptIn(KaExperimentalApi::class)
     private fun KtCallExpression.returnsArrayPrimitive(): Boolean =
         runCatching {
             analyze(this) {
-                val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
+                val functionCall = resolveCall() ?: return false
                 val returnType = functionCall.signature.returnType
                 returnType.arrayElementType?.isPrimitive == true
             }

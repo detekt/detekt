@@ -6,8 +6,8 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isCalling
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -77,9 +77,10 @@ class UnnecessaryReversed(config: Config) :
         )
     }
 
+    @OptIn(KaExperimentalApi::class)
     private fun KtCallExpression.callableId(): CallableId? =
         analyze(this) {
-            resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
+            resolveCall()?.symbol?.callableId
         }
 
     private fun KtExpression.getPrevCallInChainOrNull(): List<KtCallExpression> =

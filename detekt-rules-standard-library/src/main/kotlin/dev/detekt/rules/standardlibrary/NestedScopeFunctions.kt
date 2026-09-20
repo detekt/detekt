@@ -9,14 +9,13 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.FunctionMatcher
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.allOverriddenSymbols
-import org.jetbrains.kotlin.analysis.api.components.resolveToCall
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.allOverriddenSymbols
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -117,12 +116,13 @@ class NestedScopeFunctions(config: Config) :
         private fun KtCallExpression.isScopeFunction(): Boolean =
             analyze(this) { callableSymbols()?.any { it.matchesScopeFunction() } ?: false }
 
-        @OptIn(KaContextParameterApi::class)
+        @OptIn(KaExperimentalApi::class)
         context(_: KaSession)
         private fun KtCallExpression.callableSymbols() =
-            resolveToCall()?.singleFunctionCallOrNull()?.let {
+            resolveSuccessfulCall()?.let {
                 sequence {
                     yield(it.symbol)
+                    contextOf<KaSession>()
                     yieldAll((it.symbol as KaCallableSymbol).allOverriddenSymbols)
                 }
             }

@@ -5,15 +5,17 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
-import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import org.jetbrains.kotlin.resolution.KtResolvableCall
 
 /**
  * This rule reports unnecessary inner classes. Nested classes that do not access members from the outer class do
@@ -107,10 +109,10 @@ class UnnecessaryInnerClass(config: Config) :
         }
     }
 
+    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
     private fun findResolvedContainingClassId(expression: KtReferenceExpression): ClassId? =
         analyze(expression) {
-            expression.resolveToCall()
-                ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+            ((expression as? KtResolvableCall)?.resolveCall() as? KaCallableMemberCall<*, *>)
                 ?.partiallyAppliedSymbol
                 ?.dispatchReceiver
                 ?.type

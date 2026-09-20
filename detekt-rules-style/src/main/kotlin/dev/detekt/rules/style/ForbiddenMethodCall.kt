@@ -11,10 +11,10 @@ import dev.detekt.api.valuesWithReason
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
+import org.jetbrains.kotlin.K1Deprecation
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.allOverriddenSymbols
 import org.jetbrains.kotlin.analysis.api.resolution.KaCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundAccessCall
@@ -27,16 +27,19 @@ import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertyAccessorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
+import org.jetbrains.kotlin.analysis.api.symbols.allOverriddenSymbols
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
+import org.jetbrains.kotlin.resolution.KtResolvableCall
 import org.jetbrains.kotlin.resolve.calls.util.asCallableReferenceExpression
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 
@@ -126,8 +129,11 @@ class ForbiddenMethodCall(config: Config) :
         check(expression.callableReference)
     }
 
+    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class, K1Deprecation::class)
     private fun check(expression: KtExpression) {
         analyze(expression) {
+            // Operator references (e.g. `==`, `++`) are not themselves resolvable; their enclosing
+            // operator expression is, so fall back to the parent when the element itself is not resolvable.
             val call = expression.resolveToCall()
                 ?: expression.asCallableReferenceExpression()?.resolveToCall()
                 ?: return
@@ -160,8 +166,7 @@ class ForbiddenMethodCall(config: Config) :
         sequence {
             val symbols = when (kaCall) {
                 is KaCallableMemberCall<*, *> -> {
-                    val expressionSymbol = kaCall.partiallyAppliedSymbol.symbol
-                    @OptIn(KaContextParameterApi::class)
+                    val expressionSymbol = kaCall.symbol
                     sequenceOf(expressionSymbol).plus(expressionSymbol.allOverriddenSymbols).map {
                         if (
                             it is KaPropertySymbol &&

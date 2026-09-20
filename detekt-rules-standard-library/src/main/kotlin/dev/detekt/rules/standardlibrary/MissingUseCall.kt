@@ -8,20 +8,23 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
-import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.allSupertypes
-import org.jetbrains.kotlin.analysis.api.components.expressionType
-import org.jetbrains.kotlin.analysis.api.components.resolveToCall
-import org.jetbrains.kotlin.analysis.api.components.returnType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.components.returnType
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
+import org.jetbrains.kotlin.analysis.api.resolution.resolveCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.allSupertypes
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
@@ -31,6 +34,7 @@ import org.jetbrains.kotlin.psi.KtClassBody
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -49,6 +53,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.psi.psiUtil.siblings
+import org.jetbrains.kotlin.resolution.KtResolvableCall
 
 /**
  * Prefer using the `use` function with `Closeable` or `AutoCloseable`. As `use` function ensures proper closure of
@@ -127,13 +132,17 @@ class MissingUseCall(config: Config) :
         }
     }
 
-    @OptIn(KaContextParameterApi::class)
+    @OptIn(KaExperimentalApi::class)
     context(_: KaSession)
     private fun isChildOfCloseable(expr: KtExpression): Boolean {
         val symbol = if (expr is KtObjectLiteralExpression) {
             expr.symbol
         } else {
-            KtPsiUtil.safeDeparenthesize(expr).resolveToCall()?.singleFunctionCallOrNull()?.symbol?.returnType?.symbol
+            (KtPsiUtil.safeDeparenthesize(expr) as? KtCallExpression)
+                ?.resolveSuccessfulCall()
+                ?.symbol
+                ?.returnType
+                ?.symbol
         } ?: return false
         return isChildOfCloseable(symbol)
     }
@@ -212,10 +221,10 @@ class MissingUseCall(config: Config) :
         return isChildOfCloseable(symbol)
     }
 
-    @OptIn(KaContextParameterApi::class)
+    @OptIn(KaExperimentalApi::class)
     context(_: KaSession)
     private fun KtQualifiedExpression.doesEndWithUse(): Boolean {
-        receiverExpression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.symbol?.let {
+        (receiverExpression as? KtCallExpression)?.resolveSuccessfulCall()?.symbol?.let {
             usedReferences.add(it)
         }
         return selectorExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
@@ -304,10 +313,11 @@ class MissingUseCall(config: Config) :
         return expression
     }
 
-    @OptIn(KaContextParameterApi::class)
+    @OptIn(KaExperimentalApi::class)
     context(_: KaSession)
     private fun KtQualifiedExpression.firstCallableReceiverOrNull(): KtElement? {
-        fun KtExpression.isCallableExpression(): Boolean = resolveToCall()?.singleFunctionCallOrNull() != null
+        fun KtExpression.isCallableExpression(): Boolean =
+            (this@isCallableExpression as? KtResolvableCall)?.resolveSuccessfulCall() != null
 
         var expression = receiverExpression
 

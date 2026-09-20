@@ -9,15 +9,18 @@ import dev.detekt.psi.hasAnnotation
 import dev.detekt.rules.coroutines.utils.isCoroutineScope
 import dev.detekt.rules.coroutines.utils.isCoroutinesFlow
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.expressionType
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -72,10 +75,10 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
         }
     }
 
-    @OptIn(KaContextParameterApi::class)
+    @OptIn(KaExperimentalApi::class)
     context(_: KaSession)
     private fun KtNamedFunction.runsInRunTestBlock(): Boolean =
-        bodyExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == RUN_TEST_CALLABLE_ID
+        (bodyExpression as? KtCallExpression)?.resolveSuccessfulCall()?.symbol?.callableId == RUN_TEST_CALLABLE_ID
 
     companion object {
         private const val MESSAGE =

@@ -11,14 +11,10 @@ import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.isAnyType
-import org.jetbrains.kotlin.analysis.api.components.isBooleanType
-import org.jetbrains.kotlin.analysis.api.components.isMarkedNullable
-import org.jetbrains.kotlin.analysis.api.components.isSubtypeOf
-import org.jetbrains.kotlin.analysis.api.components.resolveCall
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaSingleCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
@@ -26,8 +22,14 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaDestructuringDeclarationSymbo
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.KaSubtypingErrorTypePolicy
+import org.jetbrains.kotlin.analysis.api.types.classId
+import org.jetbrains.kotlin.analysis.api.types.isMarkedNullable
+import org.jetbrains.kotlin.analysis.api.types.isSubtypeOf
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -143,7 +145,7 @@ class UnnecessaryAny(config: Config) :
                 isUsageOfValueAndItEligible(parameter, left, right)
             }
 
-            is KtDotQualifiedExpression if selectorExpression.isCallingEquals() -> {
+            is KtDotQualifiedExpression if (selectorExpression as? KtCallExpression).isCallingEquals() -> {
                 isUsageOfValueAndItEligible(
                     parameter,
                     receiverExpression,
@@ -156,7 +158,7 @@ class UnnecessaryAny(config: Config) :
             }
         }
 
-    @OptIn(KaContextParameterApi::class)
+    @OptIn(KaContextParameterApi::class, KaExperimentalApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun isUsageOfValueAndItEligible(
@@ -187,16 +189,18 @@ class UnnecessaryAny(config: Config) :
             }
 
             itRefCountInLeft == 1 -> {
-                val itExpressionType = ((leftExpression as? KtResolvable)?.resolveSymbol() as? KaVariableSymbol)
-                    ?.returnType
-                    ?: return null
+                val itExpressionType =
+                    ((leftExpression as? KtResolvable)?.resolveSuccessfulSymbol() as? KaVariableSymbol)
+                        ?.returnType
+                        ?: return null
                 val valueExpressionType =
-                    ((rightExpression as? KtResolvableCall)?.resolveCall() as? KaSingleCall<*, *>)
+                    ((rightExpression as? KtResolvableCall)?.resolveSuccessfulCall() as? KaSingleCall<*, *>)
                         ?.signature
                         ?.symbol
                         ?.returnType
                         ?: return null
-                if (valueExpressionType.isSubtypeOf(itExpressionType)) {
+                contextOf<KaSession>()
+                if (valueExpressionType.isSubtypeOf(itExpressionType, KaSubtypingErrorTypePolicy.STRICT)) {
                     USE_CONTAINS_MSG
                 } else {
                     null
@@ -214,17 +218,18 @@ class UnnecessaryAny(config: Config) :
     private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) =
         collectDescendantsOfType<KtNameReferenceExpression>().count {
             @OptIn(KaExperimentalApi::class)
-            it.resolveSymbol() == symbol
+            it.resolveSuccessfulSymbol() == symbol
         }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression?.isCallingEquals(): Boolean {
         if (this == null) return false
         val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol ?: return false
         return symbol.name == Name.identifier("equals") &&
-            symbol.returnType.isBooleanType &&
-            symbol.valueParameters.singleOrNull()?.returnType?.let { it.isAnyType && it.isMarkedNullable } == true
+                symbol.returnType.classId == KaStandardTypeClassIds.BOOLEAN &&
+            symbol.valueParameters.singleOrNull()?.returnType?.let {
+                it.classId == KaStandardTypeClassIds.ANY && it.isMarkedNullable
+            } == true
     }
 
     companion object {

@@ -6,8 +6,8 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isMainFunction
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -49,12 +49,13 @@ class ExitOutsideMain(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @OptIn(KaExperimentalApi::class)
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
         if (expression.getStrictParentOfType<KtNamedFunction>()?.isMainFunction() == true) return
         val fqName = analyze(expression) {
-            expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId?.asSingleFqName()
+            expression.resolveCall()?.symbol?.callableId?.asSingleFqName()
         } ?: return
 
         if (fqName.asString() in exitCalls) {

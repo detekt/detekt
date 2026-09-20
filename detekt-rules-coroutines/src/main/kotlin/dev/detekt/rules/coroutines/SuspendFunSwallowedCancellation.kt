@@ -9,16 +9,15 @@ import dev.detekt.api.Rule
 import dev.detekt.rules.coroutines.utils.CoroutineCallableIds
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
-import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
-import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
@@ -34,15 +33,16 @@ import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtOperationExpression
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
+import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.resolution.KtResolvableCall
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
@@ -165,12 +165,12 @@ class SuspendFunSwallowedCancellation(config: Config) :
             }
         }
 
+    @OptIn(KaExperimentalApi::class)
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
         val callableId = analyze(expression) {
-            expression.resolveToCall()
-                ?.successfulFunctionCallOrNull()
+            expression.resolveCall()
                 ?.symbol
                 ?.callableId
         }
@@ -212,14 +212,12 @@ class SuspendFunSwallowedCancellation(config: Config) :
         }
     }
 
+    @OptIn(KaExperimentalApi::class)
     private fun shouldTraverseInsideImpl(element: PsiElement): Boolean =
         when (element) {
             is KtCallExpression -> {
                 analyze(element) {
-                    val functionSymbol = element.resolveToCall()
-                        ?.successfulFunctionCallOrNull()
-                        ?.symbol
-                        as? KaNamedFunctionSymbol
+                    val functionSymbol = element.resolveCall()?.symbol as? KaNamedFunctionSymbol
 
                     functionSymbol?.callableId != RUN_CATCHING_CALLABLE_ID && functionSymbol?.isInline == true
                 }
@@ -229,8 +227,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
                 val parentCallExpression = element.getParentOfType<KtCallExpression>(true) ?: return false
                 val elementArgument = element.getArgumentExpression()
                 analyze(parentCallExpression) {
-                    val valueSymbol = parentCallExpression.resolveToCall()
-                        ?.successfulFunctionCallOrNull()
+                    val valueSymbol = parentCallExpression.resolveCall()
                         ?.valueArgumentMapping
                         ?.get(elementArgument)
                         ?.symbol
@@ -242,25 +239,27 @@ class SuspendFunSwallowedCancellation(config: Config) :
             else -> true
         }
 
+    @OptIn(KaExperimentalApi::class)
     private fun KtExpression.hasSuspendCalls(): Boolean =
         when (this) {
             is KtForExpression -> {
                 analyze(this) {
-                    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
                     resolveSymbols().filterIsInstance<KaNamedFunctionSymbol>().any { it.isSuspend }
                 }
             }
 
-            is KtCallExpression, is KtOperationExpression -> {
+            is KtCallExpression, is KtBinaryExpression, is KtUnaryExpression -> {
                 analyze(this) {
-                    resolveToCall()
-                        ?.successfulCallOrNull<KaCompoundVariableAccessCall>()
+                    (resolveCall() as? KaCompoundVariableAccessCall)
                         ?.compoundOperation
                         ?.operationCall
                         ?.signature
                         ?.symbol
                         ?.isSuspend
-                        ?: (resolveToCall()?.successfulFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol)
+                        ?: (
+                            ((this@hasSuspendCalls as? KtResolvableCall)?.resolveCall() as? KaFunctionCall<*>)
+                                ?.symbol as? KaNamedFunctionSymbol
+                            )
                             ?.isSuspend
                         ?: false
                 }
@@ -268,9 +267,8 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
             is KtNameReferenceExpression -> {
                 analyze(this) {
-                    resolveToCall()
-                        ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
-                        ?.symbol
+                    resolveCall()
+                        ?.signature
                         ?.callableId == CoroutineCallableIds.CoroutineContextCallableId
                 }
             }
@@ -322,7 +320,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
     }
 
     /**
-     * Checks wheter this catch clause starts with a
+     * Checks whether this catch clause starts with a
      * `if (e is CancellationException) currentCoroutineContext().ensureActive()`
      */
     @Suppress("ReturnCount") // this seems way cleaner than nesting 3 levels deep

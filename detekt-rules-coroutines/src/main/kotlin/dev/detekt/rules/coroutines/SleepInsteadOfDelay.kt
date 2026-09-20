@@ -11,18 +11,17 @@ import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.isSuspendFunctionType
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.isSuspendFunctionType
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
-import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -91,9 +90,9 @@ class SleepInsteadOfDelay(config: Config) :
         return if (this is KtCallableReferenceExpression) {
             this.isSleepCallableRef()
         } else {
-            @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
+            @OptIn(KaExperimentalApi::class)
             val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol
-                ?: (this@isThreadSleepFunction as? KtResolvable)?.resolveSymbol() as? KaCallableSymbol
+                ?: (this@isThreadSleepFunction as? KtResolvable)?.resolveSuccessfulSymbol() as? KaCallableSymbol
             symbol?.callableId?.asSingleFqName() == FqName("java.lang.Thread.sleep")
         }
     }

@@ -8,11 +8,11 @@ import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.allSupertypes
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.allSupertypes
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
@@ -49,6 +49,7 @@ class LeakingSessionBoundType(config: Config = Config.empty) :
     ),
     RequiresAnalysisApi {
 
+    @OptIn(KaExperimentalApi::class)
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
 
@@ -56,7 +57,7 @@ class LeakingSessionBoundType(config: Config = Config.empty) :
         val callExpression = lambdaArgument.getParentOfType<KtCallExpression>(strict = true) ?: return
 
         analyze(lambdaExpression) {
-            val resolvedCall = callExpression.resolveToCall()?.singleFunctionCallOrNull() ?: return
+            val resolvedCall = callExpression.resolveCall() ?: return
             if (resolvedCall.symbol.callableId != analyzeCallableId) return
             val returnType = callExpression.expressionType ?: return
 

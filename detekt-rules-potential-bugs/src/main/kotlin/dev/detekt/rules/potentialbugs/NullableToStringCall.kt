@@ -7,8 +7,8 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isNullable
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -61,9 +61,10 @@ class NullableToStringCall(config: Config) :
         }
     }
 
+    @OptIn(KaExperimentalApi::class)
     private fun KtCallExpression.calls(callableId: CallableId): Boolean {
         analyze(this) {
-            return resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == callableId
+            return resolveCall()?.symbol?.callableId == callableId
         }
     }
 

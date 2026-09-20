@@ -10,8 +10,8 @@ import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaArgument
@@ -76,10 +76,11 @@ class NamedArguments(config: Config) :
         }
     }
 
+    @OptIn(KaExperimentalApi::class)
     @Suppress("ReturnCount")
     private fun KtCallExpression.canNameArguments(): Boolean =
         analyze(this) {
-            val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
+            val functionCall = resolveCall() ?: return false
             if (ignoreMethods.any { it.value.match(functionCall.symbol) }) return false
             if (!functionCall.symbol.hasStableParameterNames) return false
 

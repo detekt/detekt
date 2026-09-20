@@ -14,7 +14,6 @@ import dev.detekt.psi.isOperator
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
@@ -24,7 +23,6 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -119,7 +117,7 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
                         val referencePsis = (references + referencesViaOperator)
                             .mapNotNull {
                                 analyze(it) {
-                                    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+                                    @OptIn(KaExperimentalApi::class)
                                     val symbol = (
                                         (it as? KtResolvableCall)?.resolveCall() as? KaFunctionCall<*>
                                         )
@@ -173,7 +171,7 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
     private fun KtPropertyDelegate.symbols(): List<KaFunctionSymbol> {
         val delegate = (this.parent as? KtProperty)?.delegate ?: return emptyList()
         return analyze(delegate) {
-            @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+            @OptIn(KaExperimentalApi::class)
             delegate.resolveSymbols().filterIsInstance<KaFunctionSymbol>()
         }
     }
@@ -188,6 +186,7 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
      * for the whole file as Kotlin allows access to private and internal object declarations
      * from everywhere in the file.
      */
+    @OptIn(KaExperimentalApi::class)
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         super.visitReferenceExpression(expression)
         val name = when (expression) {
@@ -199,7 +198,7 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
 
             is KtCallExpression -> {
                 analyze(expression) {
-                    val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol
+                    val symbol = expression.resolveCall()?.symbol
                     val psi = symbol?.psi
                     if ((psi as? KtNamedFunction)?.isOperator() == true) {
                         invokeOperatorReferences.getOrPut(symbol) { mutableListOf() }.add(expression)

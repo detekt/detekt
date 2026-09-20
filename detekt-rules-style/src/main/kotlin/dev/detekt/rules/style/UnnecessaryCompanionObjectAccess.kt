@@ -83,6 +83,7 @@ class UnnecessaryCompanionObjectAccess(config: Config) :
         analyzeCompanionNameReference(companionNameRef, companionQualifier)
     }
 
+    @OptIn(KaExperimentalApi::class)
     @Suppress("CyclomaticComplexMethod")
     private fun analyzeCompanionNameReference(
         companionNameRef: KtNameReferenceExpression,

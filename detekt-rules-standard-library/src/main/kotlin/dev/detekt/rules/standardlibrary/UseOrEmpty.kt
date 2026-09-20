@@ -6,10 +6,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
-import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
@@ -48,6 +47,7 @@ class UseOrEmpty(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @OptIn(KaExperimentalApi::class)
     @Suppress("ReturnCount")
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
@@ -62,7 +62,7 @@ class UseOrEmpty(config: Config) :
             if (!leftType.isMarkedNullable) return
             KtPsiUtil.safeDeparenthesize(left).let {
                 if (it is KtArrayAccessExpression) {
-                    val called = it.resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
+                    val called = it.resolveCall()?.symbol
                     if (called?.isOperator == true && called.typeParameters.isNotEmpty()) return
                 }
             }
@@ -75,6 +75,7 @@ class UseOrEmpty(config: Config) :
         report(Finding(Entity.from(expression), message))
     }
 
+    @OptIn(KaExperimentalApi::class)
     private fun KtExpression.isEmptyElement(): Boolean {
         when (this) {
             is KtCallExpression -> {
@@ -83,7 +84,7 @@ class UseOrEmpty(config: Config) :
                 val factoryFunction = factoryFunctions[calleeText]
                 if (emptyFunction == null && factoryFunction == null) return false
                 analyze(this) {
-                    val callableId = resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId ?: return false
+                    val callableId = resolveCall()?.symbol?.callableId ?: return false
                     return callableId == emptyFunction || (callableId == factoryFunction && valueArguments.isEmpty())
                 }
             }

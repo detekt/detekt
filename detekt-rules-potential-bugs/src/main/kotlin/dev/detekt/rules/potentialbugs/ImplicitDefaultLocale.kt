@@ -6,8 +6,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.CallableId
@@ -53,11 +54,12 @@ class ImplicitDefaultLocale(config: Config) :
     }
 
     @Suppress("ReturnCount")
+    @OptIn(KaExperimentalApi::class)
     private fun checkStringFormatting(expression: KtQualifiedExpression) {
         val formatCallId = formatCallIds[expression.getCalleeExpressionIfAny()?.text] ?: return
 
         analyze(expression) {
-            val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol ?: return
+            val symbol = (expression.resolveCall() as? KaFunctionCall<*>)?.symbol ?: return
             if (symbol.callableId != formatCallId) return
             if (symbol.valueParameters.firstOrNull()?.returnType?.symbol?.classId == localeClassId) return
 

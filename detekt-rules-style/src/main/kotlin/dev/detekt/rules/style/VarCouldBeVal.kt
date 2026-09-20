@@ -16,9 +16,10 @@ import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
+import org.jetbrains.kotlin.K1Deprecation
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
@@ -205,7 +206,7 @@ class VarCouldBeVal(config: Config) :
 
                 is KtNameReferenceExpression -> {
                     @OptIn(KaExperimentalApi::class)
-                    returnedExpression.resolveSymbol()?.let {
+                    returnedExpression.resolveSuccessfulSymbol()?.let {
                         escapeCandidates[it]?.forEach(declarationCandidates::remove)
                     }
                 }
@@ -223,6 +224,7 @@ class VarCouldBeVal(config: Config) :
             }
         }
 
+        @OptIn(K1Deprecation::class)
         private fun KtProperty.isDeclarationCandidate(): Boolean =
             when {
                 !isVar || isOverride() || (ignoreLateinitVar && isLateinit()) -> false
