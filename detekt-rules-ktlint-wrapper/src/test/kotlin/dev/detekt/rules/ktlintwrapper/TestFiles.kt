@@ -1,6 +1,6 @@
 package dev.detekt.rules.ktlintwrapper
 
-import com.intellij.openapi.util.text.StringUtilRt
+import com.intellij.openapi.util.text.StringUtil
 import dev.detekt.api.Finding
 import dev.detekt.test.FakeLanguageVersionSettings
 import dev.detekt.test.utils.compileContentForTest
@@ -20,7 +20,7 @@ internal fun KtlintRule.lint(@Language("kotlin") content: String, fileName: Stri
 
 fun loadFile(resourceName: String) = compileForTest(resource(resourceName).toPath())
 
-fun loadFileContent(resourceName: String) = StringUtilRt.convertLineSeparators(File(resource(resourceName)).readText())
+fun loadFileContent(resourceName: String) = StringUtil.convertLineSeparators(File(resource(resourceName)).readText())
 
 val contentAfterChainWrapping = """
     fun main() {
