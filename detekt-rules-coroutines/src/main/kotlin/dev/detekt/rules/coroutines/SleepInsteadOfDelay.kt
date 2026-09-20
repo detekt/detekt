@@ -7,16 +7,17 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -25,6 +26,7 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
+import org.jetbrains.kotlin.resolution.KtResolvable
 
 /**
  * Report usages of `Thread.sleep` in suspending functions and coroutine blocks. A thread can
@@ -84,8 +86,9 @@ class SleepInsteadOfDelay(config: Config) :
             this.isSleepCallableRef()
         } else {
             with(session) {
+                @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
                 val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol
-                    ?: mainReference?.resolveToSymbol() as? KaCallableSymbol
+                    ?: (this@isThreadSleepFunction as? KtResolvable)?.resolveSymbol() as? KaCallableSymbol
                 symbol?.callableId?.asSingleFqName() == FqName("java.lang.Thread.sleep")
             }
         }

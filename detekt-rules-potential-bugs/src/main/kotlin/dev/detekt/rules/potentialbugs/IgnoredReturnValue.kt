@@ -13,6 +13,7 @@ import dev.detekt.api.config
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.isCalling
 import dev.detekt.psi.pathGlobToRegex
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
@@ -23,13 +24,13 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
 import org.jetbrains.kotlin.analysis.api.types.KaType
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.load.java.JavaClassFinderImpl
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
@@ -205,7 +206,8 @@ class IgnoredReturnValue(config: Config) :
                 with(session) {
                     val symbol = lambda.functionLiteral.symbol
                     val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
-                    label?.mainReference?.resolveToSymbol() == symbol
+                    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+                    label?.resolveSymbol() == symbol
                 }
             }
 

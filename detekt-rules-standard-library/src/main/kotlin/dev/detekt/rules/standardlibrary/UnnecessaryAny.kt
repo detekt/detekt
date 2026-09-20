@@ -7,17 +7,16 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.firstParameterOrNull
 import dev.detekt.psi.isCalling
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
-import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.KaSingleCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDestructuringDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -26,12 +25,15 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.resolution.KtResolvable
+import org.jetbrains.kotlin.resolution.KtResolvableCall
 
 /**
  * Turn on this rule to flag usage of `any` which can either be replaced with simple `contains` call
@@ -172,16 +174,17 @@ class UnnecessaryAny(config: Config) :
             }
 
             itRefCountInLeft == 1 -> {
+                @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
                 with(session) {
-                    val itExpressionType = (leftExpression.mainReference?.resolveToSymbol() as? KaVariableSymbol)
+                    val itExpressionType = ((leftExpression as? KtResolvable)?.resolveSymbol() as? KaVariableSymbol)
                         ?.returnType
                         ?: return null
-                    val valueExpressionType = rightExpression
-                        .resolveToCall()
-                        ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
-                        ?.symbol
-                        ?.returnType
-                        ?: return null
+                    val valueExpressionType =
+                        ((rightExpression as? KtResolvableCall)?.resolveCall() as? KaSingleCall<*, *>)
+                            ?.signature
+                            ?.symbol
+                            ?.returnType
+                            ?: return null
                     if (valueExpressionType.isSubtypeOf(itExpressionType)) {
                         USE_CONTAINS_MSG
                     } else {
@@ -200,7 +203,8 @@ class UnnecessaryAny(config: Config) :
     private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) =
         with(session) {
             collectDescendantsOfType<KtNameReferenceExpression>().count {
-                it.mainReference.resolveToSymbol() == symbol
+                @OptIn(KaExperimentalApi::class)
+                it.resolveSymbol() == symbol
             }
         }
 
