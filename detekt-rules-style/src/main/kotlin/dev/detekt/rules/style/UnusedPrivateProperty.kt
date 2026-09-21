@@ -16,6 +16,7 @@ import dev.detekt.psi.isExpect
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.containingDeclaration
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
@@ -249,10 +250,6 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
     fun KaSymbol.isPrivateProperty() = this is KaPropertySymbol && this.visibility == KaSymbolVisibility.PRIVATE
 
     context(session: KaSession)
-    fun KaSymbol.isConstructorParameter(): Boolean {
-        val symbol = this
-        return with(session) {
-            symbol is KaValueParameterSymbol && symbol.containingDeclaration is KaConstructorSymbol
-        }
-    }
+    fun KaSymbol.isConstructorParameter(): Boolean =
+        this is KaValueParameterSymbol && containingDeclaration is KaConstructorSymbol
 }

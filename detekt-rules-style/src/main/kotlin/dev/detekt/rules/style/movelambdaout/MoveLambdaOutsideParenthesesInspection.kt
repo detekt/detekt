@@ -2,6 +2,8 @@ package dev.detekt.rules.style.movelambdaout
 
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.isFunctionType
+import org.jetbrains.kotlin.analysis.api.components.isSuspendFunctionType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
@@ -66,17 +68,11 @@ private fun KtCallExpression.canMoveLambdaOutsideParentheses(): Boolean {
 
 context(session: KaSession)
 private val KaType.isFunctionOrSuspendFunctionType: Boolean
-    get() = with(session) {
-        this@isFunctionOrSuspendFunctionType.isFunctionType ||
-            this@isFunctionOrSuspendFunctionType.isSuspendFunctionType
-    }
+    get() = isFunctionType || isSuspendFunctionType
 
 context(session: KaSession)
 private val KaType.isFunctionOrSuspendingFunctionOrGenericType: Boolean
-    get() = with(session) {
-        this@isFunctionOrSuspendingFunctionOrGenericType.isFunctionOrSuspendFunctionType ||
-            this@isFunctionOrSuspendingFunctionOrGenericType is KaTypeParameterType
-    }
+    get() = isFunctionOrSuspendFunctionType || this is KaTypeParameterType
 
 private fun KtCallExpression.isEligible(): Boolean =
     when {

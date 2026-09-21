@@ -10,6 +10,13 @@ import dev.detekt.psi.isCalling
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.isAnyType
+import org.jetbrains.kotlin.analysis.api.components.isBooleanType
+import org.jetbrains.kotlin.analysis.api.components.isMarkedNullable
+import org.jetbrains.kotlin.analysis.api.components.isSubtypeOf
+import org.jetbrains.kotlin.analysis.api.components.resolveCall
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaSingleCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -159,6 +166,7 @@ class UnnecessaryAny(config: Config) :
 
         val itRefCountInLeft = leftExpression.getItUsageCount(parameter)
         val itRefCountInRight = rightExpression.getItUsageCount(parameter)
+        @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
         return when {
             itRefCountInLeft > 0 && itRefCountInRight > 0 -> {
                 // both side `it` has been used
@@ -176,22 +184,19 @@ class UnnecessaryAny(config: Config) :
             }
 
             itRefCountInLeft == 1 -> {
-                @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
-                with(session) {
-                    val itExpressionType = ((leftExpression as? KtResolvable)?.resolveSymbol() as? KaVariableSymbol)
+                val itExpressionType = ((leftExpression as? KtResolvable)?.resolveSymbol() as? KaVariableSymbol)
+                    ?.returnType
+                    ?: return null
+                val valueExpressionType =
+                    ((rightExpression as? KtResolvableCall)?.resolveCall() as? KaSingleCall<*, *>)
+                        ?.signature
+                        ?.symbol
                         ?.returnType
                         ?: return null
-                    val valueExpressionType =
-                        ((rightExpression as? KtResolvableCall)?.resolveCall() as? KaSingleCall<*, *>)
-                            ?.signature
-                            ?.symbol
-                            ?.returnType
-                            ?: return null
-                    if (valueExpressionType.isSubtypeOf(itExpressionType)) {
-                        USE_CONTAINS_MSG
-                    } else {
-                        null
-                    }
+                if (valueExpressionType.isSubtypeOf(itExpressionType)) {
+                    USE_CONTAINS_MSG
+                } else {
+                    null
                 }
             }
 
@@ -203,22 +208,18 @@ class UnnecessaryAny(config: Config) :
 
     context(session: KaSession)
     private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) =
-        with(session) {
-            collectDescendantsOfType<KtNameReferenceExpression>().count {
-                @OptIn(KaExperimentalApi::class)
-                it.resolveSymbol() == symbol
-            }
+        collectDescendantsOfType<KtNameReferenceExpression>().count {
+            @OptIn(KaExperimentalApi::class)
+            it.resolveSymbol() == symbol
         }
 
     context(session: KaSession)
     private fun KtExpression?.isCallingEquals(): Boolean {
         if (this == null) return false
-        with(session) {
-            val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol ?: return false
-            return symbol.name == Name.identifier("equals") &&
-                symbol.returnType.isBooleanType &&
-                symbol.valueParameters.singleOrNull()?.returnType?.let { it.isAnyType && it.isMarkedNullable } == true
-        }
+        val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol ?: return false
+        return symbol.name == Name.identifier("equals") &&
+            symbol.returnType.isBooleanType &&
+            symbol.valueParameters.singleOrNull()?.returnType?.let { it.isAnyType && it.isMarkedNullable } == true
     }
 
     companion object {

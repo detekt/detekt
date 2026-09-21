@@ -16,9 +16,11 @@ import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -105,11 +107,9 @@ class VarCouldBeVal(config: Config) :
             val declarationName = nameAsSafeName.toString()
             val assignments = assignments[declarationName]
             if (assignments.isNullOrEmpty()) return false
-            with(session) {
-                val declarationSymbol = symbol
-                return assignments.any {
-                    it.resolveToCall()?.singleVariableAccessCall()?.symbol == declarationSymbol
-                }
+            val declarationSymbol = symbol
+            return assignments.any {
+                it.resolveToCall()?.singleVariableAccessCall()?.symbol == declarationSymbol
             }
         }
 

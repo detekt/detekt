@@ -10,10 +10,14 @@ import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.isSuspendFunctionType
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -85,12 +89,10 @@ class SleepInsteadOfDelay(config: Config) :
         return if (this is KtCallableReferenceExpression) {
             this.isSleepCallableRef()
         } else {
-            with(session) {
-                @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
-                val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol
-                    ?: (this@isThreadSleepFunction as? KtResolvable)?.resolveSymbol() as? KaCallableSymbol
-                symbol?.callableId?.asSingleFqName() == FqName("java.lang.Thread.sleep")
-            }
+            @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
+            val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol
+                ?: (this@isThreadSleepFunction as? KtResolvable)?.resolveSymbol() as? KaCallableSymbol
+            symbol?.callableId?.asSingleFqName() == FqName("java.lang.Thread.sleep")
         }
     }
 
@@ -99,12 +101,10 @@ class SleepInsteadOfDelay(config: Config) :
     private fun getNearestParentForSuspension(psiElement: PsiElement): PsiElement? {
         fun KtValueArgument.isNearestParentForSuspension(): Boolean {
             val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
-            with(session) {
-                val functionCall = parent.resolveToCall()?.singleFunctionCallOrNull() ?: return false
-                val functionSymbol = functionCall.symbol as? KaNamedFunctionSymbol ?: return false
-                val parameterSymbol = functionCall.valueArgumentMapping[getArgumentExpression()]?.symbol ?: return false
-                return functionSymbol.isInline.not() || parameterSymbol.isNoinline || parameterSymbol.isCrossinline
-            }
+            val functionCall = parent.resolveToCall()?.singleFunctionCallOrNull() ?: return false
+            val functionSymbol = functionCall.symbol as? KaNamedFunctionSymbol ?: return false
+            val parameterSymbol = functionCall.valueArgumentMapping[getArgumentExpression()]?.symbol ?: return false
+            return functionSymbol.isInline.not() || parameterSymbol.isNoinline || parameterSymbol.isCrossinline
         }
         return psiElement.getParentOfTypesAndPredicate(
             false,
@@ -134,26 +134,18 @@ class SleepInsteadOfDelay(config: Config) :
     private fun KtValueArgument.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
         val argumentExpression = this.getArgumentExpression() ?: return false
-        with(session) {
-            val parameter = parent.resolveToCall()?.singleFunctionCallOrNull()?.valueArgumentMapping[argumentExpression]
-            return parameter?.returnType?.isSuspendFunctionType == true
-        }
+        val parameter = parent.resolveToCall()?.singleFunctionCallOrNull()?.valueArgumentMapping[argumentExpression]
+        return parameter?.returnType?.isSuspendFunctionType == true
     }
 
     context(session: KaSession)
     private fun KtLambdaExpression.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtProperty::class.java) ?: return false
-        with(session) {
-            return parent.symbol.returnType.isSuspendFunctionType
-        }
+        return parent.symbol.returnType.isSuspendFunctionType
     }
 
     context(session: KaSession)
-    private fun KtNamedFunction.isSuspendAllowed(): Boolean {
-        with(session) {
-            return (symbol as? KaNamedFunctionSymbol)?.isSuspend == true
-        }
-    }
+    private fun KtNamedFunction.isSuspendAllowed(): Boolean = (symbol as? KaNamedFunctionSymbol)?.isSuspend == true
 
     context(session: KaSession)
     private fun shouldReport(expression: KtExpression): Boolean {

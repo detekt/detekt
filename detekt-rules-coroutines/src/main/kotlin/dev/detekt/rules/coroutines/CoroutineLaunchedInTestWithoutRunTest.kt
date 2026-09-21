@@ -10,6 +10,8 @@ import dev.detekt.rules.coroutines.utils.isCoroutineScope
 import dev.detekt.rules.coroutines.utils.isCoroutinesFlow
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.expressionType
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.CallableId
@@ -71,9 +73,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
 
     context(session: KaSession)
     private fun KtNamedFunction.runsInRunTestBlock(): Boolean =
-        with(session) {
-            bodyExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == RUN_TEST_CALLABLE_ID
-        }
+        bodyExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == RUN_TEST_CALLABLE_ID
 
     companion object {
         private const val MESSAGE =
@@ -105,9 +105,7 @@ class FunCoroutineLaunchesTraverseHelper {
             parents: List<KtNamedFunction> = emptyList(),
         ): Set<KtNamedFunction> {
             function.collectDescendantsOfType<KtExpression>().mapNotNull {
-                with(session) {
-                    it.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.psi as? KtNamedFunction
-                }
+                it.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.psi as? KtNamedFunction
             }.forEach {
                 traversedFunctions.add(it)
                 if (exploredFunctionsCache.contains(it)) return@forEach
@@ -131,12 +129,10 @@ class FunCoroutineLaunchesTraverseHelper {
 
     context(session: KaSession)
     private fun KtNamedFunction.isLaunchingCoroutine() =
-        with(session) {
-            anyDescendantOfType<KtDotQualifiedExpression> {
-                val receiverType = it.receiverExpression.expressionType ?: return@anyDescendantOfType false
-                val calleeText = it.getCalleeExpressionIfAny()?.text ?: return@anyDescendantOfType false
-                (receiverType.isCoroutineScope() && calleeText in listOf("launch", "async")) ||
-                    (receiverType.isCoroutinesFlow() && calleeText == "launchIn")
-            }
+        anyDescendantOfType<KtDotQualifiedExpression> {
+            val receiverType = it.receiverExpression.expressionType ?: return@anyDescendantOfType false
+            val calleeText = it.getCalleeExpressionIfAny()?.text ?: return@anyDescendantOfType false
+            (receiverType.isCoroutineScope() && calleeText in listOf("launch", "async")) ||
+                (receiverType.isCoroutinesFlow() && calleeText == "launchIn")
         }
 }

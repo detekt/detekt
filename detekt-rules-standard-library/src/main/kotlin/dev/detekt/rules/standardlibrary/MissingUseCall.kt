@@ -208,21 +208,18 @@ class MissingUseCall(config: Config) :
     }
 
     context(session: KaSession)
-    private fun KtQualifiedExpression.doesEndWithUse(): Boolean =
-        with(session) {
-            receiverExpression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.symbol?.let {
-                usedReferences.add(it)
-            }
-            selectorExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
-                ?.asSingleFqName() in useFqNames
+    private fun KtQualifiedExpression.doesEndWithUse(): Boolean {
+        receiverExpression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.symbol?.let {
+            usedReferences.add(it)
         }
+        return selectorExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
+            ?.asSingleFqName() in useFqNames
+    }
 
     context(session: KaSession)
     private fun KtElement?.isCloseableNotUsed(): Boolean {
         this ?: return true
-        return with(session) {
-            resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaSymbol in usedReferences
-        }
+        return resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaSymbol in usedReferences
     }
 
     context(session: KaSession)
@@ -302,10 +299,7 @@ class MissingUseCall(config: Config) :
 
     context(session: KaSession)
     private fun KtQualifiedExpression.firstCallableReceiverOrNull(): KtElement? {
-        fun KtExpression.isCallableExpression(): Boolean =
-            with(session) {
-                resolveToCall()?.singleFunctionCallOrNull() != null
-            }
+        fun KtExpression.isCallableExpression(): Boolean = resolveToCall()?.singleFunctionCallOrNull() != null
 
         var expression = receiverExpression
 

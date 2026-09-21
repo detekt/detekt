@@ -8,9 +8,11 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -107,9 +109,7 @@ private class PropertyUsageReporter(
     private fun reportIfUsedBeforeDeclaration(reference: KtNameReferenceExpression) {
         val property = allProperties[reference.text] ?: return
         if (property in declaredProperties) return
-        val resolvedProperty = with(session) {
-            reference.resolveToCall()?.successfulVariableAccessCall()?.symbol?.callableId
-        }
+        val resolvedProperty = reference.resolveToCall()?.successfulVariableAccessCall()?.symbol?.callableId
         if (property != resolvedProperty) return
 
         if (reportedReferences.add(reference)) {
@@ -138,7 +138,7 @@ private class PropertyUsageReporter(
 
     context(session: KaSession)
     private fun KtCallExpression.resolveToPrivateClassFunction(): KtNamedFunction? =
-        (with(session) { resolveToCall()?.singleFunctionCallOrNull()?.symbol?.psi } as? KtNamedFunction)
+        (resolveToCall()?.singleFunctionCallOrNull()?.symbol?.psi as? KtNamedFunction)
             ?.takeIf { it.parent == classOrObject.body && it.hasModifier(KtTokens.PRIVATE_KEYWORD) }
 }
 
@@ -146,7 +146,7 @@ context(session: KaSession)
 private fun List<PsiElement>.propertyCallableIds(): Map<String, CallableId> =
     filterIsInstance<KtProperty>().mapNotNull {
         val name = it.name ?: return@mapNotNull null
-        val callableId = with(session) { it.symbol.callableId } ?: return@mapNotNull null
+        val callableId = it.symbol.callableId ?: return@mapNotNull null
         name to callableId
     }.toMap()
 

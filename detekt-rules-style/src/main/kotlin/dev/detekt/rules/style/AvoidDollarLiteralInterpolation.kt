@@ -8,6 +8,7 @@ import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -99,10 +100,8 @@ class AvoidDollarLiteralInterpolation(config: Config) :
 
     context(session: KaSession)
     private fun KtNameReferenceExpression.resolveImmutablePropertyWithInitializerInSession(): KtProperty? {
-        val symbol = with(session) {
-            @OptIn(KaExperimentalApi::class)
-            this@resolveImmutablePropertyWithInitializerInSession.resolveSymbol()
-        } as? KaVariableSymbol ?: return null
+        @OptIn(KaExperimentalApi::class)
+        val symbol = resolveSymbol() as? KaVariableSymbol ?: return null
         if (!symbol.isVal || symbol.modality != KaSymbolModality.FINAL) return null
         val property = symbol.psi as? KtProperty ?: return null
         if (property.initializer == null || property.getter != null || property.delegate != null) return null

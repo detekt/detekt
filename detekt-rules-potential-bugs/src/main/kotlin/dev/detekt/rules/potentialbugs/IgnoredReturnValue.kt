@@ -17,11 +17,13 @@ import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.isUsedAsExpression
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
 import org.jetbrains.kotlin.analysis.api.types.KaType
@@ -205,12 +207,10 @@ class IgnoredReturnValue(config: Config) :
         }
         return when (statement) {
             is KtReturnExpression -> {
-                with(session) {
-                    val symbol = lambda.functionLiteral.symbol
-                    val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
-                    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-                    label?.resolveSymbol() == symbol
-                }
+                val symbol = lambda.functionLiteral.symbol
+                val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
+                @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+                label?.resolveSymbol() == symbol
             }
 
             else -> {

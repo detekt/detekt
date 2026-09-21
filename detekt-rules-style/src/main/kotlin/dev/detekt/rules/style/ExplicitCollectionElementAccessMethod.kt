@@ -91,9 +91,7 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
 
     context(session: KaSession)
     private fun KtCallExpression.getFunctionSymbol(): KaNamedFunctionSymbol? =
-        with(session) {
-            resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
-        }
+        resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
 
     private fun canReplace(expression: KtCallExpression, function: KaNamedFunctionSymbol): Boolean {
         if (!function.isOperator) return false

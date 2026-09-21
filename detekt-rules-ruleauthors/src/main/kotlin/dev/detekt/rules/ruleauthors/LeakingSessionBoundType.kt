@@ -7,6 +7,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.allSupertypes
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
@@ -75,9 +76,7 @@ class LeakingSessionBoundType(config: Config = Config.empty) :
     private fun KaType.usesBannedType(): Boolean {
         val classType = this as? KaClassType ?: return false
         if (classType.classId in bannedReturnTypes) return true
-        with(session) {
-            if (classType.allSupertypes.any { (it as? KaClassType)?.classId in bannedReturnTypes }) return true
-        }
+        if (classType.allSupertypes.any { (it as? KaClassType)?.classId in bannedReturnTypes }) return true
         if (classType.classId in allowedWrapperTypes) return false
         return classType.typeArguments.any { arg -> arg.type?.usesBannedType() ?: false }
     }

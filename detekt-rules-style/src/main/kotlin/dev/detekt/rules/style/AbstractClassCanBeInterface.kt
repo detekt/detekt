@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.isAnyType
 import org.jetbrains.kotlin.analysis.api.components.memberScope
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
@@ -190,10 +191,8 @@ class AbstractClassCanBeInterface(config: Config) :
 
             // Reference to a const val. Effectively a compile-time constant, safe for interface getters
             is KtNameReferenceExpression -> {
-                val symbol = with(session) {
-                    @OptIn(KaExperimentalApi::class)
-                    initializer.resolveSymbol()
-                }
+                @OptIn(KaExperimentalApi::class)
+                val symbol = initializer.resolveSymbol()
                 val psi = symbol?.psi as? KtProperty
                 psi?.isConstant() == true
             }

@@ -10,12 +10,16 @@ import dev.detekt.psi.receiverIsUsed
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.containingSymbol
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaImplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -92,27 +96,23 @@ class UnnecessaryApply(config: Config) :
             return false
         }
 
-        with(session) {
-            val lambdaSymbol = lambda.functionLiteral.symbol
-            return singleStatement.collectDescendantsOfType<KtNameReferenceExpression> {
-                val symbol = if (it.parent is KtThisExpression) {
-                    @OptIn(KaExperimentalApi::class)
-                    it.resolveSymbol()
-                } else {
-                    it.implicitReceiver()
-                }
-                symbol?.containingSymbol == lambdaSymbol
-            }.size == 1
-        }
+        val lambdaSymbol = lambda.functionLiteral.symbol
+        return singleStatement.collectDescendantsOfType<KtNameReferenceExpression> {
+            val symbol = if (it.parent is KtThisExpression) {
+                @OptIn(KaExperimentalApi::class)
+                it.resolveSymbol()
+            } else {
+                it.implicitReceiver()
+            }
+            symbol?.containingSymbol == lambdaSymbol
+        }.size == 1
     }
 
     context(session: KaSession)
     fun KtNameReferenceExpression.implicitReceiver(): KaSymbol? {
-        with(session) {
-            val symbol = resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
-            val implicitReceiver = (symbol?.dispatchReceiver ?: symbol?.extensionReceiver) as? KaImplicitReceiverValue
-            return implicitReceiver?.symbol
-        }
+        val symbol = resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
+        val implicitReceiver = (symbol?.dispatchReceiver ?: symbol?.extensionReceiver) as? KaImplicitReceiverValue
+        return implicitReceiver?.symbol
     }
 
     companion object {
