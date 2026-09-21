@@ -931,7 +931,7 @@ function generateCliOptionsFile() {
   const CLI_OPTIONS_OUTPUT = join(WEBSITE_DIR, 'docs/gettingstarted/_cli-options.mdx');
 
   const analysisModeEntries = parseEnumEntries(
-    readFileSync(join(ROOT_DIR, 'detekt-tooling/src/main/kotlin/dev/detekt/tooling/api/AnalysisMode.kt'), 'utf8')
+    readFileSync(join(ROOT_DIR, 'detekt-cli/src/main/kotlin/dev/detekt/cli/AnalysisMode.kt'), 'utf8')
   );
   const failureSeverityEntries = parseEnumEntries(
     readFileSync(join(ROOT_DIR, 'detekt-cli/src/main/kotlin/dev/detekt/cli/FailureSeverity.kt'), 'utf8')
