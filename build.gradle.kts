@@ -17,6 +17,66 @@ dependencies {
     dokka("dev.detekt:detekt-gradle-plugin")
 }
 
+configurations.detekt {
+    attributes {
+        // Fixes Caffeine variant ambiguity:
+        // 'external' vs 'shadowed'
+        attribute(
+            Bundling.BUNDLING_ATTRIBUTE,
+            named(Bundling::class.java, Bundling.EXTERNAL)
+        )
+
+        // Fixes Guava variant mismatch:
+        // Selects JRE target (Java 8+) instead of Android
+        attribute(
+            TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE,
+            named(TargetJvmEnvironment::class.java, TargetJvmEnvironment.STANDARD_JVM)
+        )
+        attribute(
+            Usage.USAGE_ATTRIBUTE,
+            named(Usage::class.java, Usage.JAVA_RUNTIME)
+        )
+        attribute(
+            Category.CATEGORY_ATTRIBUTE,
+            named(Category::class.java, Category.LIBRARY)
+        )
+        attribute(
+            LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
+            named(LibraryElements::class.java, LibraryElements.JAR)
+        )
+    }
+}
+
+configurations.detektPlugins {
+    attributes {
+        // Fixes Caffeine variant ambiguity:
+        // 'external' vs 'shadowed'
+        attribute(
+            Bundling.BUNDLING_ATTRIBUTE,
+            named(Bundling::class.java, Bundling.EXTERNAL)
+        )
+
+        // Fixes Guava variant mismatch:
+        // Selects JRE target (Java 8+) instead of Android
+        attribute(
+            TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE,
+            named(TargetJvmEnvironment::class.java, TargetJvmEnvironment.STANDARD_JVM)
+        )
+        attribute(
+            Usage.USAGE_ATTRIBUTE,
+            named(Usage::class.java, Usage.JAVA_RUNTIME)
+        )
+        attribute(
+            Category.CATEGORY_ATTRIBUTE,
+            named(Category::class.java, Category.LIBRARY)
+        )
+        attribute(
+            LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
+            named(LibraryElements::class.java, LibraryElements.JAR)
+        )
+    }
+}
+
 dokka {
     dokkaPublications.html {
         outputDirectory = layout.projectDirectory.dir("website/static/kdoc")
