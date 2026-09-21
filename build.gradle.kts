@@ -58,7 +58,6 @@ allprojects {
 
     dependencies {
         detekt(project(":detekt-cli"))
-        detektPlugins(project(":detekt-rules-ktlint-wrapper"))
         detektPlugins(project(":detekt-rules-libraries"))
         detektPlugins(project(":detekt-rules-ruleauthors"))
     }

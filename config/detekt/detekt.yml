@@ -64,20 +64,6 @@ exceptions:
   ThrowingNewInstanceOfSameException:
     active: true
 
-ktlint:
-  active: true
-  autoCorrect: true
-  Filename:
-    active: false
-  FunctionSignature:
-    functionBodyExpressionWrapping: multiline
-  Kdoc:
-    excludes: ['**/*.kts']
-  MaximumLineLength:
-    active: false
-  TrailingCommaOnCallSite:
-    active: false
-
 naming:
   ClassNaming:
     ignoreAnnotated: ['org.junit.jupiter.api.Nested']
