@@ -10,6 +10,7 @@ import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -160,6 +161,7 @@ class ForbiddenMethodCall(config: Config) :
             val symbols = when (kaCall) {
                 is KaCallableMemberCall<*, *> -> {
                     val expressionSymbol = kaCall.partiallyAppliedSymbol.symbol
+                    @OptIn(KaContextParameterApi::class)
                     sequenceOf(expressionSymbol).plus(expressionSymbol.allOverriddenSymbols).map {
                         if (
                             it is KaPropertySymbol &&

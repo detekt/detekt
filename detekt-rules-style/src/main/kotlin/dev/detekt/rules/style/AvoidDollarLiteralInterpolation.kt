@@ -5,6 +5,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -98,6 +99,7 @@ class AvoidDollarLiteralInterpolation(config: Config) :
             resolveImmutablePropertyWithInitializerInSession()
         }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtNameReferenceExpression.resolveImmutablePropertyWithInitializerInSession(): KtProperty? {
         @OptIn(KaExperimentalApi::class)

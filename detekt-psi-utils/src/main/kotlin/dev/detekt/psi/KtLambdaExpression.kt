@@ -1,5 +1,6 @@
 package dev.detekt.psi
 
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -9,6 +10,7 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
+@OptIn(KaContextParameterApi::class)
 context(_: KaSession)
 fun KtLambdaExpression.firstParameterOrNull(): KaValueParameterSymbol? =
     functionLiteral.symbol.valueParameters.singleOrNull()

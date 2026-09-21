@@ -6,6 +6,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.isBooleanType
@@ -68,6 +69,7 @@ class RedundantExplicitType(config: Config) :
         super.visitProperty(property)
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun typeIsSameAs(expression: KtConstantExpression, type: KaType) =
         when (expression.node.elementType) {

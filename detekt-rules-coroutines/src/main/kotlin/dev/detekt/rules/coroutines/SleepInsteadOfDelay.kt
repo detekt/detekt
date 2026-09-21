@@ -7,6 +7,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -77,6 +78,7 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.isThreadSleepFunction(): Boolean {
         fun KtCallableReferenceExpression.isSleepCallableRef(): Boolean =
@@ -96,6 +98,7 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
+    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun getNearestParentForSuspension(psiElement: PsiElement): PsiElement? {
@@ -130,6 +133,7 @@ class SleepInsteadOfDelay(config: Config) :
             else -> false
         }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtValueArgument.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
@@ -138,12 +142,14 @@ class SleepInsteadOfDelay(config: Config) :
         return parameter?.returnType?.isSuspendFunctionType == true
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtLambdaExpression.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtProperty::class.java) ?: return false
         return parent.symbol.returnType.isSuspendFunctionType
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtNamedFunction.isSuspendAllowed(): Boolean = (symbol as? KaNamedFunctionSymbol)?.isSuspend == true
 

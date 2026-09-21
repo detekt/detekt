@@ -13,6 +13,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isExpect
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -249,6 +250,7 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
 
     fun KaSymbol.isPrivateProperty() = this is KaPropertySymbol && this.visibility == KaSymbolVisibility.PRIVATE
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     fun KaSymbol.isConstructorParameter(): Boolean =
         this is KaValueParameterSymbol && containingDeclaration is KaConstructorSymbol

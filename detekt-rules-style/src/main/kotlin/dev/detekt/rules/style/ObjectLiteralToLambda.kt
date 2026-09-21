@@ -7,6 +7,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.expressionType
@@ -50,12 +51,14 @@ class ObjectLiteralToLambda(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.containsThisReference(objectSymbol: KaClassSymbol) =
         anyDescendantOfType<KtThisExpression> {
             it.expressionType?.symbol == objectSymbol
         }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.containsOwnMethodCall(objectSymbol: KaClassSymbol) =
         anyDescendantOfType<KtExpression> { expr ->
@@ -66,6 +69,7 @@ class ObjectLiteralToLambda(config: Config) :
             ).any { it.type.symbol == objectSymbol }
         }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.containsMethodOf(declaration: KtObjectDeclaration): Boolean {
         val objectSymbol = declaration.symbol

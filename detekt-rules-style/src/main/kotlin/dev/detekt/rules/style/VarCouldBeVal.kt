@@ -12,6 +12,7 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isLateinit
 import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -102,6 +103,7 @@ class VarCouldBeVal(config: Config) :
         fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> =
             declarationCandidates.filterNot { it.hasAssignments() }
 
+        @OptIn(KaContextParameterApi::class)
         context(_: KaSession)
         private fun KtNamedDeclaration.hasAssignments(): Boolean {
             val declarationName = nameAsSafeName.toString()
@@ -191,6 +193,7 @@ class VarCouldBeVal(config: Config) :
             }
         }
 
+        @OptIn(KaContextParameterApi::class)
         context(_: KaSession)
         private fun evaluateReturnExpression(returnedExpression: KtExpression) {
             when (returnedExpression) {

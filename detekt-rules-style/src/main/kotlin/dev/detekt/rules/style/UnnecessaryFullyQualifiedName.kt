@@ -10,6 +10,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.fullyQualifiedNameGlobToRegex
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
 import org.jetbrains.kotlin.analysis.api.KaSession
@@ -226,6 +227,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         }
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isReceiverLocalVariableOrProperty(receiver: KtExpression): Boolean {
         val leftmost = leftmostReference(receiver) ?: return false
@@ -247,6 +249,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
     private fun isInStringLiteral(element: KtElement): Boolean =
         element.getParentOfType<KtStringTemplateExpression>(strict = false) != null
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun hasNameCollision(element: KtElement, resolvedSymbol: KaSymbol): Boolean {
         val simpleName = resolvedSymbol.collisionCheckName() ?: return false
@@ -265,6 +268,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         return false
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun findLocalSymbols(element: KtElement, name: Name): Sequence<KaSymbol> {
         // Default imports are overridden by an added explicit import, so a default symbol with the same
@@ -297,6 +301,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
                 !isInImportOrPackage(it)
         }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun hasOuterClassCollision(element: KtElement, symbol: KaClassSymbol): Boolean =
         // If any class in the outer chain has a name collision, the FQN can't be simplified

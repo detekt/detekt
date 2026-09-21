@@ -6,6 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
@@ -105,6 +106,7 @@ private class PropertyUsageReporter(
         }
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun reportIfUsedBeforeDeclaration(reference: KtNameReferenceExpression) {
         val property = allProperties[reference.text] ?: return
@@ -136,12 +138,14 @@ private class PropertyUsageReporter(
         )
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtCallExpression.resolveToPrivateClassFunction(): KtNamedFunction? =
         (resolveToCall()?.singleFunctionCallOrNull()?.symbol?.psi as? KtNamedFunction)
             ?.takeIf { it.parent == classOrObject.body && it.hasModifier(KtTokens.PRIVATE_KEYWORD) }
 }
 
+@OptIn(KaContextParameterApi::class)
 context(_: KaSession)
 private fun List<PsiElement>.propertyCallableIds(): Map<String, CallableId> =
     filterIsInstance<KtProperty>().mapNotNull {

@@ -6,6 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -121,6 +122,7 @@ class RedundantHigherOrderMapUsage(config: Config) :
         return lambda
     }
 
+    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun isRedundant(functionLiteral: KtFunctionLiteral, lambdaStatements: List<KtExpression>): Boolean {
@@ -137,6 +139,7 @@ class RedundantHigherOrderMapUsage(config: Config) :
         return labeledReturnExpressions.all { isReferenceTo(it, lambdaParameter) }
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isReferenceTo(expression: KtExpression, symbol: KaValueParameterSymbol): Boolean {
         val nameReference = when (expression) {

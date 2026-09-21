@@ -7,6 +7,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.receiverIsUsed
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -78,6 +79,7 @@ class UnnecessaryApply(config: Config) :
         }
     }
 
+    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
@@ -108,6 +110,7 @@ class UnnecessaryApply(config: Config) :
         }.size == 1
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     fun KtNameReferenceExpression.implicitReceiver(): KaSymbol? {
         val symbol = resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
