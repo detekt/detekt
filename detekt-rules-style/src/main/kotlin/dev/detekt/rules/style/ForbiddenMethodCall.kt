@@ -13,6 +13,7 @@ import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.allOverriddenSymbols
 import org.jetbrains.kotlin.analysis.api.resolution.KaCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundAccessCall
@@ -150,7 +151,8 @@ class ForbiddenMethodCall(config: Config) :
     }
 
     @OptIn(KaExperimentalApi::class)
-    private fun KaSession.getCallInfos(
+    context(session: KaSession)
+    private fun getCallInfos(
         kaCall: KaCall,
         expression: KtExpression,
     ): Sequence<Pair<KaPropertySymbol?, KaCallableSymbol?>> =

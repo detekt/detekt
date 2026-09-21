@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaScopeKind
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.impl.base.references.KaBaseSimpleNameReference
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
@@ -222,7 +223,8 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         }
     }
 
-    private fun KaSession.isReceiverLocalVariableOrProperty(receiver: KtExpression): Boolean {
+    context(session: KaSession)
+    private fun isReceiverLocalVariableOrProperty(receiver: KtExpression): Boolean {
         val leftmost = leftmostReference(receiver) ?: return false
         @OptIn(KaExperimentalApi::class)
         return leftmost.resolveSymbol() is KaVariableSymbol

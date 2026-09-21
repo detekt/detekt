@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDestructuringDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -75,7 +76,8 @@ class UnnecessaryAny(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    private fun KaSession.shouldBeReported(expression: KtCallExpression): String? {
+    context(session: KaSession)
+    private fun shouldBeReported(expression: KtCallExpression): String? {
         val valueArgument = expression.valueArguments.singleOrNull() ?: return null
         return when (val valueExpression = valueArgument.getArgumentExpression()) {
             is KtLambdaExpression -> {

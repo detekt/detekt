@@ -16,6 +16,7 @@ import dev.detekt.psi.pathGlobToRegex
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.isUsedAsExpression
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
@@ -176,7 +177,8 @@ class IgnoredReturnValue(config: Config) :
         return javaClassFinder.findPackage(packageFqName)?.annotations?.mapNotNull { it.classId }.orEmpty()
     }
 
-    private fun KaSession.isUsedAsExpression(call: KtCallExpression, returnType: KaType): Boolean {
+    context(session: KaSession)
+    private fun isUsedAsExpression(call: KtCallExpression, returnType: KaType): Boolean {
         if (returnType is KaFunctionType &&
             call.getStrictParentOfType<KtCallExpression>()?.calleeExpression == KtPsiUtil.safeDeparenthesize(call)
         ) {

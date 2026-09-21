@@ -15,6 +15,7 @@ import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
@@ -190,7 +191,8 @@ class VarCouldBeVal(config: Config) :
             }
         }
 
-        private fun KaSession.evaluateReturnExpression(returnedExpression: KtExpression) {
+        context(session: KaSession)
+        private fun evaluateReturnExpression(returnedExpression: KtExpression) {
             when (returnedExpression) {
                 is KtObjectLiteralExpression -> {
                     returnedExpression.collectDescendantsOfType<KtProperty> {

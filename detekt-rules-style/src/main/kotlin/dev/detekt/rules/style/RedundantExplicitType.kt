@@ -8,6 +8,12 @@ import dev.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.isBooleanType
+import org.jetbrains.kotlin.analysis.api.components.isCharType
+import org.jetbrains.kotlin.analysis.api.components.isDoubleType
+import org.jetbrains.kotlin.analysis.api.components.isFloatType
+import org.jetbrains.kotlin.analysis.api.components.isIntType
+import org.jetbrains.kotlin.analysis.api.components.isLongType
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -62,7 +68,8 @@ class RedundantExplicitType(config: Config) :
         super.visitProperty(property)
     }
 
-    private fun KaSession.typeIsSameAs(expression: KtConstantExpression, type: KaType) =
+    context(session: KaSession)
+    private fun typeIsSameAs(expression: KtConstantExpression, type: KaType) =
         when (expression.node.elementType) {
             KtNodeTypes.BOOLEAN_CONSTANT -> type.isBooleanType
 

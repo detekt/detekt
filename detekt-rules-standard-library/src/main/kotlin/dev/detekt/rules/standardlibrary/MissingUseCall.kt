@@ -10,12 +10,17 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.allSupertypes
+import org.jetbrains.kotlin.analysis.api.components.expressionType
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.components.returnType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
@@ -121,7 +126,8 @@ class MissingUseCall(config: Config) :
         }
     }
 
-    private fun KaSession.isChildOfCloseable(expr: KtExpression): Boolean {
+    context(session: KaSession)
+    private fun isChildOfCloseable(expr: KtExpression): Boolean {
         val symbol = if (expr is KtObjectLiteralExpression) {
             expr.symbol
         } else {
@@ -130,7 +136,8 @@ class MissingUseCall(config: Config) :
         return isChildOfCloseable(symbol)
     }
 
-    private fun KaSession.isChildOfCloseable(symbol: KaSymbol): Boolean {
+    context(session: KaSession)
+    private fun isChildOfCloseable(symbol: KaSymbol): Boolean {
         val classSymbol = symbol as? KaClassSymbol ?: return false
         val fqn = symbol.classId?.asFqNameString()
         if (fqn != null && ignoreClass.contains(fqn)) {
@@ -141,7 +148,8 @@ class MissingUseCall(config: Config) :
         return superTypes.any { it.symbol?.classId?.asSingleFqName() in listOfCloseables }
     }
 
-    private fun KaSession.shouldReport(expression: KtExpression): Boolean {
+    context(session: KaSession)
+    private fun shouldReport(expression: KtExpression): Boolean {
         val expressionParent = getParentChainExpression(expression) ?: return false
 
         if (expressionParent.parent is KtProperty) {
@@ -179,7 +187,8 @@ class MissingUseCall(config: Config) :
         }.also { traversedParentExpression.add(expressionParent) }
     }
 
-    private fun KaSession.isParentFunctionReturnsCloseable(expression: KtExpression): Boolean {
+    context(session: KaSession)
+    private fun isParentFunctionReturnsCloseable(expression: KtExpression): Boolean {
         val parent = expression.getParentOfType<KtNamedFunction>(
             true,
             KtLambdaExpression::class.java,
@@ -190,7 +199,8 @@ class MissingUseCall(config: Config) :
         return isChildOfCloseable(symbol)
     }
 
-    private fun KaSession.isParamForClosableOrFunReturningClosable(expression: KtExpression): Boolean {
+    context(session: KaSession)
+    private fun isParamForClosableOrFunReturningClosable(expression: KtExpression): Boolean {
         if (expression.parent !is KtValueArgument) return false
         val callExpression = expression.parent.parent.parent as? KtCallExpression ?: return false
         val symbol = callExpression.expressionType?.symbol ?: return false
@@ -215,7 +225,8 @@ class MissingUseCall(config: Config) :
         }
     }
 
-    private fun KaSession.isExpressionUsedOnSameOrNextLine(expression: KtExpression): Boolean {
+    context(session: KaSession)
+    private fun isExpressionUsedOnSameOrNextLine(expression: KtExpression): Boolean {
         val parent = expression.getParentOfTypes(
             true,
             KtQualifiedExpression::class.java,
@@ -247,7 +258,8 @@ class MissingUseCall(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    private fun KaSession.isPartOfIfElseExpressionReturningCloseable(expression: KtExpression): Boolean {
+    context(session: KaSession)
+    private fun isPartOfIfElseExpressionReturningCloseable(expression: KtExpression): Boolean {
         val expressionAfterParens = expression.parents.firstOrNull { it !is KtParenthesizedExpression } ?: return false
         val (ifExpression, containerExpression) =
             @Suppress("BracesOnIfStatements")
