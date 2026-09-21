@@ -150,7 +150,7 @@ class UseDataClass(config: Config) :
     // such as `private set` is intentionally ignored.
     private fun KtProperty.hasLogic(): Boolean = hasDelegate() || getter != null || setter?.hasBody() == true
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isDefaultFunction(
         function: KtNamedFunction,
         classType: KaType?,

@@ -50,13 +50,13 @@ class ObjectLiteralToLambda(config: Config) :
     ),
     RequiresAnalysisApi {
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtExpression.containsThisReference(objectSymbol: KaClassSymbol) =
         anyDescendantOfType<KtThisExpression> {
             it.expressionType?.symbol == objectSymbol
         }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtExpression.containsOwnMethodCall(objectSymbol: KaClassSymbol) =
         anyDescendantOfType<KtExpression> { expr ->
             val symbol = expr.resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
@@ -66,13 +66,13 @@ class ObjectLiteralToLambda(config: Config) :
             ).any { it.type.symbol == objectSymbol }
         }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtExpression.containsMethodOf(declaration: KtObjectDeclaration): Boolean {
         val objectSymbol = declaration.symbol
         return containsThisReference(objectSymbol) || containsOwnMethodCall(objectSymbol)
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtObjectDeclaration.hasConvertibleMethod(): Boolean {
         val singleNamedMethod = declarations.singleOrNull() as? KtNamedFunction
         val functionBody = singleNamedMethod?.bodyExpression ?: return false

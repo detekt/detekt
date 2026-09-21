@@ -89,7 +89,7 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             else -> false
         } && unusedReturnValue(expression)
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtCallExpression.getFunctionSymbol(): KaNamedFunctionSymbol? =
         resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
 
@@ -115,7 +115,7 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    context(session: KaSession)
+    context(_: KaSession)
     private fun shouldReplace(function: KaNamedFunctionSymbol): Boolean {
         // The intent of kotlin operation functions is to support indexed accessed, so should always be replaced.
         val isJava = function.origin.let { it == KaSymbolOrigin.JAVA_SOURCE || it == KaSymbolOrigin.JAVA_LIBRARY }
@@ -132,7 +132,7 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isCallerMap(expression: KtCallExpression): Boolean {
         if (expression.valueArguments.size != 2) return false
         val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.containingDeclaration

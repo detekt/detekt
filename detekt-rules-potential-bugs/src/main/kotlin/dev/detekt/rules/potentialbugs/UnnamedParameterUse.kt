@@ -162,7 +162,7 @@ class UnnamedParameterUse(config: Config) :
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isAdjacentUnnamedParamsAllowed(paramInfos: List<Map.Entry<KtValueArgument, ParamInfo>>): Boolean {
         fun ParamInfo.isNamedOrVararg() = this.isNamed || this.isVararg
         val (firstEntry, secondEntry) = paramInfos
@@ -181,7 +181,7 @@ class UnnamedParameterUse(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    context(session: KaSession)
+    context(_: KaSession)
     private fun typeCanBeAssigned(firstParam: KtValueArgument, secondParam: KtValueArgument): Boolean {
         val param1Type = firstParam.getArgumentExpression()?.expressionType ?: return true
         val param2Type = secondParam.getArgumentExpression()?.expressionType ?: return true

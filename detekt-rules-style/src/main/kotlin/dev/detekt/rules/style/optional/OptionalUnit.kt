@@ -102,7 +102,7 @@ class OptionalUnit(config: Config) :
     }
 
     @OptIn(KaIdeApi::class)
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtExpression.canBeUsedAsValue(): Boolean =
         when (this) {
             is KtIfExpression -> {

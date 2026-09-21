@@ -179,7 +179,7 @@ class IgnoredReturnValue(config: Config) :
         return javaClassFinder.findPackage(packageFqName)?.annotations?.mapNotNull { it.classId }.orEmpty()
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isUsedAsExpression(call: KtCallExpression, returnType: KaType): Boolean {
         if (returnType is KaFunctionType &&
             call.getStrictParentOfType<KtCallExpression>()?.calleeExpression == KtPsiUtil.safeDeparenthesize(call)
@@ -200,7 +200,7 @@ class IgnoredReturnValue(config: Config) :
         return true
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtExpression.isLambdaResult(lambda: KtLambdaExpression): Boolean {
         val statement = getQualifiedExpressionForSelectorOrThis().let {
             it.getStrictParentOfType<KtReturnExpression>() ?: it

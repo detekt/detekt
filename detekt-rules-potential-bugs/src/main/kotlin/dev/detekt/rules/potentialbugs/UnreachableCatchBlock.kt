@@ -71,6 +71,6 @@ class UnreachableCatchBlock(config: Config) :
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun catchType(catchClause: KtCatchClause): KaType? = catchClause.catchParameter?.returnType
 }

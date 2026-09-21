@@ -151,7 +151,7 @@ class ForbiddenMethodCall(config: Config) :
     }
 
     @OptIn(KaExperimentalApi::class)
-    context(session: KaSession)
+    context(_: KaSession)
     private fun getCallInfos(
         kaCall: KaCall,
         expression: KtExpression,

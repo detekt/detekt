@@ -98,11 +98,11 @@ class VarCouldBeVal(config: Config) :
         private val assignments = mutableMapOf<String, MutableSet<KtExpression>>()
         private val escapeCandidates = mutableMapOf<KaSymbol, List<KtProperty>>()
 
-        context(session: KaSession)
+        context(_: KaSession)
         fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> =
             declarationCandidates.filterNot { it.hasAssignments() }
 
-        context(session: KaSession)
+        context(_: KaSession)
         private fun KtNamedDeclaration.hasAssignments(): Boolean {
             val declarationName = nameAsSafeName.toString()
             val assignments = assignments[declarationName]
@@ -191,7 +191,7 @@ class VarCouldBeVal(config: Config) :
             }
         }
 
-        context(session: KaSession)
+        context(_: KaSession)
         private fun evaluateReturnExpression(returnedExpression: KtExpression) {
             when (returnedExpression) {
                 is KtObjectLiteralExpression -> {

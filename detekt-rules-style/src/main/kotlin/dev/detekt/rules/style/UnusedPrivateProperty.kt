@@ -249,7 +249,7 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
 
     fun KaSymbol.isPrivateProperty() = this is KaPropertySymbol && this.visibility == KaSymbolVisibility.PRIVATE
 
-    context(session: KaSession)
+    context(_: KaSession)
     fun KaSymbol.isConstructorParameter(): Boolean =
         this is KaValueParameterSymbol && containingDeclaration is KaConstructorSymbol
 }

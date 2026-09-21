@@ -77,7 +77,7 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtExpression.isThreadSleepFunction(): Boolean {
         fun KtCallableReferenceExpression.isSleepCallableRef(): Boolean =
             if (this.parent is KtValueArgument) {
@@ -97,7 +97,7 @@ class SleepInsteadOfDelay(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    context(session: KaSession)
+    context(_: KaSession)
     private fun getNearestParentForSuspension(psiElement: PsiElement): PsiElement? {
         fun KtValueArgument.isNearestParentForSuspension(): Boolean {
             val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
@@ -121,7 +121,7 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun PsiElement.isSuspendAllowed(): Boolean =
         when (this) {
             is KtValueArgument -> this.isSuspendAllowed()
@@ -130,7 +130,7 @@ class SleepInsteadOfDelay(config: Config) :
             else -> false
         }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtValueArgument.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
         val argumentExpression = this.getArgumentExpression() ?: return false
@@ -138,16 +138,16 @@ class SleepInsteadOfDelay(config: Config) :
         return parameter?.returnType?.isSuspendFunctionType == true
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtLambdaExpression.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtProperty::class.java) ?: return false
         return parent.symbol.returnType.isSuspendFunctionType
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtNamedFunction.isSuspendAllowed(): Boolean = (symbol as? KaNamedFunctionSymbol)?.isSuspend == true
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun shouldReport(expression: KtExpression): Boolean {
         val nearestParentForSuspension = getNearestParentForSuspension(expression) ?: return false
         return nearestParentForSuspension.isSuspendAllowed()

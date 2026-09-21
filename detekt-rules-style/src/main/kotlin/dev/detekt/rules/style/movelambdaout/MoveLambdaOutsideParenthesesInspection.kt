@@ -66,11 +66,11 @@ private fun KtCallExpression.canMoveLambdaOutsideParentheses(): Boolean {
     return true
 }
 
-context(session: KaSession)
+context(_: KaSession)
 private val KaType.isFunctionOrSuspendFunctionType: Boolean
     get() = isFunctionType || isSuspendFunctionType
 
-context(session: KaSession)
+context(_: KaSession)
 private val KaType.isFunctionOrSuspendingFunctionOrGenericType: Boolean
     get() = isFunctionOrSuspendFunctionType || this is KaTypeParameterType
 

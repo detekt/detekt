@@ -120,7 +120,7 @@ class AbstractClassCanBeInterface(config: Config) :
             else -> klass.isAbstract()
         }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun checkMembers(klass: KtClass, members: List<KtCallableDeclaration>, nameIdentifier: PsiElement) {
         // Treat open members as abstract-like unless they have a non-const backing field. An open val with a
         // non-const initializer (e.g. open val x = computeSomething()) stores a value evaluated once per instance.
@@ -153,7 +153,7 @@ class AbstractClassCanBeInterface(config: Config) :
     private fun KtClass.containsInternalClass() =
         body?.children?.filterIsInstance<KtClass>()?.any { it.isInternal() } == true
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun hasInheritedMember(klass: KtClass, isAbstract: Boolean): Boolean =
         when {
             klass.superTypeListEntries.isEmpty() -> false
@@ -165,7 +165,7 @@ class AbstractClassCanBeInterface(config: Config) :
             }
         }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isAnyParentClass(klass: KtClass): Boolean =
         (klass.symbol as? KaClassSymbol)
             ?.superTypes
@@ -180,7 +180,7 @@ class AbstractClassCanBeInterface(config: Config) :
      *
      * Only literal values (e.g. 404, "text") and direct references to const vals are considered constant.
      */
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtCallableDeclaration.hasConstOrNoBackingField(): Boolean =
         when (val initializer = (this as? KtProperty)?.initializer) {
             // No initializer: getter-only property or a function. no backing field, safe for interface

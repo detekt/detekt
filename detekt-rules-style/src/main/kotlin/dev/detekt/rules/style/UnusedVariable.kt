@@ -138,7 +138,7 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtExpression.resolveToLocalVariableSymbol(): KaVariableSymbol? =
         @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
         (this as? KtResolvable)?.resolveSymbol() as? KaVariableSymbol

@@ -83,7 +83,7 @@ class UnnecessaryAny(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    context(session: KaSession)
+    context(_: KaSession)
     private fun shouldBeReported(expression: KtCallExpression): String? {
         val valueArgument = expression.valueArguments.singleOrNull() ?: return null
         return when (val valueExpression = valueArgument.getArgumentExpression()) {
@@ -112,7 +112,7 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtBlockExpression.shouldBlockExpressionBeReported(parameter: KaDeclarationSymbol): String? {
         if (this.statements.isEmpty()) return null
         if (parameter is KaDestructuringDeclarationSymbol) {
@@ -134,7 +134,7 @@ class UnnecessaryAny(config: Config) :
         return statement.shouldStatementBeReported(parameter)
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtExpression.shouldStatementBeReported(parameter: KaDeclarationSymbol): String? =
         when (this) {
             is KtBinaryExpression if operationToken == KtTokens.EQEQ -> {
@@ -155,7 +155,7 @@ class UnnecessaryAny(config: Config) :
         }
 
     @Suppress("ReturnCount")
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isUsageOfValueAndItEligible(
         parameter: KaDeclarationSymbol,
         leftExpression: KtExpression?,
@@ -206,14 +206,14 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) =
         collectDescendantsOfType<KtNameReferenceExpression>().count {
             @OptIn(KaExperimentalApi::class)
             it.resolveSymbol() == symbol
         }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtExpression?.isCallingEquals(): Boolean {
         if (this == null) return false
         val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol ?: return false

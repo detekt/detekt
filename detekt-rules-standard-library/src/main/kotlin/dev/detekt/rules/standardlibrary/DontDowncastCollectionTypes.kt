@@ -60,7 +60,7 @@ class DontDowncastCollectionTypes(config: Config) :
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun checkForDowncast(parent: KtExpression, left: KtExpression, right: KtTypeReference?) {
         val leftType = left.expressionType?.symbol?.classId ?: return
         val rightType = right?.type?.symbol?.classId ?: return

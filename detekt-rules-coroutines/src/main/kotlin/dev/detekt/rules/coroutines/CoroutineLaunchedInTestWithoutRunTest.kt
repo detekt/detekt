@@ -71,7 +71,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtNamedFunction.runsInRunTestBlock(): Boolean =
         bodyExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == RUN_TEST_CALLABLE_ID
 
@@ -87,7 +87,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
 class FunCoroutineLaunchesTraverseHelper {
     val exploredFunctionsCache = mutableMapOf<KtNamedFunction, Boolean>()
 
-    context(session: KaSession)
+    context(_: KaSession)
     fun isFunctionLaunchingCoroutines(initialFunction: KtNamedFunction): Boolean {
         val traversedFunctions = mutableSetOf<KtNamedFunction>()
 
@@ -127,7 +127,7 @@ class FunCoroutineLaunchesTraverseHelper {
         return traversedFunctions.any { exploredFunctionsCache[it] == true }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtNamedFunction.isLaunchingCoroutine() =
         anyDescendantOfType<KtDotQualifiedExpression> {
             val receiverType = it.receiverExpression.expressionType ?: return@anyDescendantOfType false

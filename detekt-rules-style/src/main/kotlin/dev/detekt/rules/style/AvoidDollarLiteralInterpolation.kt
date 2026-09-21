@@ -98,7 +98,7 @@ class AvoidDollarLiteralInterpolation(config: Config) :
             resolveImmutablePropertyWithInitializerInSession()
         }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtNameReferenceExpression.resolveImmutablePropertyWithInitializerInSession(): KtProperty? {
         @OptIn(KaExperimentalApi::class)
         val symbol = resolveSymbol() as? KaVariableSymbol ?: return null

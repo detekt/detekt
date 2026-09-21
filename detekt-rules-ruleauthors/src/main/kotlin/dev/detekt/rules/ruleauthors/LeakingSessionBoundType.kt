@@ -72,7 +72,7 @@ class LeakingSessionBoundType(config: Config = Config.empty) :
     }
 
     @Suppress("ReturnCount")
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KaType.usesBannedType(): Boolean {
         val classType = this as? KaClassType ?: return false
         if (classType.classId in bannedReturnTypes) return true

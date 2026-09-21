@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
-context(session: KaSession)
+context(_: KaSession)
 fun KtLambdaExpression.firstParameterOrNull(): KaValueParameterSymbol? =
     functionLiteral.symbol.valueParameters.singleOrNull()
 

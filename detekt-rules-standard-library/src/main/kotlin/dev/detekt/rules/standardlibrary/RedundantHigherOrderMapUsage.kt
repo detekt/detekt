@@ -122,7 +122,7 @@ class RedundantHigherOrderMapUsage(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isRedundant(functionLiteral: KtFunctionLiteral, lambdaStatements: List<KtExpression>): Boolean {
         val symbol = functionLiteral.symbol
         val lambdaParameter = symbol.valueParameters.singleOrNull() ?: return false
@@ -137,7 +137,7 @@ class RedundantHigherOrderMapUsage(config: Config) :
         return labeledReturnExpressions.all { isReferenceTo(it, lambdaParameter) }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isReferenceTo(expression: KtExpression, symbol: KaValueParameterSymbol): Boolean {
         val nameReference = when (expression) {
             is KtReturnExpression -> expression.returnedExpression

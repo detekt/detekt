@@ -68,7 +68,7 @@ class RedundantExplicitType(config: Config) :
         super.visitProperty(property)
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun typeIsSameAs(expression: KtConstantExpression, type: KaType) =
         when (expression.node.elementType) {
             KtNodeTypes.BOOLEAN_CONSTANT -> type.isBooleanType

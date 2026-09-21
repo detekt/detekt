@@ -79,7 +79,7 @@ class UnnecessaryApply(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
         val lambda = lambdaArguments.firstOrNull()?.getLambdaExpression() ?: return false
         var singleStatement = lambda.bodyExpression?.statements?.singleOrNull() ?: return false
@@ -108,7 +108,7 @@ class UnnecessaryApply(config: Config) :
         }.size == 1
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     fun KtNameReferenceExpression.implicitReceiver(): KaSymbol? {
         val symbol = resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
         val implicitReceiver = (symbol?.dispatchReceiver ?: symbol?.extensionReceiver) as? KaImplicitReceiverValue

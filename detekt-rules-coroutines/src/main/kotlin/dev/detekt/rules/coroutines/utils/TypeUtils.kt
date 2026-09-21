@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
-context(session: KaSession)
+context(_: KaSession)
 internal fun KaType.isCoroutineScope(): Boolean =
     sequence {
         yield(this@isCoroutineScope)
@@ -18,7 +18,7 @@ internal fun KaType.isCoroutineScope(): Boolean =
         .mapNotNull { it.symbol?.classId }
         .contains(CoroutineClassIds.CoroutineScope)
 
-context(session: KaSession)
+context(_: KaSession)
 internal fun KaType.isCoroutinesFlow(): Boolean =
     sequence {
         yield(this@isCoroutinesFlow)

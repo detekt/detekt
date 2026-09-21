@@ -88,7 +88,7 @@ private class PropertyUsageReporter(
     private val declaredProperties = mutableSetOf<CallableId>()
     private val reportedReferences = mutableSetOf<KtNameReferenceExpression>()
 
-    context(session: KaSession)
+    context(_: KaSession)
     fun visitMember(member: PsiElement) {
         member.forEachDescendantOfType<KtNameReferenceExpression> {
             reportIfUsedBeforeDeclaration(it)
@@ -105,7 +105,7 @@ private class PropertyUsageReporter(
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun reportIfUsedBeforeDeclaration(reference: KtNameReferenceExpression) {
         val property = allProperties[reference.text] ?: return
         if (property in declaredProperties) return
@@ -117,7 +117,7 @@ private class PropertyUsageReporter(
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun reportCallsAccessingUndeclaredProperties(root: KtElement) {
         val visitedFunctions = mutableSetOf<KtNamedFunction>()
 
@@ -136,13 +136,13 @@ private class PropertyUsageReporter(
         )
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun KtCallExpression.resolveToPrivateClassFunction(): KtNamedFunction? =
         (resolveToCall()?.singleFunctionCallOrNull()?.symbol?.psi as? KtNamedFunction)
             ?.takeIf { it.parent == classOrObject.body && it.hasModifier(KtTokens.PRIVATE_KEYWORD) }
 }
 
-context(session: KaSession)
+context(_: KaSession)
 private fun List<PsiElement>.propertyCallableIds(): Map<String, CallableId> =
     filterIsInstance<KtProperty>().mapNotNull {
         val name = it.name ?: return@mapNotNull null

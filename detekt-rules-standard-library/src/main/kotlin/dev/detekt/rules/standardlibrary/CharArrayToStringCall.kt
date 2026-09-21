@@ -82,17 +82,17 @@ class CharArrayToStringCall(config: Config) :
         }
     }
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isToStringCall(expression: KtExpression) =
         expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == toStringCallableId
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isCharArray(expression: KtExpression) = classId(expression) == charArrayClassId
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun isString(expression: KtExpression) = classId(expression) == stringClassId
 
-    context(session: KaSession)
+    context(_: KaSession)
     private fun classId(expression: KtExpression) = expression.expressionType?.symbol?.classId
 
     private fun report(expression: KtExpression) {
