@@ -11,11 +11,11 @@ import dev.detekt.psi.FunctionMatcher
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.expressions.expressionType
+import org.jetbrains.kotlin.analysis.api.components.expressionType
+import org.jetbrains.kotlin.analysis.api.components.isSubtypeOf
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
-import org.jetbrains.kotlin.analysis.api.types.isSubtypeOf
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
@@ -112,7 +112,6 @@ class UnnamedParameterUse(config: Config) :
     }
 
     @Suppress("ReturnCount", "CyclomaticComplexMethod")
-    @OptIn(KaExperimentalApi::class)
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
@@ -122,7 +121,7 @@ class UnnamedParameterUse(config: Config) :
         }
 
         analyze(expression) {
-            val call = expression.resolveCall() ?: return
+            val call = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
             val symbol = call.symbol
             if (!symbol.hasStableParameterNames) return
             if (symbol.origin.let { it == KaSymbolOrigin.JAVA_SOURCE || it == KaSymbolOrigin.JAVA_LIBRARY }) return

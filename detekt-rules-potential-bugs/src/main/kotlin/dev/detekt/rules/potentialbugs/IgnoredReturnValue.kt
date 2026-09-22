@@ -17,8 +17,9 @@ import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.expressions.isUsedAsExpression
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
+import org.jetbrains.kotlin.analysis.api.components.isUsedAsExpression
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
@@ -33,6 +34,7 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
@@ -123,13 +125,12 @@ class IgnoredReturnValue(config: Config) :
         it.map(FunctionMatcher::fromFunctionSignature)
     }
 
-    @OptIn(KaExperimentalApi::class)
     @Suppress("ComplexCondition", "ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
         analyze(expression) {
-            val functionCall = expression.resolveCall() ?: return
+            val functionCall = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
             val symbol = functionCall.symbol
             val returnType = functionCall.signature.returnType
             if (returnType.isUnitType || returnType.isNothingType) return
@@ -208,8 +209,8 @@ class IgnoredReturnValue(config: Config) :
             is KtReturnExpression -> {
                 val symbol = lambda.functionLiteral.symbol
                 val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
-                @OptIn(KaExperimentalApi::class)
-                label?.resolveSuccessfulSymbol() == symbol
+                @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+                label?.resolveSymbol() == symbol
             }
 
             else -> {

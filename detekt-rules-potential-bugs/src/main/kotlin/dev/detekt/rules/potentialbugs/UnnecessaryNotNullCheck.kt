@@ -5,8 +5,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -33,7 +33,6 @@ class UnnecessaryNotNullCheck(config: Config) :
     ),
     RequiresAnalysisApi {
 
-    @OptIn(KaExperimentalApi::class)
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -43,7 +42,8 @@ class UnnecessaryNotNullCheck(config: Config) :
 
         analyze(expression) {
             if (expression
-                    .resolveCall()
+                    .resolveToCall()
+                    ?.successfulFunctionCallOrNull()
                     ?.symbol
                     ?.callableId !in notNullCheckFunctionFqNames
             ) {

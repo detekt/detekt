@@ -135,7 +135,7 @@ private fun KtLambdaExpression.countLambdaParameterReference(): Int {
         }
         parameters.sumOf { variableSymbol ->
             bodyExpression.collectDescendantsOfType<KtSimpleNameExpression> {
-                @OptIn(KaExperimentalApi::class)
+                @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
                 it.resolveSymbol() == variableSymbol
             }.count()
         }

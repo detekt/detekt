@@ -6,18 +6,17 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.resolution.resolveCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.allSupertypes
+import org.jetbrains.kotlin.analysis.api.components.containingDeclaration
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
-import org.jetbrains.kotlin.analysis.api.symbols.containingDeclaration
-import org.jetbrains.kotlin.analysis.api.types.allSupertypes
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -91,10 +90,10 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             else -> false
         } && unusedReturnValue(expression)
 
-    @OptIn(KaExperimentalApi::class)
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtCallExpression.getFunctionSymbol(): KaNamedFunctionSymbol? =
-        resolveSuccessfulSymbol() as? KaNamedFunctionSymbol
+        resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
 
     private fun canReplace(expression: KtCallExpression, function: KaNamedFunctionSymbol): Boolean {
         if (!function.isOperator) return false
@@ -135,12 +134,12 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         )
     }
 
-    @OptIn(KaContextParameterApi::class, KaExperimentalApi::class)
+    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun isCallerMap(expression: KtCallExpression): Boolean {
         if (expression.valueArguments.size != 2) return false
-        val symbol = expression.resolveCall()?.symbol?.containingDeclaration
+        val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.containingDeclaration
             as? KaClassSymbol ?: return false
 
         val mapClass = ClassId.fromString("kotlin/collections/Map")

@@ -10,8 +10,9 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isPartOf
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.impl.base.references.KaBaseSimpleNameReference
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassLikeSymbol
@@ -192,10 +193,15 @@ class UnusedImport(config: Config) :
             return setOfNotNull(callableFqName, companionCallableFqName)
         }
 
+        @OptIn(KaImplementationDetail::class)
         private fun KtReferenceExpression.fqNamesOrEmpty(): Set<FqName> =
             analyze(this) {
-                @OptIn(KaExperimentalApi::class)
-                resolveSymbol()?.fqNamesForImport.orEmpty()
+                @Suppress("DEPRECATION")
+                // Replace with 'resolveSymbol()?.fqNamesForImport.orEmpty()` when it starts working in a future Kotlin/AA release
+                (this@fqNamesOrEmpty.reference as? KaBaseSimpleNameReference)
+                    ?.resolveToSymbol()
+                    ?.fqNamesForImport
+                    .orEmpty()
             }
     }
 

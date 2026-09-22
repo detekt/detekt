@@ -18,18 +18,17 @@ import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
-import org.jetbrains.kotlin.analysis.api.scopes.memberScope
+import org.jetbrains.kotlin.analysis.api.components.isAnyType
+import org.jetbrains.kotlin.analysis.api.components.memberScope
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
-import org.jetbrains.kotlin.analysis.api.types.isAnyType
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
@@ -184,7 +183,7 @@ class AbstractClassCanBeInterface(config: Config) :
      *
      * Only literal values (e.g. 404, "text") and direct references to const vals are considered constant.
      */
-    @OptIn(KaContextParameterApi::class, KaExperimentalApi::class, KtExperimentalApi::class)
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtCallableDeclaration.hasConstOrNoBackingField(): Boolean =
         when (val initializer = (this as? KtProperty)?.initializer) {
@@ -197,7 +196,7 @@ class AbstractClassCanBeInterface(config: Config) :
             // Reference to a const val. Effectively a compile-time constant, safe for interface getters
             is KtNameReferenceExpression -> {
                 @OptIn(KaExperimentalApi::class)
-                val symbol = initializer.resolveSuccessfulSymbol()
+                val symbol = initializer.resolveSymbol()
                 val psi = symbol?.psi as? KtProperty
                 psi?.isConstant() == true
             }

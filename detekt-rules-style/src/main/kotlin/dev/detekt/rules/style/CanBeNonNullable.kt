@@ -15,9 +15,9 @@ import dev.detekt.psi.isOpen
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
-import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -53,7 +53,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.resolution.KtResolvableCall
 
 /**
  * This rule inspects variables marked as nullable and reports which could be
@@ -208,14 +207,16 @@ class CanBeNonNullable(config: Config) :
                 }
         }
 
-        @OptIn(KaExperimentalApi::class)
         override fun visitCallExpression(expression: KtCallExpression) {
-            val calleeName = analyze(expression) {
-                expression.resolveCall()
-                    ?.symbol
-                    ?.callableId
-                    ?.callableName
-                    ?.asString()
+            val calleeName = expression.calleeExpression?.let {
+                analyze(it) {
+                    it.resolveToCall()
+                        ?.singleFunctionCallOrNull()
+                        ?.symbol
+                        ?.callableId
+                        ?.callableName
+                        ?.asString()
+                }
             }
             // Check for whether a call to `checkNonNull()` or `requireNonNull()` has
             // been made.
@@ -238,14 +239,13 @@ class CanBeNonNullable(config: Config) :
             super.visitPostfixExpression(expression)
         }
 
-        @OptIn(KaExperimentalApi::class)
         override fun visitWhenExpression(expression: KtWhenExpression) {
             val nullCheckedDescriptor = expression.subjectExpression
                 ?.collectDescendantsOfType<KtNameReferenceExpression>()
                 .orEmpty()
                 .mapNotNull {
                     analyze(it) {
-                        it.resolveCall()?.signature?.symbol?.createPointer()
+                        it.resolveToCall()?.singleVariableAccessCall()?.symbol?.createPointer()
                     }
                 }
                 .filter { kaVariableSymbolPointer ->
@@ -292,11 +292,10 @@ class CanBeNonNullable(config: Config) :
             super.visitSafeQualifiedExpression(expression)
         }
 
-        @OptIn(KaExperimentalApi::class)
         override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
             val isExtensionForNullable = analyze(expression) {
-                expression.resolveCall()
-                    ?.signature
+                expression.resolveToCall()
+                    ?.singleFunctionCallOrNull()
                     ?.symbol
                     ?.receiverParameter
                     ?.returnType
@@ -386,7 +385,6 @@ class CanBeNonNullable(config: Config) :
             return nonNullChecks
         }
 
-        @OptIn(KaExperimentalApi::class)
         private fun getDescriptor(leftExpression: KtElement?, rightExpression: KtElement?): KaVariableSymbol? =
             when {
                 leftExpression is KtNameReferenceExpression -> leftExpression
@@ -394,15 +392,16 @@ class CanBeNonNullable(config: Config) :
                 else -> null
             }?.let {
                 analyze(it) {
-                    (it.resolveCall() as? KaVariableAccessCall)?.symbol
+                    it.resolveToCall()?.singleVariableAccessCall()?.symbol
                 }
             }
 
-        @OptIn(KaExperimentalApi::class)
         private fun KtIsExpression.evaluateIsExpression(): List<KaVariableSymbol> {
             val descriptor = analyze(this.leftHandSide) {
-                (this@evaluateIsExpression.leftHandSide as? KtResolvableCall)?.resolveCall() as? KaVariableAccessCall
-            }?.symbol ?: return emptyList()
+                this@evaluateIsExpression.leftHandSide.resolveToCall()
+                    ?.singleVariableAccessCall()
+                    ?.symbol
+            } ?: return emptyList()
             return if (isNullableCheck(typeReference, isNegated)) {
                 nullableParams[descriptor]?.let { it.isNullChecked = true }
                 emptyList()
@@ -413,7 +412,7 @@ class CanBeNonNullable(config: Config) :
 
         private fun List<KtWhenCondition>.evaluateSubjectWhenExpression(
             expression: KtWhenExpression,
-            subjectDescriptors: List<KaCallableSymbol>,
+            subjectDescriptors: List<KaVariableSymbol>,
         ) {
             var isNonNullChecked = false
             var isNullChecked = false
@@ -460,10 +459,9 @@ class CanBeNonNullable(config: Config) :
         private fun KtExpression?.isValidElseExpression(): Boolean =
             this != null && this !is KtIfExpression && this !is KtWhenExpression
 
-        @OptIn(KaExperimentalApi::class)
         private fun updateNullableParam(expression: KtExpression, updateCallback: (NullableParam) -> Unit) {
             analyze(expression) {
-                ((expression as? KtResolvableCall)?.resolveCall() as? KaVariableAccessCall)?.let {
+                expression.resolveToCall()?.singleVariableAccessCall()?.let {
                     nullableParams[it.symbol]
                 }?.let(updateCallback)
             }
@@ -510,13 +508,13 @@ class CanBeNonNullable(config: Config) :
             }
         }
 
-        @OptIn(KaExperimentalApi::class)
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
             if (expression.operationToken == KtTokens.EQ) {
                 val assignedProperty = expression.left
                     ?.let {
                         analyze(it) {
-                            ((it as? KtResolvableCall)?.resolveCall() as? KaVariableAccessCall)
+                            it.resolveToCall()
+                                ?.singleVariableAccessCall()
                                 ?.symbol
                                 ?.psi as? KtProperty
                         }
@@ -554,7 +552,6 @@ class CanBeNonNullable(config: Config) :
             return isSetToNonNullable && cannotSetViaNonPrivateMeans
         }
 
-        @OptIn(KaExperimentalApi::class)
         private fun KtPropertyDelegate?.returnsNullable(): Boolean {
             val delegate = this ?: return true
             return analyze(delegate) {

@@ -6,9 +6,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.name.CallableId
@@ -57,7 +56,6 @@ class UselessCallOnNotNull(config: Config) :
     ),
     RequiresAnalysisApi {
 
-    @OptIn(KaExperimentalApi::class)
     @Suppress("ReturnCount")
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
@@ -68,7 +66,7 @@ class UselessCallOnNotNull(config: Config) :
         analyze(expression) {
             if (expression.receiverExpression.expressionType?.isNullable == true) return
 
-            val callableId = (expression.resolveCall() as? KaFunctionCall<*>)?.symbol?.callableId ?: return
+            val callableId = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId ?: return
             val conversion = uselessCallFqNames[callableId] ?: return
 
             val message = if (conversion.replacementName != null) {
@@ -80,7 +78,6 @@ class UselessCallOnNotNull(config: Config) :
         }
     }
 
-    @OptIn(KaExperimentalApi::class)
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
@@ -88,7 +85,7 @@ class UselessCallOnNotNull(config: Config) :
         if (calleeText !in ofNotNullNames) return
 
         analyze(expression) {
-            val callableId = expression.resolveCall()?.symbol?.callableId
+            val callableId = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
 
             val replacementName = ofNotNullFqNames[callableId]?.replacementName ?: return
 

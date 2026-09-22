@@ -8,21 +8,18 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isNonNullCheck
 import dev.detekt.psi.isNullCheck
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.resolution.KtResolvableCall
 
 /**
  * Reports null-checks on mutable properties, as these properties' value can be
@@ -81,7 +78,6 @@ class NullCheckOnMutableProperty(config: Config) :
             }
         }
 
-        @OptIn(KaExperimentalApi::class)
         override fun visitIfExpression(expression: KtIfExpression) {
             // Extract all possible null-checks within the if-expression.
             val nonNullChecks = (expression.condition as? KtBinaryExpression)
@@ -90,13 +86,12 @@ class NullCheckOnMutableProperty(config: Config) :
 
             val modifiedCandidateQueues = analyze(expression) {
                 nonNullChecks.mapNotNull { nonNullCondition ->
-                    (
-                        if (nonNullCondition.left is KtConstantExpression) {
-                            nonNullCondition.right as? KtNameReferenceExpression
-                        } else {
-                            nonNullCondition.left as? KtNameReferenceExpression
-                        }?.resolveCall() as? KaVariableAccessCall
-                        )
+                    if (nonNullCondition.left is KtConstantExpression) {
+                        nonNullCondition.right as? KtNameReferenceExpression
+                    } else {
+                        nonNullCondition.left as? KtNameReferenceExpression
+                    }?.resolveToCall()
+                        ?.singleVariableAccessCall()
                         ?.symbol
                         ?.callableId
                         ?.asSingleFqName()
@@ -116,11 +111,11 @@ class NullCheckOnMutableProperty(config: Config) :
             modifiedCandidateQueues.forEach { it.removeLast() }
         }
 
-        @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
         override fun visitReferenceExpression(expression: KtReferenceExpression) {
             super.visitReferenceExpression(expression)
             analyze(expression) {
-                ((expression as? KtResolvableCall)?.resolveCall() as? KaVariableAccessCall)
+                expression.resolveToCall()
+                    ?.singleVariableAccessCall()
                     ?.symbol
                     ?.callableId
                     ?.asSingleFqName()

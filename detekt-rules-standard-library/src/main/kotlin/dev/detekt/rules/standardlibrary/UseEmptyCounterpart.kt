@@ -6,8 +6,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -40,14 +40,13 @@ class UseEmptyCounterpart(config: Config) :
     ),
     RequiresAnalysisApi {
 
-    @OptIn(KaExperimentalApi::class)
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
         if (expression.calleeExpression?.text !in emptyCounterPartsShortName) return
 
         val fqName = analyze(expression) {
-            expression.resolveCall()?.symbol?.callableId?.asSingleFqName()
+            expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId?.asSingleFqName()
         } ?: return
 
         val emptyCounterpart = emptyCounterParts[fqName] ?: return

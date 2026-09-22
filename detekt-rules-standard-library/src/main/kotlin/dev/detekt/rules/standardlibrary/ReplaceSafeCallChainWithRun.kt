@@ -5,9 +5,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 
 /**
@@ -43,7 +43,6 @@ class ReplaceSafeCallChainWithRun(config: Config) :
     ),
     RequiresAnalysisApi {
 
-    @OptIn(KaExperimentalApi::class)
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)
 
@@ -56,7 +55,8 @@ class ReplaceSafeCallChainWithRun(config: Config) :
         var receiver = expression.receiverExpression
         while (receiver is KtSafeQualifiedExpression) {
             val canBeNull = analyze(receiver) {
-                receiver.resolveCall()?.signature?.returnType?.isNullable == true
+                val call = receiver.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+                call != null && call.partiallyAppliedSymbol.signature.returnType.isNullable
             }
             if (canBeNull) break
             counter++

@@ -6,18 +6,15 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleConstructorCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
-import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.KtValueArgumentList
-import org.jetbrains.kotlin.resolution.KtResolvableCall
 import org.jetbrains.kotlin.resolve.ArrayFqNames
 
 /**
@@ -86,20 +83,18 @@ class SpreadOperator(config: Config) :
      * Checks if an array copy can be skipped for this usage of the spread operator. If not, an array copy is required
      * for this usage of the spread operator, which will have a performance impact.
      */
-    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
     private fun KtValueArgument.canSkipArrayCopyForSpreadArgument(): Boolean {
         val expression = getArgumentExpression() ?: return false
         analyze(expression) {
-            val call = (expression as? KtResolvableCall)?.resolveCall() ?: return false
+            val call = expression.resolveToCall() ?: return false
 
-            if (((call as? KaVariableAccessCall)?.symbol as? KaValueParameterSymbol)?.isVararg == true) {
+            if ((call.singleVariableAccessCall()?.symbol as? KaValueParameterSymbol)?.isVararg == true) {
                 return true // As of Kotlin 1.1.60 passing varargs parameters to vararg calls does not create a new copy
             }
 
-            val functionCall = call as? KaFunctionCall<*>
-            if (functionCall?.symbol is KaConstructorSymbol) return true
+            if (call.singleConstructorCallOrNull() != null) return true
 
-            val fqName = functionCall?.symbol?.callableId?.asSingleFqName()
+            val fqName = call.singleFunctionCallOrNull()?.symbol?.callableId?.asSingleFqName()
             return fqName in ArrayFqNames.ARRAY_CALL_FQ_NAMES || fqName == FqName("kotlin.arrayOfNulls")
         }
     }

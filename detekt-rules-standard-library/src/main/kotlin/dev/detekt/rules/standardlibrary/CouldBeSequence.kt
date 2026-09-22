@@ -7,8 +7,9 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.StandardClassIds
@@ -54,7 +55,7 @@ class CouldBeSequence(config: Config) :
         var nextCall = expression.nextChainedCall()
         while (nextCall != null) {
             visitedCallExpressions += nextCall
-            if ((nextCall as? KtCallExpression)?.isCallingCollectionFunPresentInSequenceReturningSequence() != true) {
+            if (!nextCall.isCallingCollectionFunPresentInSequenceReturningSequence()) {
                 break
             }
 
@@ -68,14 +69,15 @@ class CouldBeSequence(config: Config) :
         }
     }
 
-    @OptIn(KaExperimentalApi::class)
-    private fun KtCallExpression.isCallingCollectionFunPresentInSequenceReturningSequence(): Boolean {
-        getCallNameExpression()?.getReferencedName()?.let {
+    private fun KtExpression.isCallingCollectionFunPresentInSequenceReturningSequence(): Boolean {
+        ((this as? KtCallExpression)?.getCallNameExpression()?.getReferencedName())?.let {
             if (it in listOfAllowedFunFromCollections) return false
         }
         return analyze(this) {
-            val callableId = resolveCall()?.symbol?.callableId
-
+            val callableId = resolveToCall()
+                ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
+                ?.symbol
+                ?.callableId
             callableId?.packageName == StandardClassIds.BASE_COLLECTIONS_PACKAGE &&
                 findTopLevelCallables(StandardClassIds.BASE_SEQUENCES_PACKAGE, callableId.callableName)
                     .any { it.returnType.symbol?.classId?.asFqNameString() == SEQUENCE_CLASS_STR }

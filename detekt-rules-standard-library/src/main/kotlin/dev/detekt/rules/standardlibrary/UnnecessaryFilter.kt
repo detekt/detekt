@@ -84,7 +84,7 @@ class UnnecessaryFilter(config: Config) :
         val calleeText = getCalleeExpressionIfAny()?.text ?: return null
         if (fqNames.none { it.shortName().asString() == calleeText }) return null
         return analyze(this) {
-            @OptIn(KaExperimentalApi::class)
+            @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
             val callableId = ((this@matchingCall as? KtResolvableCall)?.resolveCall() as? KaFunctionCall<*>)
                 ?.symbol
                 ?.callableId

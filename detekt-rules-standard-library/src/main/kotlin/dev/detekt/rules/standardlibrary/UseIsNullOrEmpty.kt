@@ -6,8 +6,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -133,7 +133,6 @@ class UseIsNullOrEmpty(config: Config) :
 
     private fun KtExpression?.isEmptyString() = this?.text == "\"\""
 
-    @OptIn(KaExperimentalApi::class)
     private fun KtExpression?.isCalling(callableIds: List<CallableId>): Boolean {
         val callExpression = this as? KtCallExpression
             ?: (this as? KtDotQualifiedExpression)?.selectorExpression as? KtCallExpression
@@ -142,7 +141,7 @@ class UseIsNullOrEmpty(config: Config) :
             return false
         }
         return analyze(callExpression) {
-            callExpression.resolveCall()?.symbol?.callableId in callableIds
+            callExpression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId in callableIds
         }
     }
 

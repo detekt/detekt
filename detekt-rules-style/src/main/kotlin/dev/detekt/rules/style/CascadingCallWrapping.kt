@@ -55,7 +55,7 @@ class CascadingCallWrapping(config: Config) :
 
     private fun checkExpression(expression: KtExpression, callExpression: KtExpression?) {
         if (!expression.containsNewline() && expression.receiverContainsNewline()) {
-            val callTextOrEmpty = callExpression?.text?.toString()?.let { " `$it`" }.orEmpty()
+            val callTextOrEmpty = callExpression?.text?.let { " `$it`" }.orEmpty()
             report(
                 Finding(
                     entity = expression.toErrorReportEntity(),

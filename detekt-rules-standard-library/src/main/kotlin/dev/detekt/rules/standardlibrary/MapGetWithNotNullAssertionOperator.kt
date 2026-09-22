@@ -8,8 +8,8 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
-import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedClassSymbol
@@ -23,9 +23,7 @@ import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtPostfixExpression
-import org.jetbrains.kotlin.resolution.KtResolvableCall
 
 private val GET_FUNCTION_NAME = Name.identifier("get")
 private val KEY_PARAMETER_NAME = Name.identifier("K")
@@ -76,7 +74,7 @@ class MapGetWithNotNullAssertionOperator(config: Config) :
         super.visitPostfixExpression(expression)
     }
 
-    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+    @OptIn(KaExperimentalApi::class)
     private fun KtPostfixExpression.isMapGet(): Boolean {
         val postfixExpression = baseExpression ?: return false
 
@@ -91,16 +89,20 @@ class MapGetWithNotNullAssertionOperator(config: Config) :
         } ?: return false
 
         analyze(postfixExpression) {
-            val callExpression = (expression as? KtResolvableCall)?.resolveCall()
+            val callExpression = expression.resolveToCall()
 
-            val successfulCall = callExpression as? KaCallableMemberCall<*, *> ?: return false
+            val successfulCall = callExpression?.successfulVariableAccessCall()
+                ?: callExpression?.successfulFunctionCallOrNull()
+                ?: return false
 
             val callReturnType = successfulCall.symbol.returnType
             if (callReturnType.symbol?.classId != StandardClassIds.Map && !callReturnType.hasMapSuperType()) {
                 return false
             }
 
-            val functionSymbol = ((postfixExpression as? KtResolvableCall)?.resolveCall() as? KaFunctionCall<*>)
+            val functionSymbol = postfixExpression
+                .resolveToCall()
+                ?.successfulFunctionCallOrNull()
                 ?.symbol
                 ?: return false
 

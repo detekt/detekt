@@ -7,18 +7,17 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.computeMissingCases
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.config.AnalysisFlags
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -27,7 +26,6 @@ import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.jetbrains.kotlin.psi.psiUtil.siblings
-import org.jetbrains.kotlin.resolution.KtResolvableCall
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 
 /**
@@ -146,13 +144,12 @@ class OptionalUnit(config: Config) :
     private fun createMessage(function: KtNamedFunction) =
         "The function ${function.name} defines a return type of Unit. This is unnecessary and can safely be removed."
 
-    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
     private fun KtExpression.isGenericOrNothingType(): Boolean {
         analyze(this) {
-            val isGenericType =
-                ((this@isGenericOrNothingType as? KtResolvableCall)?.resolveCall() as? KaCallableMemberCall<*, *>)
-                    ?.symbol
-                    ?.returnType is KaTypeParameterType
+            val isGenericType = resolveToCall()
+                ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
+                ?.symbol
+                ?.returnType is KaTypeParameterType
             val isNothingType = expressionType?.isNothingType == true
             // Either the function initializer returns Nothing or it is a generic function
             // into which Unit is passed, but not both.

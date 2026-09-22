@@ -10,8 +10,10 @@ import dev.detekt.psi.isOpen
 import dev.detekt.rules.coroutines.utils.CoroutineCallableIds
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
@@ -26,7 +28,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
-import org.jetbrains.kotlin.resolution.KtResolvableCall
 
 /*
  * Based on code from Kotlin project:
@@ -86,13 +87,13 @@ class RedundantSuspendModifier(config: Config) :
             this is KtCallExpression ||
             this is KtArrayAccessExpression // for get() operator function calls
 
-    @OptIn(KaExperimentalApi::class)
     private fun KtExpression.hasSuspendCalls(): Boolean {
         if (!isValidCandidateExpression()) return false
 
         return when (this) {
             is KtForExpression -> {
                 analyze(this) {
+                    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
                     this@hasSuspendCalls.resolveSymbols()
                         .filterIsInstance<KaNamedFunctionSymbol>()
                         .any { it.isSuspend }
@@ -101,19 +102,17 @@ class RedundantSuspendModifier(config: Config) :
 
             else -> {
                 analyze(this) {
-                    val call = (this@hasSuspendCalls as? KtResolvableCall)?.resolveCall()
+                    val call = this@hasSuspendCalls.resolveToCall()
+                        ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
                         ?: return false
-                    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
                     when (call) {
-                        is KaFunctionCall<*> -> {
+                        is KaFunctionCall -> {
                             (call.symbol as? KaNamedFunctionSymbol)?.isSuspend == true
                         }
 
                         is KaVariableAccessCall -> {
                             call.symbol.callableId == CoroutineCallableIds.CoroutineContextCallableId
                         }
-
-                        else -> false
                     }
                 }
             }

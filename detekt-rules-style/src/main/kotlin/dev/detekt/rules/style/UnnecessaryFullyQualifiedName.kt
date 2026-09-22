@@ -12,13 +12,16 @@ import dev.detekt.api.config
 import dev.detekt.psi.fullyQualifiedNameGlobToRegex
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaScopeKind
 import org.jetbrains.kotlin.analysis.api.components.compositeScope
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.components.scopeContext
+import org.jetbrains.kotlin.analysis.api.impl.base.references.KaBaseSimpleNameReference
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassLikeSymbol
@@ -124,8 +127,11 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         if (!typeText.contains(".")) return
 
         analyze(type) {
-            @OptIn(KaExperimentalApi::class)
-            val resolvedSymbol = type.referenceExpression?.resolveSymbol() ?: return
+            @OptIn(KaImplementationDetail::class)
+            @Suppress("DEPRECATION")
+            val resolvedSymbol = (type.referenceExpression?.reference as? KaBaseSimpleNameReference)
+                ?.resolveToSymbol()
+                ?: return
             val candidate = resolvedSymbol.ignoredFqNameCandidate()
             if (candidate != null && ignoredFullyQualifiedNames.any { it.matches(candidate) }) return
             val packageFqName = resolvedSymbol.packageFqName() ?: return
@@ -170,7 +176,6 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         )
     }
 
-    @OptIn(KaExperimentalApi::class)
     @Suppress("ReturnCount", "CyclomaticComplexMethod")
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         super.visitDotQualifiedExpression(expression)
@@ -191,8 +196,8 @@ class UnnecessaryFullyQualifiedName(config: Config) :
             ?: return
 
         analyze(expression) {
-            val resolvedCall = expression.resolveCall() as? KaCallableMemberCall<*, *>
-            val symbol = resolvedCall?.symbol ?: return
+            val resolvedCall = expression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+            val symbol = resolvedCall?.partiallyAppliedSymbol?.symbol ?: return
             val candidate = symbol.ignoredFqNameCandidate()
             if (candidate != null && ignoredFullyQualifiedNames.any { it.matches(candidate) }) return
             val packageFqName = symbol.packageFqName() ?: return
@@ -222,11 +227,12 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         }
     }
 
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isReceiverLocalVariableOrProperty(receiver: KtExpression): Boolean {
         val leftmost = leftmostReference(receiver) ?: return false
         @OptIn(KaExperimentalApi::class)
-        return leftmost.resolveSuccessfulCall() is KaVariableSymbol
+        return leftmost.resolveSymbol() is KaVariableSymbol
     }
 
     private fun leftmostReference(expression: KtExpression): KtNameReferenceExpression? =

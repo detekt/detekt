@@ -8,15 +8,15 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.expressions.expressionType
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.expressionType
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -58,14 +58,14 @@ class ObjectLiteralToLambda(config: Config) :
             it.expressionType?.symbol == objectSymbol
         }
 
-    @OptIn(KaExperimentalApi::class)
+    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.containsOwnMethodCall(objectSymbol: KaClassSymbol) =
-        anyDescendantOfType<KtCallExpression> { expr ->
-            val symbol = expr.resolveSuccessfulCall() ?: return@anyDescendantOfType false
+        anyDescendantOfType<KtExpression> { expr ->
+            val symbol = expr.resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
             listOfNotNull(
-                symbol.dispatchReceiver,
-                symbol.extensionReceiver
+                symbol?.dispatchReceiver,
+                symbol?.extensionReceiver
             ).any { it.type.symbol == objectSymbol }
         }
 
