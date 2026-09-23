@@ -9,8 +9,9 @@ import dev.detekt.api.Rule
 import dev.detekt.api.ValueWithReason
 import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.analysis.api.types.type
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
