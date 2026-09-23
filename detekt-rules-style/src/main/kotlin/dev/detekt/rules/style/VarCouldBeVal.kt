@@ -16,8 +16,8 @@ import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
@@ -205,7 +205,7 @@ class VarCouldBeVal(config: Config) :
 
                 is KtNameReferenceExpression -> {
                     @OptIn(KaExperimentalApi::class)
-                    returnedExpression.resolveSymbol()?.let {
+                    returnedExpression.resolveSuccessfulSymbol()?.let {
                         escapeCandidates[it]?.forEach(declarationCandidates::remove)
                     }
                 }

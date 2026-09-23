@@ -17,8 +17,8 @@ import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.isUsedAsExpression
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.expressions.isUsedAsExpression
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
@@ -210,7 +210,7 @@ class IgnoredReturnValue(config: Config) :
                 val symbol = lambda.functionLiteral.symbol
                 val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
                 @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-                label?.resolveSymbol() == symbol
+                label?.resolveSuccessfulSymbol() == symbol
             }
 
             else -> {

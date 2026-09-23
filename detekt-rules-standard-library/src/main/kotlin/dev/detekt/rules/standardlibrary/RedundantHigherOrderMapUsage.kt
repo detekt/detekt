@@ -10,7 +10,8 @@ import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
@@ -134,7 +135,7 @@ class RedundantHigherOrderMapUsage(config: Config) :
             if (it == lastStatement) return@collectDescendantsOfType false
             val label = (it as? KtExpressionWithLabel)?.getTargetLabel() ?: return@collectDescendantsOfType false
             @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-            label.resolveSymbol() == symbol
+            label.resolveSuccessfulSymbol() == symbol
         }
         return labeledReturnExpressions.all { isReferenceTo(it, lambdaParameter) }
     }
@@ -147,7 +148,7 @@ class RedundantHigherOrderMapUsage(config: Config) :
             else -> expression
         } as? KtNameReferenceExpression ?: return false
         @OptIn(KaExperimentalApi::class)
-        return nameReference.resolveSymbol() == symbol
+        return nameReference.resolveSuccessfulCall() == symbol
     }
 
     companion object {
