@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(libs.kotlin.compiler)
+    api(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
 }
 
 dependencyAnalysis {

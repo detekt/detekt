@@ -5,9 +5,12 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
 import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.analysis.api.types.type
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
@@ -58,7 +61,9 @@ class DontDowncastCollectionTypes(config: Config) :
         }
     }
 
-    private fun KaSession.checkForDowncast(parent: KtExpression, left: KtExpression, right: KtTypeReference?) {
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun checkForDowncast(parent: KtExpression, left: KtExpression, right: KtTypeReference?) {
         val leftType = left.expressionType?.symbol?.classId ?: return
         val rightType = right?.type?.symbol?.classId ?: return
 

@@ -6,9 +6,18 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.isBooleanType
+import org.jetbrains.kotlin.analysis.api.types.isCharType
+import org.jetbrains.kotlin.analysis.api.types.isDoubleType
+import org.jetbrains.kotlin.analysis.api.types.isFloatType
+import org.jetbrains.kotlin.analysis.api.types.isIntType
+import org.jetbrains.kotlin.analysis.api.types.isLongType
+import org.jetbrains.kotlin.analysis.api.types.isStringType
+import org.jetbrains.kotlin.analysis.api.types.type
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -62,7 +71,9 @@ class RedundantExplicitType(config: Config) :
         super.visitProperty(property)
     }
 
-    private fun KaSession.typeIsSameAs(expression: KtConstantExpression, type: KaType) =
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun typeIsSameAs(expression: KtConstantExpression, type: KaType) =
         when (expression.node.elementType) {
             KtNodeTypes.BOOLEAN_CONSTANT -> type.isBooleanType
 

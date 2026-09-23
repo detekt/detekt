@@ -10,9 +10,12 @@ import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
 import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
 import dev.detekt.rules.style.ForbiddenMethodCall.ForbiddenMethod
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.allOverriddenSymbols
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -74,7 +77,7 @@ class ForbiddenNamedParam(config: Config) :
             expression.resolveToCall()?.singleFunctionCallOrNull()?.let {
                 sequence {
                     yield(it.symbol)
-                    yieldAll(it.symbol.allOverriddenSymbols)
+                    yieldAll((it.symbol as KaCallableSymbol).allOverriddenSymbols)
                 }
             }?.forEach { symbol ->
                 methods.find { it.value.match(symbol) }?.let { matchingMethod ->

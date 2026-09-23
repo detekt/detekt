@@ -7,8 +7,10 @@ dependencies {
     compileOnly(libs.jetbrains.annotations)
     api(projects.detektApi)
     api(projects.detektTestUtils)
-    api(libs.kotlin.compiler)
+    api(libs.kotlin.analysisApiSurface)
     implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.analysisApiImplementation)
+    implementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
 }
 
 dependencyAnalysis {

@@ -7,6 +7,11 @@ dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
 
+    api(libs.kotlin.analysisApiSurface)
+    implementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
+
+    implementation(libs.kotlin.analysisApiImplementation)
+
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)

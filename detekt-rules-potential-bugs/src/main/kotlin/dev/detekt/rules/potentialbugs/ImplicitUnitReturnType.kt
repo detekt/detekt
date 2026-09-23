@@ -8,7 +8,9 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.hasImplicitUnitReturnType
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.visibility.isPublicApi
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -58,7 +60,7 @@ class ImplicitUnitReturnType(config: Config) :
 
         if (function.isLocal) return
         analyze(function) {
-            if (!isPublicApi(function.symbol)) return
+            if (!function.symbol.isPublicApi) return
         }
 
         if (allowExplicitReturnType && function.hasDeclaredReturnType()) {

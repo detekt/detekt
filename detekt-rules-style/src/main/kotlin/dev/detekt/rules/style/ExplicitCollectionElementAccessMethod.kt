@@ -6,13 +6,19 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.analysis.api.symbols.containingDeclaration
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.allSupertypes
+import org.jetbrains.kotlin.analysis.api.types.isUnitType
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -86,11 +92,10 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             else -> false
         } && unusedReturnValue(expression)
 
-    context(session: KaSession)
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
     private fun KtCallExpression.getFunctionSymbol(): KaNamedFunctionSymbol? =
-        with(session) {
-            resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
-        }
+        resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
 
     private fun canReplace(expression: KtCallExpression, function: KaNamedFunctionSymbol): Boolean {
         if (!function.isOperator) return false
@@ -113,8 +118,10 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         return required..max
     }
 
+    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
-    private fun KaSession.shouldReplace(function: KaNamedFunctionSymbol): Boolean {
+    context(_: KaSession)
+    private fun shouldReplace(function: KaNamedFunctionSymbol): Boolean {
         // The intent of kotlin operation functions is to support indexed accessed, so should always be replaced.
         val isJava = function.origin.let { it == KaSymbolOrigin.JAVA_SOURCE || it == KaSymbolOrigin.JAVA_LIBRARY }
         if (!isJava) return true
@@ -129,11 +136,13 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         )
     }
 
+    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
-    private fun KaSession.isCallerMap(expression: KtCallExpression): Boolean {
+    context(_: KaSession)
+    private fun isCallerMap(expression: KtCallExpression): Boolean {
         if (expression.valueArguments.size != 2) return false
-        val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.containingSymbol as? KaClassSymbol
-            ?: return false
+        val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.containingDeclaration
+            as? KaClassSymbol ?: return false
 
         val mapClass = ClassId.fromString("kotlin/collections/Map")
         return symbol.classId == mapClass ||

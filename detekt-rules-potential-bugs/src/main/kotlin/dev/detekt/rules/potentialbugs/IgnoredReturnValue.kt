@@ -13,17 +13,25 @@ import dev.detekt.api.config
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.isCalling
 import dev.detekt.psi.pathGlobToRegex
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.expressions.isUsedAsExpression
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.analysis.api.symbols.containingDeclaration
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.isNothingType
+import org.jetbrains.kotlin.analysis.api.types.isUnitType
 import org.jetbrains.kotlin.load.java.JavaClassFinderImpl
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
@@ -169,14 +177,13 @@ class IgnoredReturnValue(config: Config) :
         val origin = (this as? KaClassSymbol)?.origin
         if (origin != KaSymbolOrigin.JAVA_SOURCE && origin != KaSymbolOrigin.JAVA_LIBRARY) return emptyList()
         val packageFqName = this.classId?.packageFqName ?: return emptyList()
-        val javaClassFinder = JavaClassFinderImpl(null).apply {
-            setScope(scope)
-            setProjectInstance(project)
-        }
+        val javaClassFinder = JavaClassFinderImpl(null, project, scope)
         return javaClassFinder.findPackage(packageFqName)?.annotations?.mapNotNull { it.classId }.orEmpty()
     }
 
-    private fun KaSession.isUsedAsExpression(call: KtCallExpression, returnType: KaType): Boolean {
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun isUsedAsExpression(call: KtCallExpression, returnType: KaType): Boolean {
         if (returnType is KaFunctionType &&
             call.getStrictParentOfType<KtCallExpression>()?.calleeExpression == KtPsiUtil.safeDeparenthesize(call)
         ) {
@@ -196,19 +203,18 @@ class IgnoredReturnValue(config: Config) :
         return true
     }
 
-    context(session: KaSession)
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
     private fun KtExpression.isLambdaResult(lambda: KtLambdaExpression): Boolean {
         val statement = getQualifiedExpressionForSelectorOrThis().let {
             it.getStrictParentOfType<KtReturnExpression>() ?: it
         }
         return when (statement) {
             is KtReturnExpression -> {
-                with(session) {
-                    val symbol = lambda.functionLiteral.symbol
-                    val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
-                    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-                    label?.resolveSymbol() == symbol
-                }
+                val symbol = lambda.functionLiteral.symbol
+                val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
+                @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+                label?.resolveSuccessfulSymbol() == symbol
             }
 
             else -> {

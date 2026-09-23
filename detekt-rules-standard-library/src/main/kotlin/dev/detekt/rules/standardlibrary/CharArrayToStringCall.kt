@@ -6,8 +6,11 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
@@ -80,14 +83,20 @@ class CharArrayToStringCall(config: Config) :
         }
     }
 
-    private fun KaSession.isToStringCall(expression: KtExpression) =
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun isToStringCall(expression: KtExpression) =
         expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == toStringCallableId
 
-    private fun KaSession.isCharArray(expression: KtExpression) = classId(expression) == charArrayClassId
+    context(_: KaSession)
+    private fun isCharArray(expression: KtExpression) = classId(expression) == charArrayClassId
 
-    private fun KaSession.isString(expression: KtExpression) = classId(expression) == stringClassId
+    context(_: KaSession)
+    private fun isString(expression: KtExpression) = classId(expression) == stringClassId
 
-    private fun KaSession.classId(expression: KtExpression) = expression.expressionType?.symbol?.classId
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun classId(expression: KtExpression) = expression.expressionType?.symbol?.classId
 
     private fun report(expression: KtExpression) {
         val finding = Finding(

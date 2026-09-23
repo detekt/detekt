@@ -10,9 +10,12 @@ import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
+import org.jetbrains.kotlin.K1Deprecation
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundAccessCall
@@ -25,6 +28,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertyAccessorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
+import org.jetbrains.kotlin.analysis.api.symbols.allOverriddenSymbols
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -126,6 +130,7 @@ class ForbiddenMethodCall(config: Config) :
 
     private fun check(expression: KtExpression) {
         analyze(expression) {
+            @OptIn(K1Deprecation::class)
             val call = expression.resolveToCall()
                 ?: expression.asCallableReferenceExpression()?.resolveToCall()
                 ?: return
@@ -150,7 +155,8 @@ class ForbiddenMethodCall(config: Config) :
     }
 
     @OptIn(KaExperimentalApi::class)
-    private fun KaSession.getCallInfos(
+    context(_: KaSession)
+    private fun getCallInfos(
         kaCall: KaCall,
         expression: KtExpression,
     ): Sequence<Pair<KaPropertySymbol?, KaCallableSymbol?>> =
@@ -158,6 +164,7 @@ class ForbiddenMethodCall(config: Config) :
             val symbols = when (kaCall) {
                 is KaCallableMemberCall<*, *> -> {
                     val expressionSymbol = kaCall.partiallyAppliedSymbol.symbol
+                    @OptIn(KaContextParameterApi::class)
                     sequenceOf(expressionSymbol).plus(expressionSymbol.allOverriddenSymbols).map {
                         if (
                             it is KaPropertySymbol &&

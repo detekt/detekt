@@ -10,13 +10,18 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.fullyQualifiedNameGlobToRegex
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaScopeKind
-import org.jetbrains.kotlin.analysis.api.impl.base.references.KaBaseSimpleNameReference
+import org.jetbrains.kotlin.analysis.api.components.compositeScope
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.components.scopeContext
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
@@ -25,6 +30,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.findClass
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
@@ -101,6 +107,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         }
     }
 
+    @OptIn(KaExperimentalApi::class)
     @Suppress("ReturnCount")
     override fun visitUserType(type: KtUserType) {
         super.visitUserType(type)
@@ -124,8 +131,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         analyze(type) {
             @OptIn(KaImplementationDetail::class)
             @Suppress("DEPRECATION")
-            val resolvedSymbol = (type.referenceExpression?.reference as? KaBaseSimpleNameReference)
-                ?.resolveToSymbol()
+            val resolvedSymbol = type.referenceExpression?.resolveSuccessfulSymbol()
                 ?: return
             val candidate = resolvedSymbol.ignoredFqNameCandidate()
             if (candidate != null && ignoredFullyQualifiedNames.any { it.matches(candidate) }) return
@@ -222,10 +228,12 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         }
     }
 
-    private fun KaSession.isReceiverLocalVariableOrProperty(receiver: KtExpression): Boolean {
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun isReceiverLocalVariableOrProperty(receiver: KtExpression): Boolean {
         val leftmost = leftmostReference(receiver) ?: return false
         @OptIn(KaExperimentalApi::class)
-        return leftmost.resolveSymbol() is KaVariableSymbol
+        return leftmost.resolveSuccessfulSymbol() is KaVariableSymbol
     }
 
     private fun leftmostReference(expression: KtExpression): KtNameReferenceExpression? =
@@ -242,7 +250,8 @@ class UnnecessaryFullyQualifiedName(config: Config) :
     private fun isInStringLiteral(element: KtElement): Boolean =
         element.getParentOfType<KtStringTemplateExpression>(strict = false) != null
 
-    context(session: KaSession)
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
     private fun hasNameCollision(element: KtElement, resolvedSymbol: KaSymbol): Boolean {
         val simpleName = resolvedSymbol.collisionCheckName() ?: return false
 
@@ -250,7 +259,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
 
         // Annotation references resolve to constructors, so their classifier should be checked
         val symbol = if (resolvedSymbol is KaConstructorSymbol) {
-            resolvedSymbol.containingClassId?.let { with(session) { findClass(it) } } ?: resolvedSymbol
+            resolvedSymbol.containingClassId?.let { findClass(it) } ?: resolvedSymbol
         } else {
             resolvedSymbol
         }
@@ -260,19 +269,19 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         return false
     }
 
-    context(session: KaSession)
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
     private fun findLocalSymbols(element: KtElement, name: Name): Sequence<KaSymbol> {
         // Default imports are overridden by an added explicit import, so a default symbol with the same
         // name is not a real collision (only explicit imports are). Same-package declarations are
         // overridden too, so they only collide when the simple name is actually used unqualified
         // somewhere in the file.
-        val scope = with(session) {
+        val scope =
             element.containingKtFile.scopeContext(element).compositeScope {
                 it !is KaScopeKind.DefaultSimpleImportingScope &&
                     it !is KaScopeKind.DefaultStarImportingScope &&
                     (it !is KaScopeKind.PackageMemberScope || collidesWithPackageScope(element.containingKtFile, name))
             }
-        }
         return scope.classifiers(name) + scope.callables(name)
     }
 
@@ -293,12 +302,13 @@ class UnnecessaryFullyQualifiedName(config: Config) :
                 !isInImportOrPackage(it)
         }
 
-    context(session: KaSession)
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
     private fun hasOuterClassCollision(element: KtElement, symbol: KaClassSymbol): Boolean =
         // If any class in the outer chain has a name collision, the FQN can't be simplified
         // because the import path through the outer class would be ambiguous.
         generateSequence(symbol.classId?.outerClassId) { it.outerClassId }
-            .mapNotNull { with(session) { findClass(it) } }
+            .mapNotNull { findClass(it) }
             .any { hasNameCollision(element, it) }
 
     private fun isShadowedByTypeParameter(element: KtElement, name: Name): Boolean =

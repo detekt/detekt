@@ -6,13 +6,20 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.components.computeMissingCases
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
+import org.jetbrains.kotlin.analysis.api.expressions.isUsedAsExpression
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
+import org.jetbrains.kotlin.analysis.api.types.isNothingType
+import org.jetbrains.kotlin.analysis.api.types.isUnitType
 import org.jetbrains.kotlin.config.AnalysisFlags
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -100,8 +107,8 @@ class OptionalUnit(config: Config) :
         super.visitBlockExpression(expression)
     }
 
-    @OptIn(KaIdeApi::class)
-    context(session: KaSession)
+    @OptIn(KaIdeApi::class, KaContextParameterApi::class)
+    context(_: KaSession)
     private fun KtExpression.canBeUsedAsValue(): Boolean =
         when (this) {
             is KtIfExpression -> {
@@ -110,7 +117,7 @@ class OptionalUnit(config: Config) :
             }
 
             is KtWhenExpression ->
-                entries.lastOrNull()?.elseKeyword != null || with(session) { computeMissingCases().isEmpty() }
+                entries.lastOrNull()?.elseKeyword != null || computeMissingCases().isEmpty()
 
             else ->
                 true

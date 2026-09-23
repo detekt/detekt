@@ -46,7 +46,7 @@ class EntitySpec {
                     $$"Entity(signature=C$private fun memberFun: Int, " +
                         "location=Location(source=5:17, endSource=5:26, text=49:58, " +
                         "path=$path), " +
-                        "ktElement=FUN)"
+                        "ktElement=FUNCTION)"
                 )
         }
     }

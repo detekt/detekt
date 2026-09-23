@@ -6,9 +6,12 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.components.returnType
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.isSubtypeOf
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -70,5 +73,7 @@ class UnreachableCatchBlock(config: Config) :
         }
     }
 
-    private fun KaSession.catchType(catchClause: KtCatchClause): KaType? = catchClause.catchParameter?.returnType
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun catchType(catchClause: KtCatchClause): KaType? = catchClause.catchParameter?.returnType
 }

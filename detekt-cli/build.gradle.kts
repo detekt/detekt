@@ -21,17 +21,17 @@ dependencies {
     implementation(projects.detektApi)
     implementation(projects.detektTooling)
     implementation(projects.detektUtils)
-    implementation(libs.kotlin.compiler) {
-        version {
-            strictly(libs.versions.kotlin.get())
-        }
-    }
     runtimeOnly(projects.detektCore)
     runtimeOnly(projects.detektRules)
     runtimeOnly(projects.detektReportHtml)
     runtimeOnly(projects.detektReportMarkdown)
     runtimeOnly(projects.detektReportSarif)
     runtimeOnly(projects.detektReportCheckstyle)
+    implementation(libs.kotlin.analysisApiImplementation)
+    implementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
+    implementation(libs.kotlin.analysisApiSurface)
+
+    runtimeOnly(libs.kotlin.analysisApiStandaloneImplementation)
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)

@@ -14,12 +14,17 @@ import dev.detekt.psi.isConstant
 import dev.detekt.psi.isInternal
 import dev.detekt.psi.isOpen
 import dev.detekt.psi.isProtected
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
+import org.jetbrains.kotlin.analysis.api.scopes.memberScope
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.isAnyType
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
@@ -116,11 +121,8 @@ class AbstractClassCanBeInterface(config: Config) :
             else -> klass.isAbstract()
         }
 
-    private fun KaSession.checkMembers(
-        klass: KtClass,
-        members: List<KtCallableDeclaration>,
-        nameIdentifier: PsiElement,
-    ) {
+    context(_: KaSession)
+    private fun checkMembers(klass: KtClass, members: List<KtCallableDeclaration>, nameIdentifier: PsiElement) {
         // Treat open members as abstract-like unless they have a non-const backing field. An open val with a
         // non-const initializer (e.g. open val x = computeSomething()) stores a value evaluated once per instance.
         // In an interface it would become a getter evaluated on every access, changing the behavior and preventing
@@ -152,7 +154,9 @@ class AbstractClassCanBeInterface(config: Config) :
     private fun KtClass.containsInternalClass() =
         body?.children?.filterIsInstance<KtClass>()?.any { it.isInternal() } == true
 
-    private fun KaSession.hasInheritedMember(klass: KtClass, isAbstract: Boolean): Boolean =
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun hasInheritedMember(klass: KtClass, isAbstract: Boolean): Boolean =
         when {
             klass.superTypeListEntries.isEmpty() -> false
 
@@ -163,7 +167,9 @@ class AbstractClassCanBeInterface(config: Config) :
             }
         }
 
-    private fun KaSession.isAnyParentClass(klass: KtClass): Boolean =
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun isAnyParentClass(klass: KtClass): Boolean =
         (klass.symbol as? KaClassSymbol)
             ?.superTypes
             ?.any { !it.isAnyType && (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.CLASS } == true
@@ -177,7 +183,8 @@ class AbstractClassCanBeInterface(config: Config) :
      *
      * Only literal values (e.g. 404, "text") and direct references to const vals are considered constant.
      */
-    context(session: KaSession)
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
     private fun KtCallableDeclaration.hasConstOrNoBackingField(): Boolean =
         when (val initializer = (this as? KtProperty)?.initializer) {
             // No initializer: getter-only property or a function. no backing field, safe for interface
@@ -188,10 +195,8 @@ class AbstractClassCanBeInterface(config: Config) :
 
             // Reference to a const val. Effectively a compile-time constant, safe for interface getters
             is KtNameReferenceExpression -> {
-                val symbol = with(session) {
-                    @OptIn(KaExperimentalApi::class)
-                    initializer.resolveSymbol()
-                }
+                @OptIn(KaExperimentalApi::class)
+                val symbol = initializer.resolveSuccessfulSymbol()
                 val psi = symbol?.psi as? KtProperty
                 psi?.isConstant() == true
             }

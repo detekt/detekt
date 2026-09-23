@@ -13,14 +13,18 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isExpect
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolVisibility
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.containingDeclaration
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -248,11 +252,8 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
 
     fun KaSymbol.isPrivateProperty() = this is KaPropertySymbol && this.visibility == KaSymbolVisibility.PRIVATE
 
-    context(session: KaSession)
-    fun KaSymbol.isConstructorParameter(): Boolean {
-        val symbol = this
-        return with(session) {
-            symbol is KaValueParameterSymbol && symbol.containingDeclaration is KaConstructorSymbol
-        }
-    }
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    fun KaSymbol.isConstructorParameter(): Boolean =
+        this is KaValueParameterSymbol && containingDeclaration is KaConstructorSymbol
 }
