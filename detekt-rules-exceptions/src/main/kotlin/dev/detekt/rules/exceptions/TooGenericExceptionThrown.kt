@@ -50,7 +50,7 @@ class TooGenericExceptionThrown(config: Config) :
     ) { it.toSet() }
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
-        expression.thrownExpression?.referenceExpression()?.text?.let {
+        expression.thrownExpression?.referenceExpression()?.text?.toString()?.let {
             if (it in exceptionNames) {
                 report(
                     Finding(
