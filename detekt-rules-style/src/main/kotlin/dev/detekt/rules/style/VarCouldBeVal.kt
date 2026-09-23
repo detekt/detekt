@@ -12,6 +12,7 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isLateinit
 import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.K1Deprecation
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
@@ -232,6 +233,7 @@ class VarCouldBeVal(config: Config) :
                 else -> {
                     // Check for whether property belongs to an anonymous object
                     // defined in a function.
+                    @OptIn(K1Deprecation::class)
                     containingClassOrObject
                         ?.takeIf { it.isObjectLiteral() }
                         ?.containingNonLocalDeclaration() != null

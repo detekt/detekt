@@ -11,6 +11,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
+import org.jetbrains.kotlin.K1Deprecation
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
@@ -146,6 +147,7 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
         (this as? KtResolvable)?.resolveSuccessfulSymbol() as? KaVariableSymbol
 
     private fun registerNewDeclaration(declaration: KtNamedDeclaration) {
+        @OptIn(K1Deprecation::class)
         declaration.toSourceElement().getPsi()?.also {
             variables[it] = declaration
         }

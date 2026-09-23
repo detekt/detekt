@@ -10,6 +10,7 @@ import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
+import org.jetbrains.kotlin.K1Deprecation
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
@@ -128,6 +129,7 @@ class ForbiddenMethodCall(config: Config) :
 
     private fun check(expression: KtExpression) {
         analyze(expression) {
+            @OptIn(K1Deprecation::class)
             val call = expression.resolveToCall()
                 ?: expression.asCallableReferenceExpression()?.resolveToCall()
                 ?: return
