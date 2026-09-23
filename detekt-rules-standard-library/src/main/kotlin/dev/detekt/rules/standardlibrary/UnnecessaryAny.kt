@@ -187,9 +187,10 @@ class UnnecessaryAny(config: Config) :
             }
 
             itRefCountInLeft == 1 -> {
-                val itExpressionType = ((leftExpression as? KtResolvable)?.resolveSuccessfulSymbol() as? KaVariableSymbol)
-                    ?.returnType
-                    ?: return null
+                val itExpressionType =
+                    ((leftExpression as? KtResolvable)?.resolveSuccessfulSymbol() as? KaVariableSymbol)
+                        ?.returnType
+                        ?: return null
                 val valueExpressionType =
                     ((rightExpression as? KtResolvableCall)?.resolveCall() as? KaSingleCall<*, *>)
                         ?.signature
