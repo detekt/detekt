@@ -1,12 +1,11 @@
 package dev.detekt.test.utils
 
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.compilation.KaCompilationResult
 import org.jetbrains.kotlin.analysis.api.compilation.KaCompilationTarget
 import org.jetbrains.kotlin.analysis.api.compilation.compile
 import org.jetbrains.kotlin.analysis.api.compilation.createCompilationOptions
 import org.jetbrains.kotlin.analysis.api.session.analyze
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.KaCompilationResult
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnosticWithPsi
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaSeverity
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils

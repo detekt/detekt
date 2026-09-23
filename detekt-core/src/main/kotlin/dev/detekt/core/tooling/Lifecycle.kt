@@ -14,8 +14,9 @@ import dev.detekt.core.parser.DetektMessageCollector
 import dev.detekt.core.rules.createRuleProviders
 import dev.detekt.core.util.PerformanceMonitor.Phase
 import dev.detekt.tooling.api.AnalysisMode
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
+import org.jetbrains.kotlin.analysis.api.components.collectDiagnostics
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaSeverity
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocationWithRange
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
