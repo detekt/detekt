@@ -7,9 +7,11 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.renderer.base.annotations.KaRendererAnnotationsFilter
 import org.jetbrains.kotlin.analysis.api.renderer.declarations.impl.KaDeclarationRendererForSource
+import org.jetbrains.kotlin.analysis.api.renderer.render
+import org.jetbrains.kotlin.analysis.api.scopes.memberScope
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
@@ -18,9 +20,14 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolVisibility
+import org.jetbrains.kotlin.analysis.api.symbols.fakeOverrideOriginal
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.allSupertypes
+import org.jetbrains.kotlin.analysis.api.types.lowerBoundIfFlexible
 import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.analysis.api.types.type
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtDelegatedSuperTypeEntry
 
@@ -93,7 +100,8 @@ class IgnoredJavaDefaultMethod(config: Config) :
         }
     }
 
-    private fun KaSession.reportIgnoredDefaultMethods(
+    context(_: KaSession)
+    private fun reportIgnoredDefaultMethods(
         entry: KtDelegatedSuperTypeEntry,
         interfaceSymbol: KaClassSymbol,
         ignoredOriginals: Set<KaCallableSymbol>,
@@ -131,7 +139,8 @@ class IgnoredJavaDefaultMethod(config: Config) :
     }
 
     // Overloads share a name, so the parameter types go in to tell them apart.
-    private fun KaSession.signatureOf(symbol: KaNamedFunctionSymbol): String =
+    context(_: KaSession)
+    private fun signatureOf(symbol: KaNamedFunctionSymbol): String =
         symbol.valueParameters.joinToString(
             prefix = "${symbol.name.asString()}(",
             postfix = ")",
@@ -144,7 +153,8 @@ class IgnoredJavaDefaultMethod(config: Config) :
     // signature. The whole declaration spells both out. Annotations are left out: they render on
     // their own line, and a message has to stay on one.
     @OptIn(KaExperimentalApi::class)
-    private fun KaSession.declarationOf(symbol: KaNamedFunctionSymbol): String =
+    context(_: KaSession)
+    private fun declarationOf(symbol: KaNamedFunctionSymbol): String =
         symbol.render(
             KaDeclarationRendererForSource.WITH_QUALIFIED_NAMES.with {
                 annotationRenderer = annotationRenderer.with { annotationFilter = KaRendererAnnotationsFilter.NONE }
@@ -153,7 +163,8 @@ class IgnoredJavaDefaultMethod(config: Config) :
 
     // A Java parameter is a flexible type, which has no symbol of its own; the bound does.
     // Type arguments are rendered too, so `Array<String>` and `Array<Int>` stay distinct.
-    private fun KaSession.typeName(type: KaType): String {
+    context(_: KaSession)
+    private fun typeName(type: KaType): String {
         val bounded = type.lowerBoundIfFlexible()
         val name = bounded.symbol?.name?.asString() ?: return bounded.toString()
         val arguments = (bounded as? KaClassType)?.typeArguments.orEmpty()
@@ -168,7 +179,8 @@ class IgnoredJavaDefaultMethod(config: Config) :
 
     // Kotlin maps its own collection types onto java.util ones without a Java type in the
     // hierarchy, so requiring a Java-declared interface here keeps them out.
-    private fun KaSession.hasJavaDeclaredAncestor(type: KaType): Boolean =
+    context(_: KaSession)
+    private fun hasJavaDeclaredAncestor(type: KaType): Boolean =
         (sequenceOf(type) + type.allSupertypes).any { supertype ->
             (supertype.symbol as? KaClassSymbol)
                 ?.let { it.classKind == KaClassKind.INTERFACE && it.isDeclaredInJava() } == true
@@ -178,7 +190,8 @@ class IgnoredJavaDefaultMethod(config: Config) :
     // The original turns Kotlin as soon as anything in Kotlin overrides the method, and a
     // generated delegating member drops out on its own DELEGATED origin.
     // Public and not abstract leaves out the Java 9 private interface methods.
-    private fun KaSession.isIgnoredJavaDefault(symbol: KaNamedFunctionSymbol): Boolean =
+    context(_: KaSession)
+    private fun isIgnoredJavaDefault(symbol: KaNamedFunctionSymbol): Boolean =
         symbol.fakeOverrideOriginal.isDeclaredInJava() &&
             symbol.origin != KaSymbolOrigin.DELEGATED &&
             symbol.modality != KaSymbolModality.ABSTRACT &&

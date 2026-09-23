@@ -13,7 +13,7 @@ import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
 import org.jetbrains.kotlin.K1Deprecation
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundAccessCall
@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaDelegatedPropertyCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaForLoopCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertyAccessorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol

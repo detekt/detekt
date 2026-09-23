@@ -10,9 +10,11 @@ import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
 import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
 import dev.detekt.rules.style.ForbiddenMethodCall.ForbiddenMethod
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.allOverriddenSymbols
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
