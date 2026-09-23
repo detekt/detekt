@@ -29,7 +29,7 @@ detekt {
 
 buildConfig {
     buildConfigField("DETEKT_VERSION", Versions.DETEKT)
-    buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", libs.versions.kotlin.get())
+    buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", "2.5.0-uranus-26")
 }
 
 tasks {
