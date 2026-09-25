@@ -28,10 +28,9 @@ constructor(
     val gradleProperties: Map<String, String> = emptyMap(),
     val customPluginClasspath: List<File> = emptyList(),
     val projectScript: Project.() -> Unit = {},
+    val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() },
+    val randomString: String = UUID.randomUUID().toString(),
 ) {
-
-    private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }
-    private val randomString = UUID.randomUUID().toString()
 
     @Language("xml")
     private val baselineContent = """
