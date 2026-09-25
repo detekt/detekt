@@ -28,8 +28,10 @@ import dev.detekt.gradle.invoke.ParallelArgument
 import dev.detekt.gradle.plugin.isWorkerApiEnabled
 import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
+import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
@@ -83,6 +85,12 @@ abstract class DetektCreateBaselineTask @Inject constructor(
 
     @get:Internal
     abstract val friendPaths: ConfigurableFileCollection
+
+    @get:Internal
+    internal abstract val generatedClassesJars: ListProperty<RegularFile>
+
+    @get:Internal
+    internal abstract val generatedClassesDirs: ListProperty<Directory>
 
     @get:Console
     abstract val debug: Property<Boolean>
