@@ -44,7 +44,7 @@ assertj-core = { module = "org.assertj:assertj-core", version = "3.27.7" }
 # Any update to the lower-bound version should also be reflected at renovate.json to lock this version.
 assertj-coreMinimum = { module = "org.assertj:assertj-core", version = "3.27.4" }
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.195" }
-jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
+clikt-core = { module = "com.github.ajalt.clikt:clikt-core", version = "5.1.0" }
 # Version must align to dependency used by Kotlin on compile classpath due to our use of Gradle's consistent resolution
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }
 kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }

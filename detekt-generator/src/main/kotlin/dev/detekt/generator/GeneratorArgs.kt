@@ -1,66 +1,79 @@
 package dev.detekt.generator
 
-import com.beust.jcommander.IValueValidator
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.ParameterException
-import com.beust.jcommander.converters.IParameterSplitter
-import com.beust.jcommander.converters.PathConverter
+import com.github.ajalt.clikt.core.CoreCliktCommand
+import com.github.ajalt.clikt.core.FileNotFound
+import com.github.ajalt.clikt.core.MissingOption
+import com.github.ajalt.clikt.core.context
+import com.github.ajalt.clikt.parameters.options.NullableOption
+import com.github.ajalt.clikt.parameters.options.OptionWithValues
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.types.path
+import java.io.IOException
 import java.nio.file.Path
-import kotlin.io.path.exists
-import kotlin.io.path.isDirectory
+import kotlin.io.path.Path
+import kotlin.io.path.readText
 
-class GeneratorArgs {
+class GeneratorArgs : CoreCliktCommand(name = "detekt-generator") {
 
-    @Parameter(
-        names = ["--input", "-i"],
-        required = true,
-        converter = PathConverter::class,
-        splitter = PathSplitter::class,
-        validateValueWith = [PathValidator::class],
-        description = "Input paths to analyze."
+    val inputPath: List<Path> by option(
+        "-i",
+        "--input",
+        help = "Input paths to analyze.",
     )
-    var inputPath: List<Path> = emptyList()
+        .path(mustExist = true)
+        .splitBatch(",", ";", required = true)
 
-    @Parameter(
-        names = ["--documentation", "-d"],
-        converter = PathConverter::class,
-        validateValueWith = [DirectoryValidator::class],
-        description = "Output path for generated documentation."
-    )
-    var documentationPath: Path? = null
+    val documentationPath: Path? by option(
+        "-d",
+        "--documentation",
+        help = "Output path for generated documentation.",
+    ).path(canBeFile = false, canBeDir = true)
 
-    @Parameter(
-        names = ["--config", "-c"],
-        converter = PathConverter::class,
-        validateValueWith = [DirectoryValidator::class],
-        description = "Output path for generated detekt config."
-    )
-    var configPath: Path? = null
+    val configPath: Path? by option(
+        "-c",
+        "--config",
+        help = "Output path for generated detekt config.",
+    ).path(canBeFile = false, canBeDir = true)
 
-    @Parameter(
-        names = ["--help", "-h"],
-        help = true,
-        description = "Shows the usage."
-    )
-    var help: Boolean = false
-
-    class PathSplitter : IParameterSplitter {
-        override fun split(value: String): List<String> = value.split(',', ';')
-    }
-
-    class PathValidator : IValueValidator<List<Path>> {
-        override fun validate(name: String, value: List<Path>) {
-            value.forEach {
-                if (!it.exists()) throw ParameterException("Input path does not exist: $it")
+    init {
+        context {
+            readArgumentFile = {
+                try {
+                    Path(it).readText()
+                } catch (_: IOException) {
+                    throw FileNotFound(it)
+                }
             }
+            exitProcess = { exitProcess(it) }
         }
     }
 
-    class DirectoryValidator : IValueValidator<Path> {
-        override fun validate(name: String, value: Path) {
-            if (value.exists() && !value.isDirectory()) {
-                throw ParameterException("Value passed to $name must be a directory.")
-            }
-        }
+    override fun run() {
+        val generator = Generator(
+            inputPaths = inputPath,
+            documentationPath = documentationPath,
+            configPath = configPath,
+        )
+        generator.execute()
     }
 }
+
+private fun <EachT : Any, ValueT> NullableOption<EachT, ValueT>.splitBatch(
+    vararg delimiters: String,
+    default: () -> List<ValueT> = { emptyList() },
+    required: Boolean = false,
+): OptionWithValues<List<ValueT>, List<ValueT>, ValueT> =
+    copy(
+        transformValue = transformValue,
+        transformEach = { it },
+        transformAll = { calls ->
+            when {
+                calls.isEmpty() && required -> throw MissingOption(option)
+                calls.isEmpty() && !required -> default()
+                else -> calls.flatten()
+            }
+        },
+        validator = {},
+        nvalues = 1..1,
+        valueSplit = { it.split(*delimiters) }
+    )
