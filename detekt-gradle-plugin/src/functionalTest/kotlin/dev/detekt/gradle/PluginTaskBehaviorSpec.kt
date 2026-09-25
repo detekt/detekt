@@ -6,7 +6,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
 
 /**
  * Tests that run the Detekt Gradle Plugin's tasks multiple times to check for correct
@@ -66,6 +68,22 @@ class PluginTaskBehaviorSpec {
         }
         gradleRunner.runTasksAndCheckResult("clean", "detekt") { result ->
             assertThat(result.task(":clean")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
+        }
+    }
+
+    @Test
+    @Disabled("https://github.com/detekt/detekt/issues/7170")
+    fun `should pick up build artifacts from the build cache on a 2nd run even if it is in another directory`() {
+        gradleRunner.runDetektTaskAndCheckResult { result ->
+            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        }
+
+        val gradleRunner2 = gradleRunner.copy(
+            rootDir = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }
+        ).also { it.setupProject() }
+        // Running detekt again should pick up artifacts from Build Cache
+        gradleRunner2.runDetektTaskAndCheckResult { result ->
             assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
         }
     }
