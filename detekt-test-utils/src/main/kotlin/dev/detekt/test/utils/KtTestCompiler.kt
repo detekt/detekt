@@ -1,7 +1,7 @@
 package dev.detekt.test.utils
 
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.text.StringUtilRt
+import com.intellij.openapi.util.text.StringUtil
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.pom.PomModel
 import com.intellij.pom.tree.TreeAspect
@@ -24,7 +24,7 @@ internal object KtTestCompiler {
     private val psiFileFactory = KtPsiFactory(project, markGenerated = false)
 
     fun createKtFile(@Language("kotlin") content: String, path: Path): KtFile =
-        psiFileFactory.createPhysicalFile(path.name, StringUtilRt.convertLineSeparators(content))
+        psiFileFactory.createPhysicalFile(path.name, StringUtil.convertLineSeparators(content))
 
     fun compile(path: Path): KtFile {
         require(path.isRegularFile()) { "Given path '$path' should be a regular file!" }

@@ -25,16 +25,31 @@ private val expected = """
         1: KtImportList
         3: KtClass
           3: KtClassBody
-            5: KtProperty
-              5: KtTypeReference
-              5: KtUserType
-              5: KtNameReferenceExpression
-              5: KtStringTemplateExpression
-              5: KtLiteralStringTemplateEntry
-            6: KtNamedFunction
-              6: KtParameterList
-              6: KtStringTemplateExpression
-              6: KtLiteralStringTemplateEntry
-              6: KtSimpleNameStringTemplateEntry
+            5: KtNamedFunction
+            6: KtParameterList
+              6: KtParameter
+                6: KtTypeReference
+                6: KtUserType
+                6: KtNameReferenceExpression
+              6: KtTypeReference
+              6: KtUserType
               6: KtNameReferenceExpression
+              6: KtBlockExpression
+              7: KtWhenExpression
+                7: KtNameReferenceExpression
+              8: KtWhenEntry
+                8: KtWhenConditionWithExpression
+                8: KtConstantExpression
+                8: KtReturnExpression
+                  8: KtConstantExpression
+              9: KtWhenEntry
+                9: KtWhenConditionWithExpression
+                9: KtConstantExpression
+                9: KtReturnExpression
+                  9: KtConstantExpression
+              10: KtWhenEntry
+                10: KtWhenConditionWithExpression
+                10: KtConstantExpression
+                10: KtReturnExpression
+                  10: KtConstantExpression
 """.trimIndent()
