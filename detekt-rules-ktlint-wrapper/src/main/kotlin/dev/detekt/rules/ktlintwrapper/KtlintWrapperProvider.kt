@@ -22,7 +22,6 @@ import dev.detekt.rules.ktlintwrapper.wrappers.ClassName
 import dev.detekt.rules.ktlintwrapper.wrappers.ClassSignature
 import dev.detekt.rules.ktlintwrapper.wrappers.CommentSpacing
 import dev.detekt.rules.ktlintwrapper.wrappers.CommentWrapping
-import dev.detekt.rules.ktlintwrapper.wrappers.ConditionWrapping
 import dev.detekt.rules.ktlintwrapper.wrappers.ContextReceiverListWrapping
 import dev.detekt.rules.ktlintwrapper.wrappers.ContextReceiverMapping
 import dev.detekt.rules.ktlintwrapper.wrappers.EnumEntryNameCase
@@ -144,7 +143,6 @@ class KtlintWrapperProvider : RuleSetProvider {
                 ::ClassSignature,
                 ::CommentSpacing,
                 ::CommentWrapping,
-                ::ConditionWrapping,
                 ::ContextReceiverMapping,
                 ::ContextReceiverListWrapping,
                 ::EnumEntryNameCase,
