@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test
 class AutoCorrectSpec {
     @Test
     fun `a subsequent visit to a reused KtFile must not be served stale context after modifiedText changes (#9379)`() {
-        // Trigger a second, unrelated rule on a different file so the engine's registry holds two
-        // active rules. This guarantees remainingVisits starts at >= 2 regardless of test ordering.
+        // Exercise an unrelated rule on a different file first, so the engine has already built and
+        // cached walk state before the file under test is visited.
         val otherFile = compileContentForTest("fun other() = Unit\n", "EngineStaleOther.kt")
         NoSemicolons(Config.empty).visitFile(otherFile, FakeLanguageVersionSettings())
 

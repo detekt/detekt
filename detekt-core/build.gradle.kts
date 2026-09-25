@@ -82,26 +82,9 @@ val generateDefaultDetektConfig = tasks.register("generateDefaultDetektConfig") 
                           # when writing own rules with new properties, exclude the property path e.g.: ['my_rule_set', '.*>.*>[my_property]']
                           excludes: []
                         
-                        processors:
-                          active: true
-                          exclude:
-                          # - 'KtFileCountProcessor'
-                          # - 'PackageCountProcessor'
-                          # - 'ClassCountProcessor'
-                          # - 'FunctionCountProcessor'
-                          # - 'PropertyCountProcessor'
-                          # - 'ProjectCyclomaticComplexityProcessor'
-                          # - 'ProjectCognitiveComplexityProcessor'
-                          # - 'ProjectLLOCProcessor'
-                          # - 'ProjectCLOCProcessor'
-                          # - 'ProjectLOCProcessor'
-                          # - 'ProjectSLOCProcessor'
-                        
                         console-reports:
                           active: true
                           exclude:
-                             - 'ProjectStatisticsReport'
-                             - 'ComplexityReport'
                              - 'NotificationReport'
                              - 'IssuesReport'
                              - 'FileBasedIssuesReport'

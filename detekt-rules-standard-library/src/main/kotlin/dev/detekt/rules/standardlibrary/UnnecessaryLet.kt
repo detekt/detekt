@@ -8,12 +8,15 @@ import dev.detekt.api.Rule
 import dev.detekt.psi.firstParameterOrNull
 import dev.detekt.psi.isCalling
 import dev.detekt.psi.receiverIsUsed
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -128,11 +131,12 @@ private fun KtLambdaExpression.countLambdaParameterReference(): Int {
         val parameters = buildList {
             val destructuringDeclaration = valueParameters.singleOrNull()?.destructuringDeclaration
             addAll(destructuringDeclaration?.symbol?.entries ?: listOfNotNull(firstParameterOrNull()))
-            receiver?.mainReference?.resolveToSymbol()?.let { add(it) }
+            receiver?.resolveToCall()?.singleVariableAccessCall()?.symbol?.let { add(it) }
         }
         parameters.sumOf { variableSymbol ->
             bodyExpression.collectDescendantsOfType<KtSimpleNameExpression> {
-                it.mainReference.resolveToSymbol() == variableSymbol
+                @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+                it.resolveSymbol() == variableSymbol
             }.count()
         }
     }

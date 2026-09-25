@@ -4,18 +4,19 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProper
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.SpacingAroundCurlyRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#curly-spacing) for documentation.
  */
 @ActiveByDefault(since = "1.0.0")
-@AutoCorrectable(since = "1.0.0")
-internal class SpacingAroundCurly(config: Config) : KtlintRule(config, "Reports spaces around curly braces") {
+internal class SpacingAroundCurly(config: Config) :
+    KtlintRule(config, "Reports spaces around curly braces"),
+    AutoCorrectable {
 
     override val wrapping = SpacingAroundCurlyRule()
 

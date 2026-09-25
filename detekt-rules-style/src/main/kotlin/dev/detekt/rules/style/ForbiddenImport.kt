@@ -37,12 +37,6 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * original name, which means `import java.util.List as JList` is reported by the pattern
  * `java.util.List`.
  *
- * Star imports are matched without their trailing star, so `import java.util.*` is checked
- * as `java.util`. The pattern `java.util.*` consequently does not report it, while the
- * pattern `java.util` does, and `allowedImports: ['java.util.UUID']` also exempts
- * `import java.util.UUID.*`. This is tracked in
- * [#9564](https://github.com/detekt/detekt/issues/9564).
- *
  * <noncompliant>
  * import kotlin.jvm.JvmField
  * import java.util.Date
@@ -81,7 +75,7 @@ class ForbiddenImport(config: Config) :
     override fun visitImportDirective(importDirective: KtImportDirective) {
         super.visitImportDirective(importDirective)
 
-        val import = importDirective.importedFqName?.asString() ?: return
+        val import = importDirective.importPath?.pathStr ?: return
         val forbidden = forbiddenImports.find { it.import.matches(import) } ?: return
 
         if (importIsExplicitlyAllowed(import)) {

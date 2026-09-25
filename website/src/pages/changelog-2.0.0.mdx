@@ -17,6 +17,8 @@ Detekt 2.0.0 is still in alpha. While it's stable enough to use in your projects
 ### Notable Changes
 
 - The yaml configuration parser is now more strict with the types. Before it parsed `active: "true"` correctly but that's not the case anymore. You need to use the correct yaml type: `active: true`. [#9049](https://github.com/detekt/detekt/pull/9049)
+- The complexity report was moved from core to a first party plugin. If you want to get the complexity metrics of your project add `detektPlugin("dev.detekt:detekt-report-complexity:2.0.0-alpha.7")`.
+- The statistics report was moved from core to a first party plugin. If you want to get the statistics of your project add `detektPlugin("dev.detekt:detekt-report-statistics:2.0.0-alpha.7")`.
 
 ## 2.0.0-alpha.6 - 2026-08-04
 

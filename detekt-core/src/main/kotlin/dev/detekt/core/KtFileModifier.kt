@@ -1,11 +1,10 @@
 package dev.detekt.core
 
-import com.intellij.openapi.util.text.StringUtilRt
+import com.intellij.openapi.util.text.StringUtil
 import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.Notification
 import dev.detekt.api.modifiedText
-import dev.detekt.psi.absolutePath
 import org.jetbrains.kotlin.psi.KtFile
 import kotlin.io.path.writeText
 
@@ -27,7 +26,7 @@ class KtFileModifier : FileProcessListener {
     }
 
     private fun KtFile.unnormalizeContent(): String =
-        StringUtilRt.convertLineSeparators(
+        StringUtil.convertLineSeparators(
             checkNotNull(modifiedText),
             checkNotNull(virtualFile.detectedLineSeparator) {
                 "Line separator was not automatically detected. This is unexpected."

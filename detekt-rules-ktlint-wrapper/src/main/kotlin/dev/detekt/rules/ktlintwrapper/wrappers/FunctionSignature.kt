@@ -5,10 +5,10 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPER
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.FunctionSignatureRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
@@ -17,9 +17,9 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-@AutoCorrectable(since = "1.22.0")
 internal class FunctionSignature(config: Config) :
-    KtlintRule(config, "Format signature to be single when possible, multiple lines otherwise.") {
+    KtlintRule(config, "Format signature to be single when possible, multiple lines otherwise."),
+    AutoCorrectable {
 
     override val wrapping = FunctionSignatureRule()
 

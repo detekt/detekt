@@ -13,14 +13,13 @@ import dev.detekt.psi.isNullCheck
 import dev.detekt.psi.isNullable
 import dev.detekt.psi.isOpen
 import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
-import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -54,7 +53,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.util.OperatorNameConventions
 
 /**
  * This rule inspects variables marked as nullable and reports which could be
@@ -557,14 +555,10 @@ class CanBeNonNullable(config: Config) :
         private fun KtPropertyDelegate?.returnsNullable(): Boolean {
             val delegate = this ?: return true
             return analyze(delegate) {
-                val functionSymbol = delegate
-                    .mainReference
-                    ?.resolveToSymbols()
-                    ?.filterIsInstance<KaFunctionSymbol>()
-                    ?.firstOrNull {
-                        it.callableId?.callableName == OperatorNameConventions.GET_VALUE
-                    }
-                functionSymbol?.run {
+                @OptIn(KaExperimentalApi::class)
+                val functionSymbol = delegate.resolveCall()?.valueGetterCall?.symbol ?: return true
+
+                with(functionSymbol) {
                     if (returnType is KaTypeParameterType) {
                         // todo<k2> ignoring some case which in pre k2 was passing as earlier
                         //  using BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL we were able to
@@ -573,7 +567,7 @@ class CanBeNonNullable(config: Config) :
                     } else {
                         returnType.isMarkedNullable
                     }
-                } ?: true
+                }
             }
         }
 

@@ -192,7 +192,11 @@ were superseded by ktlint rules or compiler warnings:
 Remove them from your `detekt.yml`. The `MultiRule` mechanism was also removed; if you maintained
 a custom multi-rule, see the **rule author guide** below.
 
-### Report format ID renames
+### Reports
+
+The plain-text (`txt`) report was removed entirely.
+
+#### Format ID renames
 
 The IDs used on the CLI and Gradle plugin for the XML and Markdown reports changed:
 
@@ -219,7 +223,13 @@ In Gradle:
  }
 ```
 
-The plain-text (`txt`) report was removed entirely.
+#### First party plugin reports
+
+The complexity report was moved from core to a first party plugin. If you want to get the complexity metrics of your project add
+`detektPlugin("dev.detekt:detekt-report-complexity:2.0.0")` to your `build.gradle` dependencies.
+
+The statistics report was moved from core to a first party plugin. If you want to get the statistics of your project add
+`detektPlugin("dev.detekt:detekt-report-statistics:2.0.0")` to your `build.gradle` dependencies.
 
 ### Configuration changes
 
