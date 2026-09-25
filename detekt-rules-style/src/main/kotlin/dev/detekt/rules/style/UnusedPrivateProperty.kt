@@ -36,7 +36,6 @@ import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
@@ -47,8 +46,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 /**
  * An unused private property can be removed to simplify the source file.
  *
- * This rule also detects unused constructor parameters since these can become
- * properties of the class when they are declared with `val` or `var`.
+ * This rule also detects unused constructor properties, which are the parameters declared with `val` or `var`.
+ * Constructor parameters that are not properties are reported by `UnusedParameter`.
  *
  * <noncompliant>
  * class Foo {
@@ -98,7 +97,6 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
     private val classProperties = hashSetOf<KtNamedDeclaration>()
     private val usedClassProperties = hashSetOf<PsiElement>()
 
-    private val constructorParameters = hashSetOf<KtNamedDeclaration>()
     private val usedConstructorParameters = hashSetOf<PsiElement>()
 
     fun getUnusedReports(): List<Finding> {
@@ -121,16 +119,6 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
                 }
             }
 
-        val constructorParametersReport = constructorParameters
-            .filter { it.psiOrParent !in usedConstructorParameters }
-            .filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
-            .map {
-                Finding(
-                    entity = Entity.atName(it),
-                    message = "Constructor parameter `${it.nameAsSafeName.identifier}` is unused.",
-                )
-            }
-
         val topLevelPropertyReport = topLevelProperties
             .filter { it.psiOrParent !in usedTopLevelProperties }
             .filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
@@ -141,7 +129,7 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
                 )
             }
 
-        return propertiesReport + constructorParametersReport + topLevelPropertyReport
+        return propertiesReport + topLevelPropertyReport
     }
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
@@ -149,22 +137,12 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
 
         constructor.valueParameters
             .filter {
-                (it.isPrivate() || !it.isPropertyParameter()) &&
+                it.isPropertyParameter() &&
+                    it.isPrivate() &&
                     !constructor.isExpectClassConstructor() &&
                     !constructor.isDataOrValueClassConstructor()
             }
-            .forEach { valueParameter ->
-                if (valueParameter.isPropertyParameter()) {
-                    classProperties.add(valueParameter)
-                } else {
-                    constructorParameters.add(valueParameter)
-                }
-            }
-    }
-
-    override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
-        super.visitSecondaryConstructor(constructor)
-        constructorParameters += constructor.valueParameters
+            .forEach { classProperties.add(it) }
     }
 
     override fun visitProperty(property: KtProperty) {
@@ -212,8 +190,6 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
                                 usedConstructorParameters.add(psi)
                             }
                         }
-
-                        else -> usedConstructorParameters.add(psi)
                     }
                 }
         }
