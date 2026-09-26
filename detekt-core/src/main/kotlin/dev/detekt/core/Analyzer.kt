@@ -28,7 +28,7 @@ internal class Analyzer(
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.languageVersionSettings
 
-        return if (settings.spec.executionSpec.parallelAnalysis) {
+        return if (settings.spec.executionSpec.parallelAnalysis && analysisMode != AnalysisMode.Full) {
             runAsync(ktFiles, languageVersionSettings)
         } else {
             runSync(ktFiles, languageVersionSettings)
