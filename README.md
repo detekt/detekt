@@ -142,6 +142,7 @@ The recommended versions together with the other tools recommended versions are:
 
 | Detekt Version  | Gradle   | Kotlin   | AGP      | Java Target Level | JDK Max Version |
 |-----------------|----------|----------|----------|-------------------|-----------------|
+| `2.0.0-alpha.7` | `9.6.1`  | `2.4.10` | `9.3.1`  | `17`              | `25`            |
 | `2.0.0-alpha.6` | `9.6.1`  | `2.4.10` | `9.3.1`  | `1.8`             | `25`            |
 | `2.0.0-alpha.5` | `9.5.1`  | `2.4.0`  | `9.2.1`  | `1.8`             | `25`            |
 | `2.0.0-alpha.3` | `9.3.1`  | `2.3.21` | `9.1.1`  | `1.8`             | `25`            |
