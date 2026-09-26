@@ -28,7 +28,6 @@ dependencies {
             attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
         }
     }
-    testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
@@ -52,21 +51,9 @@ tasks.jar {
     )
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-    }
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-    }
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+tapmoc {
+    @Suppress("MagicNumber")
+    java(17)
 }
 
 tasks.named("generateConfig") {

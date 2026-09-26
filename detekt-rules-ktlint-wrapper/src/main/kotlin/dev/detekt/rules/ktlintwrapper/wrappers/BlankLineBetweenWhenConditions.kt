@@ -11,7 +11,7 @@ import dev.detekt.api.config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/experimental/#blank-lines-between-when-conditions)
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#blank-line-between-when-conditions)
  * for documentation.
  */
 @ActiveByDefault(since = "2.0.0")

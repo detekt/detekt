@@ -747,6 +747,7 @@ style:
     active: false
   NullableBooleanCheck:
     active: false
+    onlyConditionals: true
   ObjectLiteralToLambda:
     active: true
   OneTopLevelClassOrObjectPerFile:

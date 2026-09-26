@@ -5,10 +5,10 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtConstructorCalleeExpression
@@ -88,14 +88,15 @@ class UnnecessaryCompanionObjectAccess(config: Config) :
         companionNameRef: KtNameReferenceExpression,
         companionQualifier: KtDotQualifiedExpression,
     ) {
+        @OptIn(KaExperimentalApi::class)
         analyze(companionNameRef) {
-            val companionSymbol = companionNameRef.mainReference.resolveToSymbol() as? KaClassSymbol ?: return@analyze
+            val companionSymbol = companionNameRef.resolveSymbol() as? KaClassSymbol ?: return@analyze
             if (companionSymbol.classKind != KaClassKind.COMPANION_OBJECT) return@analyze
 
             fun reportRedundantDotAccess(outer: KtDotQualifiedExpression) {
                 if (outer.receiverExpression != companionQualifier) return
                 val memberReference = outer.memberNameReference() ?: return
-                val memberSymbol = memberReference.mainReference.resolveToSymbol() as? KaClassSymbol
+                val memberSymbol = memberReference.resolveSymbol() as? KaClassSymbol
                 if (memberSymbol != null && memberSymbol.containingSymbol == companionSymbol) return
 
                 report(
@@ -110,7 +111,7 @@ class UnnecessaryCompanionObjectAccess(config: Config) :
             fun reportRedundantCallableRef(outer: KtCallableReferenceExpression) {
                 if (outer.receiverExpression != companionQualifier) return
                 val memberReference = outer.callableReference as? KtNameReferenceExpression ?: return
-                val memberSymbol = memberReference.mainReference.resolveToSymbol() as? KaClassSymbol
+                val memberSymbol = memberReference.resolveSymbol() as? KaClassSymbol
                 if (memberSymbol != null && memberSymbol.containingSymbol == companionSymbol) return
 
                 report(

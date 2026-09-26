@@ -206,6 +206,9 @@ style:
         reason: 'Use AssertJ assertThatCode { }.isInstanceOf() or assertThatExceptionOfType().isThrownBy { } instead.'
       - value: 'org.junit.jupiter.api.assertDoesNotThrow'
         reason: 'Use AssertJ assertThatCode { }.doesNotThrowAnyException() instead.'
+      # Remove this rule after Kotlin Analysis API dependencies use Kotlin 2.5.0 or higher
+      - value: 'org.jetbrains.kotlin.idea.references.mainReference'
+        reason: 'Removed in newer Kotlin versions.'
       # These don't have AssertJ alternatives, so just allow them:
       #- value: 'org.junit.jupiter.api.fail'
       #- value: 'org.junit.jupiter.api.assertTimeout'
