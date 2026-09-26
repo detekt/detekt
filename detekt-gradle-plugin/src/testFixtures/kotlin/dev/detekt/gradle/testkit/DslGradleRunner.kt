@@ -28,10 +28,46 @@ constructor(
     val gradleProperties: Map<String, String> = emptyMap(),
     val customPluginClasspath: List<File> = emptyList(),
     val projectScript: Project.() -> Unit = {},
+    val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() },
+    val randomString: String = UUID.randomUUID().toString(),
 ) {
-
-    private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }
-    private val randomString = UUID.randomUUID().toString()
+    @Suppress("LongParameterList")
+    fun copy(
+        projectLayout: ProjectLayout = this.projectLayout,
+        buildFileName: String = this.buildFileName,
+        mainBuildFileContent: String = this.mainBuildFileContent,
+        settingsContent: String = this.settingsContent,
+        configFileOrNone: String? = this.configFileOrNone,
+        baselineFiles: List<String> = this.baselineFiles,
+        gradleVersionOrNone: String? = this.gradleVersionOrNone,
+        dryRun: Boolean = this.dryRun,
+        disableIP: Boolean = this.disableIP,
+        failOnGradleWarnings: Boolean = this.failOnGradleWarnings,
+        jvmArgs: String = this.jvmArgs,
+        gradleProperties: Map<String, String> = this.gradleProperties,
+        customPluginClasspath: List<File> = this.customPluginClasspath,
+        projectScript: Project.() -> Unit = this.projectScript,
+        rootDir: File = this.rootDir,
+        randomString: String = this.randomString,
+    ): DslGradleRunner =
+        DslGradleRunner(
+            projectLayout = projectLayout,
+            buildFileName = buildFileName,
+            mainBuildFileContent = mainBuildFileContent,
+            settingsContent = settingsContent,
+            configFileOrNone = configFileOrNone,
+            baselineFiles = baselineFiles,
+            gradleVersionOrNone = gradleVersionOrNone,
+            dryRun = dryRun,
+            disableIP = disableIP,
+            failOnGradleWarnings = failOnGradleWarnings,
+            jvmArgs = jvmArgs,
+            gradleProperties = gradleProperties,
+            customPluginClasspath = customPluginClasspath,
+            projectScript = projectScript,
+            rootDir = rootDir,
+            randomString = randomString,
+        )
 
     @Language("xml")
     private val baselineContent = """
