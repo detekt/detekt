@@ -1,14 +1,14 @@
 package dev.detekt.rules.ktlintwrapper.wrappers
 
-import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
-import io.github.ktlint.core.ruleset.standard.rules.BlankLineBetweenWhenConditions
-import io.github.ktlint.core.ruleset.standard.rules.BlankLineBetweenWhenConditions.Companion.LINE_BREAK_AFTER_WHEN_CONDITION_PROPERTY
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
+import io.github.ktlint.core.ruleset.standard.rules.BlankLineBetweenWhenConditions
+import io.github.ktlint.core.ruleset.standard.rules.BlankLineBetweenWhenConditions.Companion.LINE_BREAK_AFTER_WHEN_CONDITION_PROPERTY
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#blank-line-between-when-conditions)

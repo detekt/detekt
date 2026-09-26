@@ -1,8 +1,5 @@
 package dev.detekt.rules.ktlintwrapper.wrappers
 
-import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
-import io.github.ktlint.core.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
-import io.github.ktlint.core.ruleset.standard.rules.MaxLineLengthRule
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Alias
 import dev.detekt.api.Config
@@ -10,6 +7,9 @@ import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
+import io.github.ktlint.core.ruleset.standard.rules.MaxLineLengthRule
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#max-line-length) for documentation.

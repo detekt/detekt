@@ -1,8 +1,5 @@
 package dev.detekt.rules.ktlintwrapper.wrappers
 
-import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
-import io.github.ktlint.core.ruleset.standard.rules.EnumEntryNameCaseRule
-import io.github.ktlint.core.ruleset.standard.rules.EnumEntryNameCaseRule.Companion.ENUM_ENTRY_NAME_CASING_PROPERTY
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Alias
 import dev.detekt.api.AutoCorrectable
@@ -10,6 +7,9 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
+import io.github.ktlint.core.ruleset.standard.rules.EnumEntryNameCaseRule
+import io.github.ktlint.core.ruleset.standard.rules.EnumEntryNameCaseRule.Companion.ENUM_ENTRY_NAME_CASING_PROPERTY
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#enum-entry) for documentation.

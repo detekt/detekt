@@ -1,13 +1,13 @@
 package dev.detekt.rules.ktlintwrapper.wrappers
 
-import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
-import io.github.ktlint.core.ruleset.standard.rules.TrailingCommaOnDeclarationSiteRule
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
+import io.github.ktlint.core.ruleset.standard.rules.TrailingCommaOnDeclarationSiteRule
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#trailing-comma-on-declaration-site) for documentation.

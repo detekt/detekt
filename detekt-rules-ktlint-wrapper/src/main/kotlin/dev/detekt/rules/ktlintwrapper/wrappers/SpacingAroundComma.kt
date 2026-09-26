@@ -1,10 +1,10 @@
 package dev.detekt.rules.ktlintwrapper.wrappers
 
-import io.github.ktlint.core.ruleset.standard.rules.SpacingAroundCommaRule
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
+import io.github.ktlint.core.ruleset.standard.rules.SpacingAroundCommaRule
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#comma-spacing) for documentation.

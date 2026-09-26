@@ -1,10 +1,10 @@
 package dev.detekt.rules.ktlintwrapper.wrappers
 
+import dev.detekt.api.Config
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
 import io.github.ktlint.core.ruleset.standard.rules.FunctionNamingRule
 import io.github.ktlint.core.ruleset.standard.rules.FunctionNamingRule.Companion.IGNORE_WHEN_ANNOTATED_WITH_PROPERTY
-import dev.detekt.api.Config
-import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-naming) for
