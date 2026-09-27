@@ -78,6 +78,22 @@ testing {
         withType<JvmTestSuite> {
             useJUnitJupiter(versionCatalog.findVersion("junit").get().requiredVersion)
         }
+        register<JvmTestSuite>("multiJvmTest") {
+            targets {
+                @Suppress("MagicNumber")
+                setOf(17, 21, 25).forEach {
+                    register("testJvm$it") {
+                        testTask {
+                            javaLauncher = javaToolchains.launcherFor {
+                                languageVersion = JavaLanguageVersion.of(it)
+                            }
+                            classpath = tasks.test.get().classpath
+                            testClassesDirs = tasks.test.get().testClassesDirs
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

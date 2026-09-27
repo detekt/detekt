@@ -81,6 +81,18 @@ testing {
                         inputs.property("isAndroidSdkInstalled", isAndroidSdkInstalled).optional(true)
                     }
                 }
+                targets {
+                    @Suppress("MagicNumber")
+                    setOf(17, 21, 25).forEach {
+                        register("functionalTestJvm$it") {
+                            testTask {
+                                javaLauncher = javaToolchains.launcherFor {
+                                    languageVersion = JavaLanguageVersion.of(it)
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         register<JvmTestSuite>("functionalTestMinSupportedGradle") {
@@ -276,7 +288,7 @@ tasks {
 
     check {
         dependsOn(
-            testing.suites.named("functionalTest"),
+            "functionalTest",
             testing.suites.named("functionalTestMinSupportedGradle"),
         )
     }
