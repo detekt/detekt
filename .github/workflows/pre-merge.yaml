@@ -68,10 +68,11 @@ jobs:
         run: ./gradlew publishToMavenLocal
 
       - name: Build detekt
-        run: ./gradlew build -x detekt
+        run: ./gradlew build testJvm${{ matrix.jdk }} -x detekt -x test
 
       - name: Build detekt-gradle-plugin
-        run: ./gradlew -pdetekt-gradle-plugin build -x detekt
+        working-directory: ./detekt-gradle-plugin
+        run: ./gradlew testJvm${{ matrix.jdk }} functionalTestJvm${{ matrix.jdk }} build -x detekt
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
