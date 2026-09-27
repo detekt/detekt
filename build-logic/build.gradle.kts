@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     `kotlin-dsl`
 }
@@ -15,6 +17,12 @@ kotlin {
     jvmToolchain(jdkVersion = 27)
 
     compilerOptions {
+        jvmTarget = JvmTarget.entries.last()
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    @Suppress("MagicNumber")
+    options.release = JvmTarget.entries.last().target.toInt()
 }
