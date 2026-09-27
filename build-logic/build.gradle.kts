@@ -14,6 +14,8 @@ dependencies {
 }
 
 kotlin {
+    jvmToolchain(jdkVersion = 27)
+
     compilerOptions {
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }

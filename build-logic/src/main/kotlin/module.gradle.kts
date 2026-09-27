@@ -58,6 +58,8 @@ tasks.withType<Test>().configureEach {
 val jvmMajorVersion = 8
 
 kotlin {
+    jvmToolchain(jdkVersion = 27)
+
     compilerOptions {
         @Suppress("MagicNumber")
         jvmTarget = JvmTarget.fromTarget(if (jvmMajorVersion == 8) "1.8" else jvmMajorVersion.toString())
