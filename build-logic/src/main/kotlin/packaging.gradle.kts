@@ -4,6 +4,38 @@ plugins {
     signing
 }
 
+// This flag is reserved for the final, dedicated 1.x release. See scripts/release-relocation.sh.
+val publishRelocationInfo = "publishRelocationInfo".byProperty.toBoolean()
+
+val relocationGroupId = "dev.detekt"
+val relocationVersion = "2.0.0"
+val migrationGuide = "https://detekt.dev/docs/introduction/migrationguide"
+
+val relocationMessage =
+    "detekt 2.x is published under the '$relocationGroupId' group, and some artifacts were renamed. " +
+        "See the migration guide at $migrationGuide"
+
+val relocationDescription =
+    "DEPRECATED - this is the final detekt 1.x release. detekt 2.x is published under the " +
+        "'$relocationGroupId' group, and some artifacts were renamed. Migration guide: $migrationGuide"
+
+val notRelocated = setOf(
+    "detekt-report-txt",
+    "detekt-sample-extensions",
+    "detekt-compiler-plugin",
+)
+
+val artifactRenames = mapOf(
+    "detekt-formatting" to "detekt-rules-ktlint-wrapper",
+    "detekt-report-xml" to "detekt-report-checkstyle",
+    "detekt-report-md" to "detekt-report-markdown",
+    "detekt-rules-empty" to "detekt-rules-empty-blocks",
+    "detekt-rules-documentation" to "detekt-rules-comments",
+    "detekt-rules-errorprone" to "detekt-rules-potential-bugs",
+)
+
+val MavenPublication.isPluginMarker: Boolean get() = name.endsWith("PluginMarkerMaven")
+
 publishing {
     repositories {
         maven {
@@ -26,14 +58,20 @@ publishing {
     // We don't need to configure publishing for the Gradle plugin.
     if (project.name != "detekt-gradle-plugin") {
         publications.register<MavenPublication>(DETEKT_PUBLICATION) {
-            from(components["java"])
+            if (!publishRelocationInfo) {
+                from(components["java"])
+            }
         }
     }
     publications.withType<MavenPublication> {
         artifactId = project.name
         version = Versions.currentOrSnapshot()
+        val relocate = publishRelocationInfo && !isPluginMarker && project.name !in notRelocated
         pom {
-            description.set("Static code analysis for Kotlin")
+            if (publishRelocationInfo) {
+                packaging = "pom"
+            }
+            description.set(if (relocate) relocationDescription else "Static code analysis for Kotlin")
             name.set("detekt")
             url.set("https://detekt.dev")
             licenses {
@@ -53,7 +91,54 @@ publishing {
             scm {
                 url.set("https://github.com/detekt/detekt")
             }
+            if (relocate) {
+                val newArtifactId = artifactRenames[project.name]
+                distributionManagement {
+                    relocation {
+                        groupId = relocationGroupId
+                        if (newArtifactId != null) {
+                            artifactId = newArtifactId
+                        }
+                        version = relocationVersion
+                        message = relocationMessage
+                    }
+                }
+            }
         }
+    }
+}
+
+// Gradle Module Metadata cannot express Maven relocation and would take precedence over the POM.
+tasks.withType<GenerateModuleMetadata>().configureEach {
+    enabled = !publishRelocationInfo
+}
+
+// Artifacts are contributed both by the Java component and directly by module build scripts, so
+// remove them after every project has been evaluated.
+if (publishRelocationInfo) {
+    afterEvaluate {
+        val javaComponent = components["java"] as AdhocComponentWithVariants
+        listOf("apiElements", "runtimeElements", "sourcesElements", "javadocElements")
+            .mapNotNull(configurations::findByName)
+            .forEach { javaComponent.withVariantsFromConfiguration(it) { skip() } }
+        publishing.publications.withType<MavenPublication>().configureEach {
+            setArtifacts(emptyList<Any>())
+        }
+    }
+}
+
+// Plugin markers cannot redirect across plugin IDs.
+if (publishRelocationInfo) {
+    tasks.withType<AbstractPublishToMaven>().configureEach {
+        if (name.contains("PluginMarkerMavenPublication")) {
+            enabled = false
+        }
+    }
+}
+
+if (publishRelocationInfo && project.name in notRelocated) {
+    tasks.withType<AbstractPublishToMaven>().configureEach {
+        enabled = false
     }
 }
 
