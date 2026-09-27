@@ -16,8 +16,9 @@ tasks.shadowJar {
     enableKotlinModuleRemapping = false
 }
 
-java {
-    targetCompatibility = JavaVersion.VERSION_17
+tasks.withType<JavaCompile>().configureEach {
+    @Suppress("MagicNumber")
+    options.release = 17
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants

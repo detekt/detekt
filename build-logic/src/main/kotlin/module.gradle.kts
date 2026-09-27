@@ -2,12 +2,12 @@ import com.gradle.develocity.agent.gradle.test.DevelocityTestConfiguration
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("packaging")
     kotlin("jvm")
     id("jacoco")
-    id("com.gradleup.tapmoc")
 }
 
 val versionCatalog = versionCatalogs.named("libs")
@@ -55,8 +55,13 @@ tasks.withType<Test>().configureEach {
     }
 }
 
+val jvmMajorVersion = 8
+
 kotlin {
     compilerOptions {
+        @Suppress("MagicNumber")
+        jvmTarget = JvmTarget.fromTarget(if (jvmMajorVersion == 8) "1.8" else jvmMajorVersion.toString())
+
         extraWarnings = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
         if (project.name != "detekt-gradle-plugin") {
@@ -97,8 +102,6 @@ testing {
     }
 }
 
-val jvmMajorVersion = 8
-
 // Pretend AGP API, JUnit and detekt-rules-ktlint-wrapper target JVM 8. Required while detekt itself targets JVM 8 and these dependencies target newer JVM versions.
 dependencies {
     components {
@@ -125,10 +128,6 @@ dependencies {
     }
 }
 
-tapmoc {
-    java(jvmMajorVersion)
-}
-
 java {
     withSourcesJar()
     if (project.name !in setOf("detekt-gradle-plugin", "detekt-test-junit")) {
@@ -137,4 +136,8 @@ java {
             useCompileClasspathVersions()
         }
     }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release = jvmMajorVersion
 }
