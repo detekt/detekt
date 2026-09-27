@@ -19,9 +19,9 @@ import dev.detekt.psi.isMainFunction
 import dev.detekt.psi.isOpen
 import dev.detekt.psi.isOperator
 import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructor
@@ -164,7 +164,8 @@ private class ParameterUsageVisitor : DetektVisitor() {
         if (expression.parent is KtValueArgumentName) return
 
         analyze(expression) {
-            val symbol = expression.mainReference.resolveToSymbol() as? KaValueParameterSymbol ?: return
+            @OptIn(KaExperimentalApi::class)
+            val symbol = expression.resolveSymbol() as? KaValueParameterSymbol ?: return
             symbol.psi?.let { usedParameters.add(it) }
         }
     }
