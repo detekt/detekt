@@ -96,6 +96,8 @@ testing {
             }
         }
         register<JvmTestSuite>("functionalTestMinSupportedGradle") {
+            // Note: the only compatible LTS JVM version for this task is 17. AssertJ requires that minimum version,
+            // while the Gradle version tested is compatible up to Java 19.
             dependencies {
                 implementation(libs.assertj.core)
                 implementation(testFixtures(project()))
