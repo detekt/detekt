@@ -1,6 +1,5 @@
 plugins {
     `kotlin-dsl`
-    id("com.gradleup.tapmoc") version "0.4.2"
 }
 
 dependencies {
@@ -10,7 +9,6 @@ dependencies {
     implementation(libs.semver4j)
     implementation(libs.breadmoirai.githubRelease.plugin)
     implementation(libs.dokka.plugin)
-    implementation(libs.tapmoc.plugin)
 }
 
 kotlin {
@@ -19,8 +17,4 @@ kotlin {
     compilerOptions {
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
-}
-
-tapmoc {
-    gradle(gradle.gradleVersion)
 }
