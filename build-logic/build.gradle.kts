@@ -23,6 +23,5 @@ kotlin {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    @Suppress("MagicNumber")
     options.release = JvmTarget.entries.last().target.toInt()
 }
