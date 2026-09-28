@@ -1,18 +1,9 @@
 package dev.detekt.gradle.plugin.internal
 
 import org.gradle.api.GradleException
-import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
-import org.gradle.api.file.Directory
 import org.gradle.api.tasks.VerificationException
 import org.gradle.util.GradleVersion
-
-internal fun Project.rootProjectDirectoryCompat(): Directory =
-    if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-        isolated.rootProject.projectDirectory
-    } else {
-        rootProject.layout.projectDirectory
-    }
 
 /**
  * `Configuration.visible` has no effect from Gradle 9.0 on, its accessors are deprecated and
