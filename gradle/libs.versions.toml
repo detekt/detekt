@@ -29,7 +29,7 @@ android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "
 # we need to be on a newer version until KGP minimum version gets bumped higher (https://youtrack.jetbrains.com/issue/KT-84114)
 gradle-publicApi = { module = "org.gradle.experimental:gradle-public-api", version = "8.14.3" }
 github-api = { module = "org.kohsuke:github-api", version = "1.330" }
-jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version = "2.22.2" }
+jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version = "2.22.3" }
 
 # This represents the oldest JUnit version supported by detekt-test-junit.
 # This should only be updated when updating the minimum version supported by detekt-test-junit.
