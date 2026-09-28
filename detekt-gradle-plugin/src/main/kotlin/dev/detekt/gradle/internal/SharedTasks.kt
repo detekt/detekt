@@ -3,7 +3,6 @@ package dev.detekt.gradle.internal
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import dev.detekt.gradle.extensions.DetektExtension
-import dev.detekt.gradle.plugin.internal.conventionCompat
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
@@ -34,7 +33,7 @@ internal fun Project.setDetektTaskDefaults(extension: DetektExtension) {
         it.autoCorrect.convention(extension.autoCorrect)
         it.ignoreFailures.convention(extension.ignoreFailures)
         it.failOnSeverity.convention(extension.failOnSeverity)
-        it.config.conventionCompat(provider { extension.config })
+        it.config.convention(provider { extension.config })
         it.basePath.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
         it.allRules.convention(extension.allRules)
         it.noJdk.convention(false)
@@ -59,7 +58,7 @@ internal fun Project.setCreateBaselineTaskDefaults(extension: DetektExtension) {
             it.jvmTarget.convention(compilerOptions.jvmTarget.map { jvmTarget -> jvmTarget.target })
         }
 
-        it.config.conventionCompat(project.provider { extension.config })
+        it.config.convention(project.provider { extension.config })
         it.debug.convention(extension.debug)
         it.parallel.convention(extension.parallel)
         it.disableDefaultRuleSets.convention(extension.disableDefaultRuleSets)

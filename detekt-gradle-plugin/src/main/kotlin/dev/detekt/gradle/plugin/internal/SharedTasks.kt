@@ -30,11 +30,11 @@ internal fun Project.registerJvmCompilationDetektTask(
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
         detektTask.source(source)
-        detektTask.classpath.conventionCompat(
+        detektTask.classpath.convention(
             compilation.output.classesDirs,
             siblingTask.map { it.libraries }
         )
-        detektTask.friendPaths.conventionCompat(
+        detektTask.friendPaths.convention(
             compilation.output.classesDirs,
             siblingTask.map { it.friendPaths }
         )
@@ -88,11 +88,11 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
         createBaselineTask.source(source)
-        createBaselineTask.classpath.conventionCompat(
+        createBaselineTask.classpath.convention(
             compilation.output.classesDirs,
             siblingTask.map { it.libraries }
         )
-        createBaselineTask.friendPaths.conventionCompat(
+        createBaselineTask.friendPaths.convention(
             compilation.output.classesDirs,
             siblingTask.map { it.friendPaths }
         )
