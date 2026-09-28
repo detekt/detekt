@@ -2,6 +2,8 @@ package dev.detekt.rules.ktlintwrapper
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.snakeyaml.engine.v2.api.Load
+import org.snakeyaml.engine.v2.api.LoadSettings
 
 class DefaultConfigSpec {
 
@@ -16,12 +18,20 @@ class DefaultConfigSpec {
      * and the user's `ktlint: autoCorrect: false` is unreachable. See #1466.
      *
      * Which rules are able to correct is decided at runtime by [dev.detekt.api.AutoCorrectable]
-     * instead, so the default config only carries the rule set level switch.
+     * instead, so the default config only carries the rule set level switch. This checks the
+     * generated config bundled with the ktlint wrapper.
      */
     @Test
     fun `declares autoCorrect only at the rule set level`() {
-        val declarations = defaultConfig.lines().filter { "autoCorrect:" in it }
+        val config = Load(LoadSettings.builder().build()).loadFromString(defaultConfig) as Map<*, *>
+        val ruleSetConfig = config["ktlint"] as Map<*, *>
 
-        assertThat(declarations).containsExactly("  autoCorrect: true")
+        assertThat(ruleSetConfig["autoCorrect"]).isEqualTo(true)
+        for (ruleName in KtlintWrapperProvider().instance().rules.keys) {
+            val ruleConfig = ruleSetConfig[ruleName.value] as Map<*, *>
+            assertThat(ruleConfig.containsKey("autoCorrect"))
+                .describedAs("%s must not declare autoCorrect in the bundled config", ruleName.value)
+                .isFalse()
+        }
     }
 }

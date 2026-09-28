@@ -36,6 +36,7 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
     testImplementation(libs.classgraph)
+    testImplementation(libs.snakeyaml.engine)
 
     testRuntimeOnly(libs.slf4j.nop)
     testCompileOnly(libs.jetbrains.annotations)
