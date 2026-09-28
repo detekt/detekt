@@ -1,8 +1,6 @@
 package dev.detekt.gradle.plugin.internal
 
-import org.gradle.api.GradleException
 import org.gradle.api.artifacts.Configuration
-import org.gradle.api.tasks.VerificationException
 import org.gradle.util.GradleVersion
 
 /**
@@ -18,11 +16,3 @@ internal fun Configuration.setVisibleCompat(visible: Boolean) {
         isVisible = visible
     }
 }
-
-@Suppress("NOTHING_TO_INLINE") // not inlining for performance, but for simpler stack traces
-internal inline fun verificationExceptionCompat(message: String, cause: Throwable): GradleException =
-    if (GradleVersion.current() >= GradleVersion.version("8.2")) {
-        VerificationException(message, cause)
-    } else {
-        VerificationException(message)
-    }
