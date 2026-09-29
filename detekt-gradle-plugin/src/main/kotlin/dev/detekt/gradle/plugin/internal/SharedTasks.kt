@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import java.util.concurrent.Callable
 
 internal fun Project.registerJvmCompilationDetektTask(
     extension: DetektExtension,
@@ -32,7 +33,7 @@ internal fun Project.registerJvmCompilationDetektTask(
         detektTask.source(source)
         detektTask.classpath.convention(
             compilation.output.classesDirs,
-            siblingTask.map { it.libraries }
+            files(Callable { siblingTask.get().libraries })
         )
         detektTask.friendPaths.convention(
             compilation.output.classesDirs,
@@ -90,7 +91,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         createBaselineTask.source(source)
         createBaselineTask.classpath.convention(
             compilation.output.classesDirs,
-            siblingTask.map { it.libraries }
+            files(Callable { siblingTask.get().libraries })
         )
         createBaselineTask.friendPaths.convention(
             compilation.output.classesDirs,
