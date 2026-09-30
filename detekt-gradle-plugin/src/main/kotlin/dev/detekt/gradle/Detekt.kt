@@ -37,10 +37,12 @@ import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
+import org.gradle.api.file.ProjectLayout
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
@@ -60,6 +62,7 @@ import org.gradle.api.tasks.options.Option
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
+import kotlin.io.path.Path
 
 @CacheableTask
 abstract class Detekt @Inject constructor(
@@ -141,12 +144,17 @@ abstract class Detekt @Inject constructor(
     @get:Option(option = "auto-correct", description = "Allow rules to auto correct code if they support it")
     abstract val autoCorrect: Property<Boolean>
 
-    /**
-     * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
-     */
+    @get:Inject
+    internal abstract val projectLayout: ProjectLayout
+
+    @get:Internal
+    abstract val basePath: Property<String>
+
     @get:Input
     @get:Optional
-    abstract val basePath: Property<String>
+    internal val basePathForCache: Provider<String> = basePath.map { path ->
+        projectLayout.projectDirectory.asFile.toPath().relativize(Path(path)).toString()
+    }
 
     @get:Nested
     /*
