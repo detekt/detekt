@@ -46,10 +46,7 @@ ktlint:
   CommentWrapping:
     active: true
     indentSize: 4
-  ConditionWrapping:
-    active: true
-    indentSize: 4
-  ContextReceiverListWrapping:
+  ContextParameterListWrapping:
     active: true
     # maxLineLength: If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
     indentSize: 4
