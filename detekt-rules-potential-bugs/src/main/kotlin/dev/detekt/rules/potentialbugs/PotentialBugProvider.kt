@@ -22,6 +22,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 ::ElseCaseInsteadOfExhaustiveWhen,
                 ::EqualsAlwaysReturnsTrueOrFalse,
                 ::EqualsWithHashCodeExist,
+                ::EqualsWithHashCodeSameFields,
                 ::ExitOutsideMain,
                 ::ExplicitGarbageCollectionCall,
                 ::HasPlatformType,
