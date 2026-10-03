@@ -102,8 +102,7 @@ the formatting wrapper), update the coordinates accordingly:
 `CodeQualityExtension`, and the long-deprecated `reports {}` block on the extension is gone —
 configure reports on the tasks instead.
 
-On Gradle 8.2 and newer you can keep using `=` thanks to lazy property assignment. On older
-supported Gradle versions, use `.set(...)`:
+You can keep using `=` thanks to Gradle's lazy property assignment, or use `.set(...)`:
 
 ```diff
  detekt {
@@ -187,6 +186,8 @@ If a rule you expect seems to have stopped reporting after the upgrade, re-run w
 
 ### Reports
 
+The plain-text (`txt`) report was removed entirely.
+
 #### Format ID renames
 
 The IDs used on the CLI and Gradle plugin for the XML and Markdown reports changed:
@@ -213,8 +214,6 @@ In Gradle:
      }
  }
 ```
-
-The plain-text (`txt`) report was removed entirely.
 
 #### First-party plugin reports
 
@@ -485,7 +484,7 @@ instance name too, for example `FeatureEnvy/my-instance:Junk.kt:signature`.
 - `--api-version` was added, alongside the existing `--language-version`.
 - `--classpath` is no longer marked experimental, and paths are validated when the CLI starts so
   misconfigured classpaths fail fast.
-- `--report` accepts the [new report IDs](#report-format-id-renames).
+- `--report` accepts the [new report IDs](#format-id-renames).
 
 ### The compiler plugin was removed
 
@@ -589,6 +588,10 @@ Key points:
   name. Override it if you need a different reported name.
 - `ThresholdedCodeSmell` and `ThresholdRule` were removed — emit a plain `Finding` and put the
   threshold information into the message.
+
+Rules that correct code must implement the `dev.detekt.api.AutoCorrectable` marker interface.
+Without it, `Rule.autoCorrect` is always `false`. For capable rules, a rule-level `autoCorrect`
+value takes precedence over the ruleset-level value.
 
 `Entity` also changed: `name` and `compact()` are gone and `ktElement` is now non-null.
 

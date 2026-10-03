@@ -1,7 +1,7 @@
 ---
 title: "Using Type Resolution"
 keywords: [detekt, static, analysis, code, kotlin]
-sidebar: 
+sidebar:
 permalink: type-resolution.html
 folder: gettingstarted
 summary:
@@ -12,7 +12,7 @@ This page describes how to use detekt's **type resolution** feature.
 
 ## What is type resolution
 
-Type resolution is a feature that allows detekt to perform more **advanced** static analysis on your Kotlin source code. 
+Type resolution is a feature that allows detekt to perform more **advanced** static analysis on your Kotlin source code.
 
 Normally, detekt doesn't have access to the types and symbols that are available to the compiler during the compilation. This restricts the inspection capability.
 By enabling type resolution, you provide to detekt all the information to understand types and symbols in your code needed to perform more accurate analysis. This extends detekt's inspection capability to ones of the Kotlin **compiler**.
@@ -31,7 +31,7 @@ detekt is able to report the usage of the number `42` as a magic number, **witho
 
 Similarly, detekt has another rule called [UnnecessarySafeCall](../rules/potential-bugs.mdx#unnecessarysafecall) to detect unnecessary usages of safe call operators (`?.`).
 
-In the previous example, detekt is able to determine if the safe call in `getUserById(42)?.toString()` is required **only with** type resolution. 
+In the previous example, detekt is able to determine if the safe call in `getUserById(42)?.toString()` is required **only with** type resolution.
 
 This is because detekt needs to know what is the **return type** of `getUserById()` in order to correctly perform the inspection. If the return type is a nullable type, then the code is valid. If the return type is a non-nullable type, detekt will report an `UnnecessarySafeCall` as the `?.` is actually not needed.
 
@@ -41,7 +41,7 @@ With type resolution, detekt has access to all the symbols and types of your cod
 
 If you're running detekt **without** type resolution, all the rules that require type resolution **will not run**.
 
-All the rules that require type resolution implement the [`RequiresAnalysisApi`](https://github.com/detekt/detekt/blob/main/detekt-api/src/main/kotlin/dev/detekt/api/RequiresAnalysisApi.kt) marker interface. 
+All the rules that require type resolution implement the [`RequiresAnalysisApi`](https://github.com/detekt/detekt/blob/main/detekt-api/src/main/kotlin/dev/detekt/api/RequiresAnalysisApi.kt) marker interface.
 
 Moreover, their official documentation in the detekt website will mention _Requires Type Resolution_ ([like here](../rules/potential-bugs.mdx#unnecessarysafecall)).
 
