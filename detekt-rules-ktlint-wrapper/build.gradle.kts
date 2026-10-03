@@ -51,11 +51,6 @@ tasks.jar {
     )
 }
 
-tapmoc {
-    @Suppress("MagicNumber")
-    java(17)
-}
-
 tasks.named("generateConfig") {
     val ktlintVersion = libs.versions.ktlint
     inputs.property("ktlintVersion", ktlintVersion)
