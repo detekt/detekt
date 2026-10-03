@@ -48,7 +48,6 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
 import org.jetbrains.kotlin.psi.psiUtil.parents
-import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
@@ -156,17 +155,11 @@ class MissingUseCall(config: Config) :
     private fun shouldReport(expression: KtExpression): Boolean {
         val expressionParent = getParentChainExpression(expression) ?: return false
 
-        if (expressionParent.parent is KtProperty) {
-            val property = expressionParent.parent as KtProperty
-            if (property.parent is KtClassBody) {
-                return false
-            }
-            if (isPropertyUsedWithUse(property)) {
-                return false
-            }
-        }
+        val isIgnoredProperty = (expressionParent.parent as? KtProperty)?.let {
+            it.parent is KtClassBody || isPropertyUsedWithUse(it)
+        } ?: false
 
-        return when {
+        return !isIgnoredProperty && when {
             expressionParent is KtQualifiedExpression -> {
                 expressionParent.doesEndWithUse().not() &&
                     expressionParent.firstCallableReceiverOrNull().isCloseableNotUsed()
