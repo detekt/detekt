@@ -1,4 +1,4 @@
-package dev.detekt.core.suppressors
+package dev.detekt.suppressors
 
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
