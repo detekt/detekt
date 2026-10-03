@@ -7,9 +7,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.hasAnnotation
-import dev.detekt.psi.isInternal
-import dev.detekt.psi.isOverride
+import dev.detekt.rulehelpers.hasAnnotation
+import dev.detekt.rulehelpers.isInternal
+import dev.detekt.rulehelpers.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile

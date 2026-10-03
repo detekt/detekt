@@ -5,8 +5,8 @@ import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import dev.detekt.psi.companionObject
-import dev.detekt.psi.isConstant
+import dev.detekt.rulehelpers.companionObject
+import dev.detekt.rulehelpers.isConstant
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstantExpression

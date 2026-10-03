@@ -2,7 +2,7 @@ package dev.detekt.suppressors
 
 import dev.detekt.api.Rule
 import dev.detekt.api.valueOrDefault
-import dev.detekt.psi.FunctionMatcher
+import dev.detekt.rulehelpers.FunctionMatcher
 import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedFunction

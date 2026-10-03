@@ -10,8 +10,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.psi.hasImplicitParameter
-import dev.detekt.psi.hasImplicitParameterReference
+import dev.detekt.rulehelpers.hasImplicitParameter
+import dev.detekt.rulehelpers.hasImplicitParameterReference
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassInitializer

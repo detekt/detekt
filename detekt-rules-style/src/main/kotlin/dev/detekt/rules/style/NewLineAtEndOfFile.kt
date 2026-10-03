@@ -9,7 +9,7 @@ import dev.detekt.api.Location
 import dev.detekt.api.Rule
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
-import dev.detekt.psi.absolutePath
+import dev.detekt.rulehelpers.absolutePath
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset

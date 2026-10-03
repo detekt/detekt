@@ -4,8 +4,8 @@ import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.psi.isOpen
-import dev.detekt.psi.isOverride
+import dev.detekt.rulehelpers.isOpen
+import dev.detekt.rulehelpers.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
