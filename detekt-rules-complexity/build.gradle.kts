@@ -8,7 +8,6 @@ dependencies {
     compileOnly(projects.detektMetrics)
     compileOnly(projects.detektPsiUtils)
 
-    testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektMetrics)
     testRuntimeOnly(projects.detektPsiUtils)

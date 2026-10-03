@@ -586,6 +586,8 @@ style:
   AbstractClassCanBeInterface:
     active: true
     ignoreSealedClasses: false
+  AvoidDollarLiteralInterpolation:
+    active: false
   BracesOnIfStatements:
     active: false
     singleLine: 'never'
@@ -745,6 +747,7 @@ style:
     active: false
   NullableBooleanCheck:
     active: false
+    onlyConditionals: true
   ObjectLiteralToLambda:
     active: true
   OneTopLevelClassOrObjectPerFile:

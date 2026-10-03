@@ -2,7 +2,6 @@ package dev.detekt.cli
 
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.converters.PathConverter
-import dev.detekt.tooling.api.AnalysisMode
 import dev.detekt.tooling.api.spec.RulesSpec
 import dev.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import dev.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail

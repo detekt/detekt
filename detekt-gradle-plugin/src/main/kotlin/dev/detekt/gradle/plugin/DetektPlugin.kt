@@ -14,7 +14,6 @@ import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_FILE
 import dev.detekt.gradle.plugin.internal.DetektAndroidCompilations
 import dev.detekt.gradle.plugin.internal.DetektJvmCompilations
 import dev.detekt.gradle.plugin.internal.DetektKmpJvmCompilations
-import dev.detekt.gradle.plugin.internal.conventionCompat
 import dev.detekt.gradle.plugin.internal.setVisibleCompat
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
@@ -137,8 +136,8 @@ class DetektPlugin : Plugin<Project> {
 
     private fun setTaskDefaults(project: Project, extension: DetektExtension) {
         project.tasks.withType(Detekt::class.java).configureEach { task ->
-            task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
-            task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
+            task.detektClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT))
+            task.pluginClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
             val reportName = if (task.name.startsWith(DETEKT_TASK_NAME) && task.name != DETEKT_TASK_NAME) {
                 task.name.removePrefix(DETEKT_TASK_NAME).replaceFirstChar { it.lowercase() }
             } else {
@@ -163,13 +162,13 @@ class DetektPlugin : Plugin<Project> {
         }
 
         project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach { task ->
-            task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
-            task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
+            task.detektClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT))
+            task.pluginClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
         }
 
         project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach { task ->
-            task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
-            task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
+            task.detektClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT))
+            task.pluginClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
         }
     }
 
