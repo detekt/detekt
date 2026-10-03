@@ -24,7 +24,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
         with:
-          java-version: 25
+          java-version: 27
           distribution: 'temurin'
           verify-signature: true
 
@@ -55,7 +55,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
         with:
-          java-version: ${{ matrix.jdk }}
+          java-version: 27
           distribution: 'temurin'
           verify-signature: true
 
@@ -68,10 +68,11 @@ jobs:
         run: ./gradlew publishToMavenLocal
 
       - name: Build detekt
-        run: ./gradlew build -x detekt
+        run: ./gradlew build testJvm${{ matrix.jdk }} -x detekt -x test
 
       - name: Build detekt-gradle-plugin
-        run: ./gradlew -pdetekt-gradle-plugin build -x detekt
+        working-directory: ./detekt-gradle-plugin
+        run: ./gradlew testJvm${{ matrix.jdk }} functionalTestJvm${{ matrix.jdk }} build -x detekt -x test -x functionalTest
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
@@ -88,7 +89,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
         with:
-          java-version: 25
+          java-version: 27
           distribution: 'temurin'
           verify-signature: true
 
@@ -109,7 +110,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
         with:
-          java-version: 25
+          java-version: 27
           distribution: 'temurin'
           verify-signature: true
 
@@ -130,7 +131,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
         with:
-          java-version: 25
+          java-version: 27
           distribution: 'temurin'
           verify-signature: true
 
