@@ -935,6 +935,50 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
+
+        @Test
+        fun `does not report when _Closeable_ assigned to local variable is used on next line`() {
+            val code = """
+                ${myClosable()}
+
+                fun createCloseable(): MyCloseable = MyCloseable(0)
+
+                fun test(block: MyCloseable.() -> Unit) {
+                    val repo = createCloseable()
+                    repo.use(block)
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when _Closeable_ assigned to local variable is returned with _use_`() {
+            val code = """
+                ${myClosable()}
+
+                fun <T> test(block: MyCloseable.() -> T): T {
+                    val walk = MyCloseable(0)
+                    return walk.use(block)
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when _Closeable_ assigned to local variable is used in property with _use_`() {
+            val code = """
+                ${myClosable()}
+
+                fun test() {
+                    val resource = MyCloseable(0)
+                    val result = resource.use { 42 }
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 }
 
