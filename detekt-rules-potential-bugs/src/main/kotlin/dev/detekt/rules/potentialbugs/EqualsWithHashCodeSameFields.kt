@@ -9,7 +9,6 @@ import dev.detekt.api.config
 import dev.detekt.psi.isEqualsFunction
 import dev.detekt.psi.isHashCodeFunction
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
@@ -65,12 +64,11 @@ class EqualsWithHashCodeSameFields(config: Config) :
         val hashCodeFunction = functions.firstOrNull { it.isHashCodeFunction() }
 
         if (equalsFunction != null && hashCodeFunction != null) {
-            val classPropertyNames = (
-                klass.primaryConstructorParameters
-                    .filter { it.isPropertyParameter() }
-                    .mapNotNull { it.name } +
-                klass.getProperties().mapNotNull { it.name }
-            ).toSet()
+            val constructorProps = klass.primaryConstructorParameters
+                .filter { it.isPropertyParameter() }
+                .mapNotNull { it.name }
+            val memberProps = klass.getProperties().mapNotNull { it.name }
+            val classPropertyNames = (constructorProps + memberProps).toSet()
 
             if (classPropertyNames.isNotEmpty()) {
                 val equalsFields = extractReferencedFields(equalsFunction, classPropertyNames)
@@ -85,14 +83,17 @@ class EqualsWithHashCodeSameFields(config: Config) :
                             "Missing in hashCode(): ${missingInHashCode.sorted().joinToString(", ")}; " +
                             "missing in equals(): ${missingInEquals.sorted().joinToString(", ")}."
                     }
+
                     missingInEquals.isNotEmpty() -> {
                         "Properties used in hashCode() are missing in equals(): " +
                             "${missingInEquals.sorted().joinToString(", ")}."
                     }
+
                     !allowHashCodeSubset && missingInHashCode.isNotEmpty() -> {
                         "Properties used in equals() are missing in hashCode(): " +
                             "${missingInHashCode.sorted().joinToString(", ")}."
                     }
+
                     else -> null
                 }
 
@@ -105,10 +106,7 @@ class EqualsWithHashCodeSameFields(config: Config) :
         super.visitClass(klass)
     }
 
-    private fun extractReferencedFields(
-        function: KtNamedFunction,
-        classProperties: Set<String>
-    ): Set<String> {
+    private fun extractReferencedFields(function: KtNamedFunction, classProperties: Set<String>): Set<String> {
         val body = function.bodyExpression ?: return emptySet()
         return body.collectDescendantsOfType<KtNameReferenceExpression> {
             it.getReferencedName() in classProperties
