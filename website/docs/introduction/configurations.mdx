@@ -98,6 +98,35 @@ The severity will be computed in the priority order:
 - Severity of the parent ruleset if exists
 - Default severity: error
 
+### Auto correction
+
+Some rules are able to correct the code they report on. Correction is off unless you run _detekt_ with
+`--auto-correct` (or set `autoCorrect` on the Gradle extension or task) - that flag is the master switch and
+nothing in the config file can turn correction on without it.
+
+With the flag on, you may narrow down which rules correct by setting `autoCorrect` at the rule or ruleset level:
+
+```yaml
+ktlint:
+    active: true
+    autoCorrect: false
+    ImportOrdering:
+        active: true
+        autoCorrect: true
+```
+
+Whether a rule corrects will be computed in the priority order:
+
+- `autoCorrect` of the rule if exists
+- `autoCorrect` of the parent ruleset if exists
+- Default: `false`
+
+The example above therefore corrects import ordering and nothing else. Note that the rule level value wins, so a
+ruleset level `autoCorrect: false` acts as a default for the ruleset rather than a veto over it.
+
+Rules which are not able to correct anything are never affected by this setting. Setting `autoCorrect` on such a
+rule has no effect, and _detekt_ will warn you about it rather than silently ignoring it.
+
 ### Aliases
 
 Each rule can have a list of aliases. Those aliases will be used as new identifiers for that rule so they can be used

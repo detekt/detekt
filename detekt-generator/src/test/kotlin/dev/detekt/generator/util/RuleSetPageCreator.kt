@@ -93,7 +93,6 @@ internal fun createRules(): List<Rule> {
         aliases = emptyList(),
         parent = "",
         configurations = emptyList(),
-        autoCorrect = true,
         requiresFullAnalysis = true
     )
     val rule4 = Rule(
