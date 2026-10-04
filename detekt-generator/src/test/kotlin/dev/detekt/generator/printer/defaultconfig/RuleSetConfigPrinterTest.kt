@@ -104,24 +104,6 @@ internal class RuleSetConfigPrinterTest {
         }
 
         @Nested
-        inner class AutoCorrect {
-
-            @Test
-            fun `has auto correct property`() {
-                val rule = ruleTemplate.copy(autoCorrect = true)
-                val actual = yaml { printRule(rule) }
-                assertThat(actual.lines()).contains("  autoCorrect: true")
-            }
-
-            @Test
-            fun `omits auto correct property if false`() {
-                val rule = ruleTemplate.copy(autoCorrect = false)
-                val actual = yaml { printRule(rule) }
-                assertThat(actual).doesNotContain(Config.AUTO_CORRECT_KEY)
-            }
-        }
-
-        @Nested
         inner class Exclusion {
 
             @Test

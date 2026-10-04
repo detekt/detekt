@@ -38,9 +38,6 @@ internal fun YamlNode.printRule(rule: Rule) {
         if (rule.aliases.isNotEmpty()) {
             keyValue { Config.ALIASES_KEY to "[${rule.aliases.joinToString(separator = ", ") { "'$it'" }}]" }
         }
-        if (rule.autoCorrect) {
-            keyValue { Config.AUTO_CORRECT_KEY to "true" }
-        }
         val ruleExclusion = exclusions.singleOrNull { it.isExcluded(rule) }
         if (ruleExclusion != null) {
             keyValue { Config.EXCLUDES_KEY to ruleExclusion.pattern }
