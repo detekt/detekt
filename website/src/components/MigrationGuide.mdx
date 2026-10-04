@@ -424,6 +424,16 @@ Threshold-style configs were renamed to `allowed…`:
 | `StringLiteralDuplication` | `threshold` / `excludeStringsWithLessThan5Characters` | `allowedDuplications` / `allowedWithLengthLessThan` |
 | `TooManyFunctions`         | `thresholdInFiles`, `thresholdInClasses`, `thresholdInInterfaces`, `thresholdInObjects`, `thresholdInEnums` | `allowedFunctionsPerFile`, `allowedFunctionsPerClass`, `allowedFunctionsPerInterface`, `allowedFunctionsPerObject`, `allowedFunctionsPerEnum` |
 
+The new `allowed…` value is the largest value that is still accepted. For
+`CyclomaticComplexMethod`, `CognitiveComplexMethod`, `ComplexCondition`, `LongParameterList`,
+`LongMethod`, `LargeClass`, `ComplexInterface`, `MethodOverloading`, `NestedBlockDepth`,
+`TooManyFunctions`, `CouldBeSequence` and `StringLiteralDuplication`, the comparison changed from
+`>= threshold` to `> allowed…`. To keep 1.x behavior, use the old threshold minus 1. For example,
+`LongMethod`'s `threshold: 60` becomes `allowedLines: 59`, so a 60-line method is still reported.
+`NestedScopeFunctions` and `NamedArguments` already used `>` in 1.x; keep their values unchanged.
+This adjustment applies to the reporting thresholds, not `StringLiteralDuplication`'s
+`allowedWithLengthLessThan` option.
+
 Other key renames:
 
 | Rule                        | Old key                     | New key                          |
@@ -438,6 +448,26 @@ Other key renames:
 | `FunctionOnlyReturningConstant` | `excludeAnnotatedFunction` | `ignoreAnnotated`              |
 | `LateinitUsage`             | `excludeAnnotatedProperties`| `ignoreAnnotated`                 |
 | `UseDataClass`, `UnnecessaryAbstractClass` | `excludeAnnotatedClasses` | `ignoreAnnotated`  |
+
+Two of these renames also require changing the configured values:
+
+- **`ForbiddenImport`**: 1.x `forbiddenPatterns` was a regular expression that could match anywhere
+  in an import. In 2.x, `forbiddenImports` entries are globs that must match the whole fully
+  qualified name. Rewrite regexes as globs, for example `kotlin\.jvm\..*` becomes `kotlin.jvm.*`.
+  Patterns that previously matched only part of an import need wildcards to cover the rest.
+- **`AbsentOrWrongFileLicense`**: 1.x `licenseTemplateFile` was a path resolved relative to the
+  config file. In 2.x, `licenseTemplate` is the header text itself. Inline the template file's
+  contents into the YAML, for example using a `|` block scalar:
+
+  ```yaml
+  comments:
+    AbsentOrWrongFileLicense:
+      active: true
+      licenseTemplate: |
+        /*
+         * Copyright (c) Example
+         */
+  ```
 
 The `ignoreOverridden` option on `BooleanPropertyNaming`, `ConstructorParameterNaming`,
 `FunctionNaming`, `FunctionParameterNaming` and `VariableNaming` was ignored in 1.x and is now
