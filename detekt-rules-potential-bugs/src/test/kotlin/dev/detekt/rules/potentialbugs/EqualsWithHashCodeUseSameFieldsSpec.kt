@@ -7,8 +7,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class EqualsWithHashCodeSameFieldsSpec {
-    private val subject = EqualsWithHashCodeSameFields(Config.empty)
+class EqualsWithHashCodeUseSameFieldsSpec {
+    private val subject = EqualsWithHashCodeUseSameFields(Config.empty)
 
     @Nested
     inner class `classes with matching equals and hashCode fields` {
@@ -87,7 +87,7 @@ class EqualsWithHashCodeSameFieldsSpec {
 
         @Test
         fun `does not report subset when allowHashCodeSubset is enabled`() {
-            val configSubject = EqualsWithHashCodeSameFields(TestConfig("allowHashCodeSubset" to true))
+            val configSubject = EqualsWithHashCodeUseSameFields(TestConfig("allowHashCodeSubset" to true))
             val code = """
                 class Person(val name: String, val age: Int) {
                     override fun equals(other: Any?): Boolean {
@@ -104,7 +104,7 @@ class EqualsWithHashCodeSameFieldsSpec {
 
         @Test
         fun `reports when allowHashCodeSubset is enabled but hashCode uses extra field`() {
-            val configSubject = EqualsWithHashCodeSameFields(TestConfig("allowHashCodeSubset" to true))
+            val configSubject = EqualsWithHashCodeUseSameFields(TestConfig("allowHashCodeSubset" to true))
             val code = """
                 class Person(val name: String, val age: Int) {
                     override fun equals(other: Any?): Boolean {
