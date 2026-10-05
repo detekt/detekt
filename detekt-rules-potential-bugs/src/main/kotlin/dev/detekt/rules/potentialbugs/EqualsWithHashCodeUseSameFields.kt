@@ -47,7 +47,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  * }
  * </compliant>
  */
-class EqualsWithHashCodeSameFields(config: Config) :
+class EqualsWithHashCodeUseSameFields(config: Config) :
     Rule(
         config,
         "Classes overriding equals() and hashCode() should use consistent properties across both methods."
