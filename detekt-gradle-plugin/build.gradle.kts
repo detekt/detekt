@@ -81,9 +81,23 @@ testing {
                         inputs.property("isAndroidSdkInstalled", isAndroidSdkInstalled).optional(true)
                     }
                 }
+                targets {
+                    @Suppress("MagicNumber")
+                    setOf(17, 21, 25).forEach {
+                        register("functionalTestJvm$it") {
+                            testTask {
+                                javaLauncher = javaToolchains.launcherFor {
+                                    languageVersion = JavaLanguageVersion.of(it)
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         register<JvmTestSuite>("functionalTestMinSupportedGradle") {
+            // Note: the only compatible LTS JVM version for this task is 17. AssertJ requires that minimum version,
+            // while the Gradle version tested is compatible up to Java 19.
             dependencies {
                 implementation(libs.assertj.core)
                 implementation(testFixtures(project()))
@@ -276,7 +290,7 @@ tasks {
 
     check {
         dependsOn(
-            testing.suites.named("functionalTest"),
+            "functionalTest",
             testing.suites.named("functionalTestMinSupportedGradle"),
         )
     }

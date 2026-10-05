@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("module")
     id("generator")
@@ -52,9 +54,13 @@ tasks.jar {
     )
 }
 
-tapmoc {
+kotlin {
+    compilerOptions.jvmTarget = JvmTarget.JVM_17
+}
+
+tasks.withType<JavaCompile>().configureEach {
     @Suppress("MagicNumber")
-    java(17)
+    options.release = 17
 }
 
 tasks.named("generateConfig") {

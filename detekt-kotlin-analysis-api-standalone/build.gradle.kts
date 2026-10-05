@@ -57,8 +57,12 @@ val sourcesJar = tasks.register<Jar>("sourcesJar") {
 }
 
 java {
-    targetCompatibility = JavaVersion.VERSION_1_8
     withSourcesJar()
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    @Suppress("MagicNumber")
+    options.release = 8
 }
 
 shadow {

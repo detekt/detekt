@@ -1,6 +1,7 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     `kotlin-dsl`
-    id("com.gradleup.tapmoc") version "0.4.2"
 }
 
 dependencies {
@@ -11,15 +12,17 @@ dependencies {
     implementation(libs.github.api)
     implementation(platform(libs.jackson.bom))
     implementation(libs.dokka.plugin)
-    implementation(libs.tapmoc.plugin)
 }
 
 kotlin {
+    jvmToolchain(jdkVersion = 27)
+
     compilerOptions {
+        jvmTarget = JvmTarget.entries.last()
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
 }
 
-tapmoc {
-    gradle(gradle.gradleVersion)
+tasks.withType<JavaCompile>().configureEach {
+    options.release = JvmTarget.entries.last().target.toInt()
 }
