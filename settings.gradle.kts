@@ -37,6 +37,7 @@ include("detekt-rules-performance")
 include("detekt-rules-ruleauthors")
 include("detekt-rules-standard-library")
 include("detekt-rules-style")
+include("detekt-suppressors")
 include("detekt-test")
 include("detekt-test-assertj")
 include("detekt-test-junit")
@@ -48,7 +49,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 plugins {
-    id("com.gradle.develocity") version "4.5.1"
+    id("com.gradle.develocity") version "4.6.0"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "2.8.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("com.autonomousapps.build-health") version "3.19.2"

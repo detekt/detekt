@@ -35,6 +35,7 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
     testImplementation(libs.classgraph)
+    testImplementation(libs.snakeyaml.engine)
 
     testRuntimeOnly(libs.slf4j.nop)
     testCompileOnly(libs.jetbrains.annotations)
@@ -51,21 +52,9 @@ tasks.jar {
     )
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-    }
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-    }
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+tapmoc {
+    @Suppress("MagicNumber")
+    java(17)
 }
 
 tasks.named("generateConfig") {

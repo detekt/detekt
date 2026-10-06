@@ -9,9 +9,11 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isExpect
 import dev.detekt.psi.isOpen
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
@@ -149,7 +151,9 @@ class UseDataClass(config: Config) :
     // such as `private set` is intentionally ignored.
     private fun KtProperty.hasLogic(): Boolean = hasDelegate() || getter != null || setter?.hasBody() == true
 
-    private fun KaSession.isDefaultFunction(
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun isDefaultFunction(
         function: KtNamedFunction,
         classType: KaType?,
         primaryConstructorParameterTypes: List<KaType>,

@@ -12,12 +12,16 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isLateinit
 import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -95,20 +99,19 @@ class VarCouldBeVal(config: Config) :
         private val assignments = mutableMapOf<String, MutableSet<KtExpression>>()
         private val escapeCandidates = mutableMapOf<KaSymbol, List<KtProperty>>()
 
-        context(session: KaSession)
+        context(_: KaSession)
         fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> =
             declarationCandidates.filterNot { it.hasAssignments() }
 
-        context(session: KaSession)
+        @OptIn(KaContextParameterApi::class)
+        context(_: KaSession)
         private fun KtNamedDeclaration.hasAssignments(): Boolean {
             val declarationName = nameAsSafeName.toString()
             val assignments = assignments[declarationName]
             if (assignments.isNullOrEmpty()) return false
-            with(session) {
-                val declarationSymbol = symbol
-                return assignments.any {
-                    it.resolveToCall()?.singleVariableAccessCall()?.symbol == declarationSymbol
-                }
+            val declarationSymbol = symbol
+            return assignments.any {
+                it.resolveToCall()?.singleVariableAccessCall()?.symbol == declarationSymbol
             }
         }
 
@@ -190,7 +193,9 @@ class VarCouldBeVal(config: Config) :
             }
         }
 
-        private fun KaSession.evaluateReturnExpression(returnedExpression: KtExpression) {
+        @OptIn(KaContextParameterApi::class)
+        context(_: KaSession)
+        private fun evaluateReturnExpression(returnedExpression: KtExpression) {
             when (returnedExpression) {
                 is KtObjectLiteralExpression -> {
                     returnedExpression.collectDescendantsOfType<KtProperty> {

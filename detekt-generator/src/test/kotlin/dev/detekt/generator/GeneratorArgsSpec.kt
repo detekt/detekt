@@ -26,6 +26,9 @@ private val expectedHelp = """
     |  Options:
     |    --config, -c
     |      Output path for generated detekt config.
+    |    --debug
+    |      Prints extra information about the execution.
+    |      Default: false
     |    --documentation, -d
     |      Output path for generated documentation.
     |    --help, -h
