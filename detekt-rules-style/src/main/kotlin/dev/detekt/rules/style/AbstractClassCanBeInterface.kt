@@ -16,14 +16,15 @@ import dev.detekt.psi.isOpen
 import dev.detekt.psi.isProtected
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.scopes.memberScope
 import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
-import org.jetbrains.kotlin.analysis.api.types.isAnyType
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
@@ -194,7 +195,10 @@ class AbstractClassCanBeInterface(config: Config) :
     private fun isAnyParentClass(klass: KtClass): Boolean =
         (klass.symbol as? KaClassSymbol)
             ?.superTypes
-            ?.any { !it.isAnyType && (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.CLASS } == true
+            ?.any {
+                it.classId != KaStandardTypeClassIds.ANY &&
+                    (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.CLASS
+            } == true
 
     /**
      * Returns true if this callable can be safely represented in an interface: functions, getter-only properties
@@ -217,7 +221,7 @@ class AbstractClassCanBeInterface(config: Config) :
             // Reference to a const val. Effectively a compile-time constant, safe for interface getters
             is KtNameReferenceExpression -> {
                 @OptIn(KaExperimentalApi::class)
-                val symbol = initializer.resolveSymbol()
+                val symbol = initializer.resolveSuccessfulSymbol()
                 val psi = symbol?.psi as? KtProperty
                 psi?.isConstant() == true
             }

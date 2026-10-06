@@ -10,7 +10,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.expressions.isUsedAsExpression
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -62,7 +62,7 @@ class UnusedUnaryOperator(config: Config) :
             val parentOrSelf = expression.parentBinaryExpressionOrThis()
             if (parentOrSelf.isUsedAsExpression) return
             @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
-            if (expression.operationReference.resolveSymbol() != null) return
+            if (expression.operationReference.resolveSuccessfulSymbol() != null) return
             val message = "This '${parentOrSelf.text}' is not used"
             report(Finding(Entity.from(expression), message))
         }

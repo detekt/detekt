@@ -14,9 +14,9 @@ import dev.detekt.psi.isOperator
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbols
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbols
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
@@ -126,10 +126,10 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
                                 analyze(it) {
                                     @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
                                     val symbol = (
-                                        (it as? KtResolvableCall)?.resolveCall() as? KaFunctionCall<*>
+                                        (it as? KtResolvableCall)?.resolveSuccessfulCall() as? KaFunctionCall<*>
                                         )
                                         ?.symbol
-                                        ?: it.resolveSymbol()
+                                        ?: it.resolveSuccessfulSymbol()
                                     symbol?.psi
                                 }
                             }
@@ -179,7 +179,7 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
         val delegate = (this.parent as? KtProperty)?.delegate ?: return emptyList()
         return analyze(delegate) {
             @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-            delegate.resolveSymbols().filterIsInstance<KaFunctionSymbol>()
+            delegate.resolveSuccessfulSymbols().filterIsInstance<KaFunctionSymbol>()
         }
     }
 

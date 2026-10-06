@@ -1,10 +1,11 @@
 package dev.detekt.psi
 
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
-import org.jetbrains.kotlin.analysis.api.components.directDiagnostics
+import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnosticCheckerKind
+import org.jetbrains.kotlin.analysis.api.diagnostics.diagnostics
 import org.jetbrains.kotlin.analysis.api.expressions.expressionType
 import org.jetbrains.kotlin.analysis.api.fir.diagnostics.KaFirDiagnostic
+import org.jetbrains.kotlin.analysis.api.fir.diagnostics.KaUnstableDiagnosticApi
 import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.types.hasFlexibleNullability
 import org.jetbrains.kotlin.analysis.api.types.isNullable
@@ -28,8 +29,11 @@ import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 fun KtExpression.isNullable(shouldConsiderPlatformTypeAsNullable: Boolean): Boolean {
     if (this is KtSafeQualifiedExpression) {
         analyze(this) {
-            return directDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
-                .none { it is KaFirDiagnostic.UnnecessarySafeCall }
+            return diagnostics().directOnly(true).withCheckers(KaDiagnosticCheckerKind.COMMON)
+                .none {
+                    @OptIn(KaUnstableDiagnosticApi::class)
+                    it is KaFirDiagnostic.UnnecessarySafeCall
+                }
         }
     }
     analyze(this) {

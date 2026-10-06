@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbols
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbols
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
@@ -97,7 +97,7 @@ class RedundantSuspendModifier(config: Config) :
             is KtForExpression -> {
                 analyze(this) {
                     @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-                    this@hasSuspendCalls.resolveSymbols()
+                    this.resolveSuccessfulSymbols()
                         .filterIsInstance<KaNamedFunctionSymbol>()
                         .any { it.isSuspend }
                 }

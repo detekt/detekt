@@ -10,7 +10,8 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
-import org.jetbrains.kotlin.analysis.api.types.isUnitType
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.analysis.api.visibility.isPublicApi
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -81,7 +82,7 @@ class LibraryCodeMustSpecifyReturnType(config: Config) :
         if (this is KtNamedFunction) {
             if (this.isLocal || this.hasBlockBody() || bodyExpression?.text == "Unit") return
             analyze(this) {
-                if (allowOmitUnit && symbol.returnType.isUnitType) return
+                if (allowOmitUnit && symbol.returnType.classId == KaStandardTypeClassIds.UNIT) return
                 if (!symbol.isPublicApi) return
             }
         }

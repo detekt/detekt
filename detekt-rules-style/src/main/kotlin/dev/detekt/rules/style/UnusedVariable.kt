@@ -14,7 +14,7 @@ import dev.detekt.api.config
 import org.jetbrains.kotlin.K1Deprecation
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -142,7 +142,7 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
     context(_: KaSession)
     private fun KtExpression.resolveToLocalVariableSymbol(): KaVariableSymbol? =
         @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
-        (this as? KtResolvable)?.resolveSymbol() as? KaVariableSymbol
+        (this as? KtResolvable)?.resolveSuccessfulSymbol() as? KaVariableSymbol
 
     private fun registerNewDeclaration(declaration: KtNamedDeclaration) {
         @OptIn(K1Deprecation::class)

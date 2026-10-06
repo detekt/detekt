@@ -12,7 +12,8 @@ import dev.detekt.api.config
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.analysis.api.expressions.expressionType
 import org.jetbrains.kotlin.analysis.api.session.analyze
-import org.jetbrains.kotlin.analysis.api.types.isBooleanType
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.analysis.api.types.isMarkedNullable
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -87,7 +88,7 @@ class NullableBooleanCheck(config: Config) :
     private fun KtExpression.isNullableBoolean() =
         analyze(this) {
             val type = expressionType
-            type?.isBooleanType == true && type.isMarkedNullable
+            type?.classId == KaStandardTypeClassIds.BOOLEAN && type.isMarkedNullable
         }
 
     private fun KtExpression.isUsedInCondition(): Boolean =

@@ -12,8 +12,9 @@ import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.expressions.expressionType
 import org.jetbrains.kotlin.analysis.api.expressions.isUsedAsExpression
 import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
 import org.jetbrains.kotlin.analysis.api.types.KaType
-import org.jetbrains.kotlin.analysis.api.types.isUnitType
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtFinallySection
@@ -127,6 +128,6 @@ class ReturnFromFinally(config: Config) :
 
     private fun KtFinallySection.returnsNonUnitType(): Boolean =
         analyze(finalExpression) {
-            finalExpression.expressionType?.isUnitType == false
+            finalExpression.expressionType?.classId != KaStandardTypeClassIds.UNIT
         }
 }

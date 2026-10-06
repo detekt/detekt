@@ -7,10 +7,10 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isCalling
-import org.jetbrains.kotlin.analysis.api.components.isClassType
 import org.jetbrains.kotlin.analysis.api.expressions.expressionType
 import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.types.allSupertypes
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
@@ -71,7 +71,7 @@ class ErrorUsageWithThrowable(config: Config) :
                 yield(expressionType)
                 yieldAll(expressionType.allSupertypes)
             }
-                .any { type -> throwableTypes.any { type.isClassType(it) } }
+                .any { type -> throwableTypes.any { type.classId == it } }
         }
 
     companion object {
