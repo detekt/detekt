@@ -7,6 +7,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -61,39 +62,21 @@ class ComplexCondition(config: Config) :
     }
 
     private fun checkIfComplex(condition: KtExpression?) {
-        val binaryExpressions = condition?.collectDescendantsOfType<KtBinaryExpression>() ?: return
+        val logicalOperators = condition?.collectDescendantsOfType<KtBinaryExpression> {
+            it.operationToken == KtTokens.ANDAND || it.operationToken == KtTokens.OROR
+        } ?: return
 
-        if (binaryExpressions.size > 1) {
-            val longestBinExpr = binaryExpressions.reduce { acc, binExpr ->
-                if (binExpr.text.length > acc.text.length) binExpr else acc
-            }
-            val conditionString = longestBinExpr.text
-            val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
-            if (count > allowedConditions) {
-                report(
-                    Finding(
-                        Entity.from(condition),
-                        "This condition is too complex ($count). " +
-                            "The defined maximum number of allowed conditions is set to '$allowedConditions'"
-                    )
+        if (logicalOperators.isEmpty()) return
+
+        val count = logicalOperators.size + 1
+        if (count > allowedConditions) {
+            report(
+                Finding(
+                    Entity.from(condition),
+                    "This condition is too complex ($count). " +
+                        "The defined maximum number of allowed conditions is set to '$allowedConditions'"
                 )
-            }
+            )
         }
-    }
-
-    private fun frequency(source: String, part: String): Int {
-        if (source.isEmpty() || part.isEmpty()) {
-            return 0
-        }
-
-        var count = 0
-        var pos = source.indexOf(part, 0)
-        while (pos != -1) {
-            pos += part.length
-            count++
-            pos = source.indexOf(part, pos)
-        }
-
-        return count
     }
 }
