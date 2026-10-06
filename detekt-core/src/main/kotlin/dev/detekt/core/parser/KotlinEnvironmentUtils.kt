@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.cli.jvm.setupJvmSpecificArguments
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.config.MessageCollectorAccess
 import java.io.File
 import java.io.PrintStream
 import java.nio.file.Path
@@ -74,6 +75,7 @@ fun createCompilerConfiguration(
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpathFiles)
+        @OptIn(MessageCollectorAccess::class)
         put(
             CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY,
             PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
