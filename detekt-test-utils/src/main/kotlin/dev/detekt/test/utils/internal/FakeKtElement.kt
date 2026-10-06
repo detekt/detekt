@@ -18,9 +18,11 @@ import com.intellij.psi.search.SearchScope
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIdeApi
+import org.jetbrains.kotlin.psi.KtImplementationDetail
 import org.jetbrains.kotlin.psi.KtVisitor
 import javax.swing.Icon
 
+@OptIn(KtImplementationDetail::class)
 class FakeKtElement(private val psiFile: PsiFile = FakePsiFile("")) : KtElement {
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R {
