@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.expressions.isUsedAsExpression
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
@@ -28,9 +28,9 @@ import org.jetbrains.kotlin.analysis.api.symbols.containingDeclaration
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
 import org.jetbrains.kotlin.analysis.api.types.KaType
-import org.jetbrains.kotlin.analysis.api.types.isNothingType
-import org.jetbrains.kotlin.analysis.api.types.isUnitType
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.load.java.createJavaClassFinder
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
@@ -136,7 +136,7 @@ class IgnoredReturnValue(config: Config) :
             val functionCall = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
             val symbol = functionCall.symbol
             val returnType = functionCall.signature.returnType
-            if (returnType.isUnitType || returnType.isNothingType) return
+            if (returnType.classId in setOf(KaStandardTypeClassIds.UNIT, KaStandardTypeClassIds.NOTHING)) return
 
             if (ignoreFunctionCall.any { it.match(symbol) }) return
 
@@ -211,7 +211,7 @@ class IgnoredReturnValue(config: Config) :
                 val symbol = lambda.functionLiteral.symbol
                 val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
                 @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-                label?.resolveSymbol() == symbol
+                label?.resolveSuccessfulSymbol() == symbol
             }
 
             else -> {

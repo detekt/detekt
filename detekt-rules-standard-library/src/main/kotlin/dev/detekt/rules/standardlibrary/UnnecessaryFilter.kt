@@ -9,8 +9,8 @@ import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
@@ -89,7 +89,7 @@ class UnnecessaryFilter(config: Config) :
         if (fqNames.none { it.shortName().asString() == calleeText }) return null
         return analyze(this) {
             @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-            val callableId = ((this@matchingCall as? KtResolvableCall)?.resolveCall() as? KaFunctionCall<*>)
+            val callableId = ((this as? KtResolvableCall)?.resolveSuccessfulCall() as? KaFunctionCall<*>)
                 ?.symbol
                 ?.callableId
                 ?: resolveToCall()?.singleVariableAccessCall()?.symbol?.callableId
@@ -109,7 +109,7 @@ class UnnecessaryFilter(config: Config) :
                 val singleReferrer = property.siblings(forward = true, withItself = false).flatMap { sibling ->
                     sibling.collectDescendantsOfType<KtNameReferenceExpression> {
                         @OptIn(KaExperimentalApi::class)
-                        it.text == propertyName && it.resolveSymbol() == propertySymbol
+                        it.text == propertyName && it.resolveSuccessfulSymbol() == propertySymbol
                     }
                 }.singleOrNull()
                 val qualified = singleReferrer?.getQualifiedExpressionForReceiver()

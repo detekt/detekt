@@ -9,10 +9,10 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isConstant
 import dev.detekt.psi.isOverride
-import org.jetbrains.kotlin.analysis.api.components.isClassType
-import org.jetbrains.kotlin.analysis.api.components.returnType
+import org.jetbrains.kotlin.analysis.api.expressions.returnType
 import org.jetbrains.kotlin.analysis.api.session.analyze
-import org.jetbrains.kotlin.analysis.api.types.isBooleanType
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -75,11 +75,11 @@ class BooleanPropertyNaming(config: Config) :
 
     private fun KtCallableDeclaration.isKotlinBooleanType(): Boolean =
         analyze(this) {
-            returnType.isBooleanType
+            returnType.classId == KaStandardTypeClassIds.BOOLEAN
         }
 
     private fun KtCallableDeclaration.isJavaBooleanType(): Boolean =
         analyze(this) {
-            returnType.isClassType(ClassId(FqName("java.lang"), Name.identifier("Boolean")))
+            returnType.classId == ClassId(FqName("java.lang"), Name.identifier("Boolean"))
         }
 }

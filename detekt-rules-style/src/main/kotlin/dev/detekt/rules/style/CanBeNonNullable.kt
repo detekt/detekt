@@ -16,7 +16,7 @@ import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.expressions.expressionType
-import org.jetbrains.kotlin.analysis.api.resolution.resolveCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -565,7 +565,7 @@ class CanBeNonNullable(config: Config) :
             val delegate = this ?: return true
             return analyze(delegate) {
                 @OptIn(KaExperimentalApi::class)
-                val functionSymbol = delegate.resolveCall()?.valueGetterCall?.symbol ?: return true
+                val functionSymbol = delegate.resolveSuccessfulCall()?.valueGetterCall?.symbol ?: return true
 
                 with(functionSymbol) {
                     if (returnType is KaTypeParameterType) {

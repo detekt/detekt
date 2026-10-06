@@ -17,7 +17,7 @@ import dev.detekt.psi.isExpect
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.expressions.expressionType
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
@@ -168,7 +168,7 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
         analyze(expression) {
             @OptIn(KaExperimentalApi::class)
             val references = when (expression) {
-                is KtNameReferenceExpression -> listOfNotNull(expression.resolveSymbol())
+                is KtNameReferenceExpression -> listOfNotNull(expression.resolveSuccessfulSymbol())
 
                 is KtCallExpression -> expression.getChildrenOfType<KtValueArgumentList>()
                     .flatMap { it.arguments }

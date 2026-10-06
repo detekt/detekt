@@ -10,7 +10,7 @@ import dev.detekt.psi.isCalling
 import dev.detekt.psi.receiverIsUsed
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
@@ -139,7 +139,7 @@ private fun KtLambdaExpression.countLambdaParameterReference(): Int {
         parameters.sumOf { variableSymbol ->
             bodyExpression.collectDescendantsOfType<KtSimpleNameExpression> {
                 @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-                it.resolveSymbol() == variableSymbol
+                it.resolveSuccessfulSymbol() == variableSymbol
             }.count()
         }
     }

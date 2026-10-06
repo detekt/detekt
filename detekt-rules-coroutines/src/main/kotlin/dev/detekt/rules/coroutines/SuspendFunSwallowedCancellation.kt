@@ -12,8 +12,8 @@ import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.expressions.expectedType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbols
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbols
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -258,7 +258,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
             is KtForExpression -> {
                 analyze(this) {
                     @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-                    resolveSymbols().filterIsInstance<KaNamedFunctionSymbol>().any { it.isSuspend }
+                    resolveSuccessfulSymbols().filterIsInstance<KaNamedFunctionSymbol>().any { it.isSuspend }
                 }
             }
 
@@ -323,7 +323,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
             .map { expr ->
                 analyze(expr) {
                     @OptIn(KaExperimentalApi::class)
-                    expr.resolveSymbol()?.psi
+                    expr.resolveSuccessfulSymbol()?.psi
                 }
             }
             .toList()

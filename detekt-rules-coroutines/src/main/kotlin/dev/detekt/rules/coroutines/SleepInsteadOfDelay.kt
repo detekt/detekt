@@ -10,7 +10,7 @@ import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
@@ -91,7 +91,7 @@ class SleepInsteadOfDelay(config: Config) :
         } else {
             @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
             val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol
-                ?: (this@isThreadSleepFunction as? KtResolvable)?.resolveSymbol() as? KaCallableSymbol
+                ?: (this as? KtResolvable)?.resolveSuccessfulSymbol() as? KaCallableSymbol
             symbol?.callableId?.asSingleFqName() == FqName("java.lang.Thread.sleep")
         }
     }

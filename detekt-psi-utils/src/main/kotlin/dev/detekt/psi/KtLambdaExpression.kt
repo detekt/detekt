@@ -2,7 +2,7 @@ package dev.detekt.psi
 
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
@@ -27,7 +27,7 @@ fun KtLambdaExpression.hasImplicitParameterReference(): Boolean {
         val implicitParameter = functionLiteral.symbol.valueParameters.singleOrNull() ?: return false
         return anyDescendantOfType<KtNameReferenceExpression> {
             @OptIn(KaExperimentalApi::class)
-            it.text == "it" && it.resolveSymbol() == implicitParameter
+            it.text == "it" && it.resolveSuccessfulSymbol() == implicitParameter
         }
     }
 }

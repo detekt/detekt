@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaImplicitReceiverValue
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -100,7 +100,7 @@ class UnnecessaryApply(config: Config) :
         return singleStatement.collectDescendantsOfType<KtNameReferenceExpression> {
             val symbol = if (it.parent is KtThisExpression) {
                 @OptIn(KaExperimentalApi::class)
-                it.resolveSymbol()
+                it.resolveSuccessfulSymbol()
             } else {
                 it.implicitReceiver()
             }

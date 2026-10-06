@@ -16,9 +16,9 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
-import org.jetbrains.kotlin.analysis.api.types.isNothingType
-import org.jetbrains.kotlin.analysis.api.types.isUnitType
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.config.AnalysisFlags
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -89,7 +89,7 @@ class OptionalUnit(config: Config) :
                         else -> {
                             val prev =
                                 it.siblings(forward = false, withItself = false).firstIsInstanceOrNull<KtExpression>()
-                            prev?.expressionType?.isUnitType == true && prev.canBeUsedAsValue()
+                            prev?.expressionType?.classId == KaStandardTypeClassIds.UNIT && prev.canBeUsedAsValue()
                         }
                     }
                 }
@@ -154,7 +154,7 @@ class OptionalUnit(config: Config) :
                 ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
                 ?.symbol
                 ?.returnType is KaTypeParameterType
-            val isNothingType = expressionType?.isNothingType == true
+            val isNothingType = expressionType?.classId == KaStandardTypeClassIds.NOTHING
             // Either the function initializer returns Nothing or it is a generic function
             // into which Unit is passed, but not both.
             return (isGenericType && !isNothingType) || (isNothingType && !isGenericType)

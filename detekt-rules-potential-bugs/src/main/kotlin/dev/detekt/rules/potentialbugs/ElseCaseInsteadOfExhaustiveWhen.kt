@@ -7,13 +7,14 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import org.jetbrains.kotlin.analysis.api.components.returnType
 import org.jetbrains.kotlin.analysis.api.expressions.expressionType
+import org.jetbrains.kotlin.analysis.api.expressions.returnType
 import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
-import org.jetbrains.kotlin.analysis.api.types.isBooleanType
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
@@ -86,7 +87,7 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config) :
 
             val isEnumSubject = subjectSymbol?.classKind == KaClassKind.ENUM_CLASS
             val isSealedSubject = isNonExpectedSealedClass(subjectSymbol)
-            val isBooleanSubject = subjectType?.isBooleanType == true
+            val isBooleanSubject = subjectType?.classId == KaStandardTypeClassIds.BOOLEAN
 
             if (isEnumSubject || isSealedSubject || isBooleanSubject) {
                 val subjectTypeName = when {

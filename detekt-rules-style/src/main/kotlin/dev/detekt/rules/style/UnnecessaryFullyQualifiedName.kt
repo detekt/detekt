@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.components.scopeContext
 import org.jetbrains.kotlin.analysis.api.expressions.expressionType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
@@ -128,7 +128,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         analyze(type) {
             @OptIn(KaExperimentalApi::class)
             val resolvedSymbol = type.referenceExpression
-                ?.resolveSymbol()
+                ?.resolveSuccessfulSymbol()
                 ?: return
             val candidate = resolvedSymbol.ignoredFqNameCandidate()
             if (candidate != null && ignoredFullyQualifiedNames.any { it.matches(candidate) }) return
@@ -229,7 +229,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
     private fun isReceiverLocalVariableOrProperty(receiver: KtExpression): Boolean {
         val leftmost = leftmostReference(receiver) ?: return false
         @OptIn(KaExperimentalApi::class)
-        return leftmost.resolveSymbol() is KaVariableSymbol
+        return leftmost.resolveSuccessfulSymbol() is KaVariableSymbol
     }
 
     private fun leftmostReference(expression: KtExpression): KtNameReferenceExpression? =

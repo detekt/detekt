@@ -6,7 +6,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
@@ -94,17 +94,17 @@ class UnnecessaryCompanionObjectAccess(config: Config) :
     ) {
         @OptIn(KaExperimentalApi::class)
         analyze(companionNameRef) {
-            val companionSymbol = companionNameRef.resolveSymbol() as? KaClassSymbol ?: return@analyze
+            val companionSymbol = companionNameRef.resolveSuccessfulSymbol() as? KaClassSymbol ?: return@analyze
             if (companionSymbol.classKind != KaClassKind.COMPANION_OBJECT) return@analyze
             if (companionSymbol.name?.asString() != companionNameRef.getReferencedName()) return@analyze
             val ownerSymbol = companionSymbol.containingSymbol as? KaNamedClassSymbol ?: return@analyze
-            val receiverSymbol = companionQualifier.receiverExpression.lastNameReference()?.resolveSymbol()
+            val receiverSymbol = companionQualifier.receiverExpression.lastNameReference()?.resolveSuccessfulSymbol()
             if (receiverSymbol != ownerSymbol && receiverSymbol != ownerSymbol.companionObject) return@analyze
 
             fun reportRedundantDotAccess(outer: KtDotQualifiedExpression) {
                 if (outer.receiverExpression != companionQualifier) return
                 val memberReference = outer.memberNameReference() ?: return
-                val memberSymbol = memberReference.resolveSymbol() as? KaClassSymbol
+                val memberSymbol = memberReference.resolveSuccessfulSymbol() as? KaClassSymbol
                 if (memberSymbol != null && memberSymbol.containingSymbol == companionSymbol) return
 
                 report(
@@ -119,7 +119,7 @@ class UnnecessaryCompanionObjectAccess(config: Config) :
             fun reportRedundantCallableRef(outer: KtCallableReferenceExpression) {
                 if (outer.receiverExpression != companionQualifier) return
                 val memberReference = outer.callableReference as? KtNameReferenceExpression ?: return
-                val memberSymbol = memberReference.resolveSymbol() as? KaClassSymbol
+                val memberSymbol = memberReference.resolveSuccessfulSymbol() as? KaClassSymbol
                 if (memberSymbol != null && memberSymbol.containingSymbol == companionSymbol) return
 
                 report(
