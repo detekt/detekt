@@ -17,6 +17,7 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.SearchScope
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtIdeApi
 import org.jetbrains.kotlin.psi.KtVisitor
 import javax.swing.Icon
 
@@ -24,6 +25,11 @@ class FakeKtElement(private val psiFile: PsiFile = FakePsiFile("")) : KtElement 
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R {
         error("Fake not implemented yet")
+    }
+
+    @OptIn(KtIdeApi::class)
+    override fun rawDelete() {
+        // no-op
     }
 
     override fun accept(p0: PsiElementVisitor) {
