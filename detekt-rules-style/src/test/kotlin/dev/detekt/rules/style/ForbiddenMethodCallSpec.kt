@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 private const val METHODS = "methods"
 
-@KotlinCoreEnvironmentTest
+@KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
 class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
 
     @Test
@@ -905,6 +905,31 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.util.Calendar.compareTo"))
+        ).lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `test with flexible time with warnings`() {
+        val code = """
+            package dev.detekt.rules.style
+            
+            import com.example.fromjava.ClassWithMethodWithParameters
+            import java.util.concurrent.TimeUnit
+            
+            fun test() {
+                ClassWithMethodWithParameters().read(1, TimeUnit.SECONDS)
+            }
+        """.trimIndent()
+        val findings = ForbiddenMethodCall(
+            TestConfig(
+                Pair(
+                    METHODS,
+                    listOf(
+                        "com.example.fromjava.ClassWithMethodWithParameters.read(kotlin.Long, java.util.concurrent.TimeUnit)",
+                    )
+                )
+            )
         ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }

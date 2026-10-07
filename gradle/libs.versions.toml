@@ -48,6 +48,7 @@ classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.196" }
 jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
 # Version must align to dependency used by Kotlin on compile classpath due to our use of Gradle's consistent resolution
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }
+jsr305 = { module = "com.google.code.findbugs:jsr305", version = "3.0.2" }
 kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }
