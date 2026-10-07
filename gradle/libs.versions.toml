@@ -49,6 +49,7 @@ classgraph = { module = "io.github.classgraph:classgraph", version = "5.0.2" }
 clikt-core = { module = "com.github.ajalt.clikt:clikt-core", version = "5.1.0" }
 # Version must align to dependency used by Kotlin on compile classpath due to our use of Gradle's consistent resolution
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }
+jsr305 = { module = "com.google.code.findbugs:jsr305", version = "3.0.2" }
 kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin-analysisApi" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin-analysisApi" }
 kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin-analysisApi" }
