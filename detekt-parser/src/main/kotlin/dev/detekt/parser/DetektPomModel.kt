@@ -1,10 +1,12 @@
 package dev.detekt.parser
 
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.UserDataHolderBase
 import com.intellij.pom.PomModel
 import com.intellij.pom.PomModelAspect
 import com.intellij.pom.PomTransaction
+import com.intellij.pom.event.PomModelListener
 import com.intellij.pom.impl.PomTransactionBase
 import com.intellij.pom.tree.TreeAspect
 
@@ -30,5 +32,17 @@ class DetektPomModel(project: Project) :
         check(aspect == treeAspect::class.java) { "The only PomModelAspect type supported is TreeAspect" }
         @Suppress("UNCHECKED_CAST")
         return treeAspect as T
+    }
+
+    override fun addModelListener(listener: PomModelListener) {
+        // no-op
+    }
+
+    override fun addModelListener(listener: PomModelListener, parentDisposable: Disposable) {
+        // no-op
+    }
+
+    override fun removeModelListener(listener: PomModelListener) {
+        // no-op
     }
 }
