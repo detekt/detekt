@@ -12,6 +12,8 @@ import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.expressions.isUsedAsExpression
 import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtExperimentalApi
@@ -62,7 +64,10 @@ class UnusedUnaryOperator(config: Config) :
             val parentOrSelf = expression.parentBinaryExpressionOrThis()
             if (parentOrSelf.isUsedAsExpression) return
             @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
-            if (expression.operationReference.resolveSuccessfulSymbol() != null) return
+            val operatorSymbol =
+                expression.operationReference.resolveSuccessfulSymbol() as? KaNamedFunctionSymbol ?: return
+            val classId = operatorSymbol.callableId?.classId ?: return
+            if (!classId.startsWith(StandardNames.BUILT_INS_PACKAGE_NAME)) return
             val message = "This '${parentOrSelf.text}' is not used"
             report(Finding(Entity.from(expression), message))
         }
