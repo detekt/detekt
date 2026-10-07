@@ -603,6 +603,8 @@ style:
     includeElvis: true
   ClassOrdering:
     active: false
+  CollapseAnnotationUseSiteTargets:
+    active: false
   CollapsibleIfStatements:
     active: false
   DataClassContainsFunctions:
