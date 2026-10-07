@@ -407,6 +407,8 @@ potential-bugs:
     active: true
   HasPlatformType:
     active: true
+  IgnoredJavaDefaultMethod:
+    active: false
   IgnoredReturnValue:
     active: true
     restrictToConfig: true
