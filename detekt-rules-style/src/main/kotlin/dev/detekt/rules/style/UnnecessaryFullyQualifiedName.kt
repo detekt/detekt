@@ -12,15 +12,13 @@ import dev.detekt.api.config
 import dev.detekt.psi.fullyQualifiedNameGlobToRegex
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaScopeKind
 import org.jetbrains.kotlin.analysis.api.components.compositeScope
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.components.scopeContext
-import org.jetbrains.kotlin.analysis.api.impl.base.references.KaBaseSimpleNameReference
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
@@ -127,10 +125,9 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         if (!typeText.contains(".")) return
 
         analyze(type) {
-            @OptIn(KaImplementationDetail::class)
-            @Suppress("DEPRECATION")
-            val resolvedSymbol = (type.referenceExpression?.reference as? KaBaseSimpleNameReference)
-                ?.resolveToSymbol()
+            @OptIn(KaExperimentalApi::class)
+            val resolvedSymbol = type.referenceExpression
+                ?.resolveSymbol()
                 ?: return
             val candidate = resolvedSymbol.ignoredFqNameCandidate()
             if (candidate != null && ignoredFullyQualifiedNames.any { it.matches(candidate) }) return
