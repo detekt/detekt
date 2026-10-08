@@ -75,7 +75,7 @@ class IgnoredReturnValue(config: Config) :
 
     @Configuration(
         "List of simple glob patterns for annotation names that require return values to be used. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
     )
     private val returnValueAnnotations: List<Regex> by config(
         listOf(
@@ -90,7 +90,7 @@ class IgnoredReturnValue(config: Config) :
 
     @Configuration(
         "List of simple glob patterns for annotation names that skip this inspection. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
     )
     private val ignoreReturnValueAnnotations: List<Regex> by config(
         listOf(
@@ -103,7 +103,7 @@ class IgnoredReturnValue(config: Config) :
 
     @Configuration(
         "List of simple glob patterns for return type names that should not be ignored. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
     )
     private val returnValueTypes: List<Regex> by config(
         listOf(
