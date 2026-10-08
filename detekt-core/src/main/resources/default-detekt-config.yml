@@ -554,6 +554,8 @@ standard-library:
     active: false
   UnnecessaryReversed:
     active: false
+  UnnecessaryRun:
+    active: false
   UseAnyOrNoneInsteadOfFind:
     active: true
   UseCheckNotNull:
