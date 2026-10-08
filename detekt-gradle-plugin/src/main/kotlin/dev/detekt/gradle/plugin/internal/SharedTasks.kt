@@ -32,7 +32,7 @@ internal fun Project.registerJvmCompilationDetektTask(
         detektTask.source(source)
         detektTask.classpath.convention(
             compilation.output.classesDirs,
-            siblingTask.map { it.libraries }
+            siblingTask.flatMap { it.libraries.elements }
         )
         detektTask.friendPaths.convention(
             compilation.output.classesDirs,
@@ -90,7 +90,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         createBaselineTask.source(source)
         createBaselineTask.classpath.convention(
             compilation.output.classesDirs,
-            siblingTask.map { it.libraries }
+            siblingTask.flatMap { it.libraries.elements }
         )
         createBaselineTask.friendPaths.convention(
             compilation.output.classesDirs,
