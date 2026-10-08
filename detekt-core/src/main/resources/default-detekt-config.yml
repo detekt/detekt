@@ -401,6 +401,9 @@ potential-bugs:
     active: true
   EqualsWithHashCodeExist:
     active: true
+  EqualsWithHashCodeUseSameFields:
+    active: false
+    allowHashCodeSubset: false
   ExitOutsideMain:
     active: false
   ExplicitGarbageCollectionCall:
