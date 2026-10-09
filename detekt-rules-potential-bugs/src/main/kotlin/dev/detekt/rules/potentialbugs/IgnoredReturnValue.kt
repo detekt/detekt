@@ -13,12 +13,11 @@ import dev.detekt.api.config
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.isCalling
 import dev.detekt.psi.pathGlobToRegex
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.isUsedAsExpression
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.expressions.isUsedAsExpression
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
@@ -177,7 +176,6 @@ class IgnoredReturnValue(config: Config) :
         return javaClassFinder.findPackage(packageFqName)?.annotations?.mapNotNull { it.classId }.orEmpty()
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isUsedAsExpression(call: KtCallExpression, returnType: KaType): Boolean {
         if (returnType is KaFunctionType &&
@@ -199,7 +197,6 @@ class IgnoredReturnValue(config: Config) :
         return true
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.isLambdaResult(lambda: KtLambdaExpression): Boolean {
         val statement = getQualifiedExpressionForSelectorOrThis().let {
