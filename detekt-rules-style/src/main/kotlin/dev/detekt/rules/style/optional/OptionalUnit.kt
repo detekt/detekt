@@ -6,7 +6,6 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isOverride
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -102,7 +101,7 @@ class OptionalUnit(config: Config) :
         super.visitBlockExpression(expression)
     }
 
-    @OptIn(KaIdeApi::class, KaContextParameterApi::class)
+    @OptIn(KaIdeApi::class)
     context(_: KaSession)
     private fun KtExpression.canBeUsedAsValue(): Boolean =
         when (this) {

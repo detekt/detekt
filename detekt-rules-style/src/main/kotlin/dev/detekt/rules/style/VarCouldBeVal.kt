@@ -14,12 +14,11 @@ import dev.detekt.psi.isActual
 import dev.detekt.psi.isLateinit
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.K1Deprecation
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
@@ -105,7 +104,6 @@ class VarCouldBeVal(config: Config) :
         fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> =
             declarationCandidates.filterNot { it.hasAssignments() }
 
-        @OptIn(KaContextParameterApi::class)
         context(_: KaSession)
         private fun KtNamedDeclaration.hasAssignments(): Boolean {
             val declarationName = nameAsSafeName.toString()
@@ -203,7 +201,6 @@ class VarCouldBeVal(config: Config) :
             }
         }
 
-        @OptIn(KaContextParameterApi::class)
         context(_: KaSession)
         private fun evaluateReturnExpression(returnedExpression: KtExpression) {
             when (returnedExpression) {

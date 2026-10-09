@@ -14,17 +14,16 @@ import dev.detekt.psi.isConstant
 import dev.detekt.psi.isInternal
 import dev.detekt.psi.isOpen
 import dev.detekt.psi.isProtected
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.isAnyType
-import org.jetbrains.kotlin.analysis.api.components.memberScope
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.scopes.memberScope
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.isAnyType
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
@@ -179,7 +178,6 @@ class AbstractClassCanBeInterface(config: Config) :
     private fun KtClass.containsInternalClass() =
         body?.children?.filterIsInstance<KtClass>()?.any { it.isInternal() } == true
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun hasInheritedMember(klass: KtClass, isAbstract: Boolean): Boolean =
         when {
@@ -192,7 +190,6 @@ class AbstractClassCanBeInterface(config: Config) :
             }
         }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isAnyParentClass(klass: KtClass): Boolean =
         (klass.symbol as? KaClassSymbol)
@@ -208,7 +205,6 @@ class AbstractClassCanBeInterface(config: Config) :
      *
      * Only literal values (e.g. 404, "text") and direct references to const vals are considered constant.
      */
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtCallableDeclaration.hasConstOrNoBackingField(): Boolean =
         when (val initializer = (this as? KtProperty)?.initializer) {

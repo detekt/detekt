@@ -1,16 +1,14 @@
 package dev.detekt.rules.coroutines.utils
 
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.components.allSupertypes
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.allSupertypes
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
-@OptIn(KaContextParameterApi::class)
 context(_: KaSession)
 internal fun KaType.isCoroutineScope(): Boolean =
     sequence {
@@ -20,7 +18,6 @@ internal fun KaType.isCoroutineScope(): Boolean =
         .mapNotNull { it.symbol?.classId }
         .contains(CoroutineClassIds.CoroutineScope)
 
-@OptIn(KaContextParameterApi::class)
 context(_: KaSession)
 internal fun KaType.isCoroutinesFlow(): Boolean =
     sequence {

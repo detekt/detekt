@@ -8,13 +8,11 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.allSupertypes
-import org.jetbrains.kotlin.analysis.api.components.expressionType
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.components.returnType
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
@@ -22,6 +20,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.allSupertypes
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
@@ -127,7 +126,6 @@ class MissingUseCall(config: Config) :
         }
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isChildOfCloseable(expr: KtExpression): Boolean {
         val symbol = if (expr is KtObjectLiteralExpression) {
@@ -138,7 +136,6 @@ class MissingUseCall(config: Config) :
         return isChildOfCloseable(symbol)
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isChildOfCloseable(symbol: KaSymbol): Boolean {
         val classSymbol = symbol as? KaClassSymbol ?: return false
@@ -183,7 +180,6 @@ class MissingUseCall(config: Config) :
         }.also { traversedParentExpression.add(expressionParent) }
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isParentFunctionReturnsCloseable(expression: KtExpression): Boolean {
         val parent = expression.getParentOfType<KtNamedFunction>(
@@ -196,7 +192,6 @@ class MissingUseCall(config: Config) :
         return isChildOfCloseable(symbol)
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isParamForClosableOrFunReturningClosable(expression: KtExpression): Boolean {
         if (expression.parent !is KtValueArgument) return false
@@ -205,7 +200,6 @@ class MissingUseCall(config: Config) :
         return isChildOfCloseable(symbol)
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtQualifiedExpression.doesEndWithUse(): Boolean {
         receiverExpression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.symbol?.let {
@@ -215,7 +209,6 @@ class MissingUseCall(config: Config) :
             ?.asSingleFqName() in useFqNames
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtElement?.isCloseableNotUsed(): Boolean {
         this ?: return true
@@ -308,7 +301,6 @@ class MissingUseCall(config: Config) :
         return expression
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtQualifiedExpression.firstCallableReceiverOrNull(): KtElement? {
         fun KtExpression.isCallableExpression(): Boolean = resolveToCall()?.singleFunctionCallOrNull() != null

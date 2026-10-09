@@ -7,18 +7,13 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.firstParameterOrNull
 import dev.detekt.psi.isCalling
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.isAnyType
-import org.jetbrains.kotlin.analysis.api.components.isBooleanType
-import org.jetbrains.kotlin.analysis.api.components.isMarkedNullable
-import org.jetbrains.kotlin.analysis.api.components.isSubtypeOf
-import org.jetbrains.kotlin.analysis.api.components.resolveCall
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaSingleCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
@@ -26,6 +21,10 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaDestructuringDeclarationSymbo
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.isAnyType
+import org.jetbrains.kotlin.analysis.api.types.isBooleanType
+import org.jetbrains.kotlin.analysis.api.types.isMarkedNullable
+import org.jetbrains.kotlin.analysis.api.types.isSubtypeOf
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -82,7 +81,6 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun shouldBeReported(expression: KtCallExpression): String? {
@@ -155,7 +153,6 @@ class UnnecessaryAny(config: Config) :
             }
         }
 
-    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun isUsageOfValueAndItEligible(
@@ -208,7 +205,6 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) =
         collectDescendantsOfType<KtNameReferenceExpression>().count {
@@ -216,7 +212,6 @@ class UnnecessaryAny(config: Config) :
             it.resolveSymbol() == symbol
         }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression?.isCallingEquals(): Boolean {
         if (this == null) return false
