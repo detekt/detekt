@@ -162,6 +162,141 @@ class RedundantVisibilityModifierSpec {
     }
 
     @Nested
+    inner class `internal constructor` {
+        @Test
+        fun `reports internal primary constructor of internal class`() {
+            val code = """
+                internal class A internal constructor(val a: Int)
+            """.trimIndent()
+            assertThat(subject.lint(code)).singleElement()
+                .hasMessage(
+                    "The `internal` modifier on the constructor of A is redundant because the class is already internal."
+                )
+        }
+
+        @Test
+        fun `reports internal secondary constructor of internal class`() {
+            val code = """
+                internal class A(val a: Int) {
+                    internal constructor() : this(0)
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports internal constructor of internal nested class`() {
+            val code = """
+                internal class A {
+                    internal class B internal constructor()
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports internal constructor of private class`() {
+            val code = """
+                private class A internal constructor()
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report constructor without modifier of internal class`() {
+            val code = """
+                internal class A constructor(val a: Int) {
+                    constructor() : this(0)
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report internal constructor of public class`() {
+            val code = """
+                class A internal constructor(val a: Int) {
+                    internal constructor() : this(0)
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report private constructor of internal class`() {
+            val code = """
+                internal class A private constructor()
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report internal constructor of public class nested in internal class`() {
+            val code = """
+                internal class A {
+                    class B internal constructor()
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report PublishedApi internal constructor of internal class`() {
+            val code = """
+                @PublishedApi
+                internal class A @PublishedApi internal constructor()
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports internal constructor of internal class with other annotation`() {
+            val code = """
+                internal class A @Deprecated("") internal constructor()
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports internal constructor of local class`() {
+            val code = """
+                fun f() {
+                    class A internal constructor()
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report internal constructor of internal sealed class`() {
+            val code = """
+                internal sealed class A internal constructor()
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report internal top-level declarations`() {
+            val code = """
+                internal class A
+                internal fun f() {}
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report internal members of internal class`() {
+            val code = """
+                internal class A {
+                    internal val a: Int = 0
+                    internal fun f() {}
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
     inner class `Explicit API mode` {
         val code = """
             public class A {

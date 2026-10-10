@@ -11,6 +11,8 @@ import org.jetbrains.kotlin.config.AnalysisFlags
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtModifierListOwner
@@ -26,11 +28,16 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * In this mode, the visibility modifier should be defined explicitly even if it is public.
  * Hence, the rule ignores the visibility modifiers in explicit API mode.
  *
+ * The rule also reports `internal` modifiers that have no effect: on members of private or local classes,
+ * and on constructors of `internal` classes.
+ *
  * <noncompliant>
  * public interface Foo { // public per default
  *
  *     public fun bar() // public per default
  * }
+ *
+ * internal class Bar internal constructor() // constructor is already effectively internal
  * </noncompliant>
  *
  * <compliant>
@@ -38,6 +45,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  *     fun bar()
  * }
+ *
+ * internal class Bar()
  * </compliant>
  */
 class RedundantVisibilityModifier(config: Config) :
@@ -72,18 +81,35 @@ class RedundantVisibilityModifier(config: Config) :
 
     override fun visitDeclaration(declaration: KtDeclaration) {
         super.visitDeclaration(declaration)
-        if (
-            declaration.isInternal() &&
-            declaration.containingClassOrObject?.let { it.isLocal || it.isPrivate() } == true
-        ) {
+        if (!declaration.isInternal()) return
+        val containingClass = declaration.containingClassOrObject ?: return
+        if (containingClass.isLocal || containingClass.isPrivate()) {
             report(
                 Finding(
                     Entity.from(declaration),
                     "The `internal` modifier on ${declaration.name} is redundant and should be removed."
                 )
             )
+        } else if (declaration is KtConstructor<*> && declaration.isRedundantInternalConstructorOf(containingClass)) {
+            report(
+                Finding(
+                    Entity.from(declaration),
+                    "The `internal` modifier on the constructor of ${containingClass.name} is redundant " +
+                        "because the class is already internal."
+                )
+            )
         }
     }
+
+    /**
+     * A constructor of an `internal` class can't be visible outside the module, so `internal` adds nothing.
+     * Sealed classes are skipped as their constructors are `protected` by default, and `@PublishedApi`
+     * requires an explicit `internal` modifier.
+     */
+    private fun KtConstructor<*>.isRedundantInternalConstructorOf(klass: KtClassOrObject): Boolean =
+        klass.isInternal() &&
+            !klass.hasModifier(KtTokens.SEALED_KEYWORD) &&
+            annotationEntries.none { it.shortName?.asString() == "PublishedApi" }
 
     private inner class ClassVisitor : DetektVisitor() {
         override fun visitClass(klass: KtClass) {
