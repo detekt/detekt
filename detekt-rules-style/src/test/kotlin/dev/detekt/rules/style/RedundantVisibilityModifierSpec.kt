@@ -250,6 +250,41 @@ class RedundantVisibilityModifierSpec {
         }
 
         @Test
+        fun `reports internal constructor of internal class with other annotation`() {
+            val code = """
+                internal class A @Deprecated("") internal constructor()
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports internal constructor of local class`() {
+            val code = """
+                fun f() {
+                    class A internal constructor()
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report internal constructor of internal sealed class`() {
+            val code = """
+                internal sealed class A internal constructor()
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report internal top-level declarations`() {
+            val code = """
+                internal class A
+                internal fun f() {}
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
         fun `does not report internal members of internal class`() {
             val code = """
                 internal class A {
