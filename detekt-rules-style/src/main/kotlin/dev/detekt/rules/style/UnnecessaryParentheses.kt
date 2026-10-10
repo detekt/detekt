@@ -57,6 +57,7 @@ class UnnecessaryParentheses(config: Config) :
     )
     private val allowForUnclearPrecedence: Boolean by config(defaultValue = false)
 
+    @Suppress("DEPRECATION")
     override fun visitParenthesizedExpression(expression: KtParenthesizedExpression) {
         super.visitParenthesizedExpression(expression)
 
