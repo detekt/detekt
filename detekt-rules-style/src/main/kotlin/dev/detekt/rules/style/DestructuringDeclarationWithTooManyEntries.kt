@@ -15,13 +15,13 @@ import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
  * declaration.
  *
  * <noncompliant>
- * data class TooManyElements(val a: Int, val b: Int, val c: Int, val d: Int)
- * val (a, b, c, d) = TooManyElements(1, 2, 3, 4)
+ * data class TooManyElements(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int, val f: Int)
+ * val (a, b, c, d, e, f) = TooManyElements(1, 2, 3, 4, 5, 6)
  * </noncompliant>
  *
  * <compliant>
- * data class FewerElements(val a: Int, val b: Int, val c: Int)
- * val (a, b, c) = TooManyElements(1, 2, 3)
+ * data class FewerElements(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int)
+ * val (a, b, c, d, e) = TooManyElements(1, 2, 3, 4, 5)
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
@@ -29,7 +29,7 @@ class DestructuringDeclarationWithTooManyEntries(config: Config) :
     Rule(config, "Too many entries in a destructuring declaration make the code hard to understand.") {
 
     @Configuration("maximum allowed elements in a destructuring declaration")
-    private val maxDestructuringEntries: Int by config(3)
+    private val maxDestructuringEntries: Int by config(5)
 
     override fun visitDestructuringDeclaration(destructuringDeclaration: KtDestructuringDeclaration) {
         if (destructuringDeclaration.entries.size > maxDestructuringEntries) {
