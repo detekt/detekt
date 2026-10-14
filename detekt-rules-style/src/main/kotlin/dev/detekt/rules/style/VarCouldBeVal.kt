@@ -10,6 +10,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
+import dev.detekt.psi.isActual
 import dev.detekt.psi.isLateinit
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
@@ -110,8 +111,16 @@ class VarCouldBeVal(config: Config) :
             val assignments = assignments[declarationName]
             if (assignments.isNullOrEmpty()) return false
             val declarationSymbol = symbol
-            return assignments.any {
-                it.resolveToCall()?.singleVariableAccessCall()?.symbol == declarationSymbol
+            return assignments.any { assignment ->
+                val assignedSymbol = assignment.resolveToCall()?.singleVariableAccessCall()?.symbol
+                if (assignedSymbol != null) {
+                    assignedSymbol == declarationSymbol
+                } else {
+                    // The analysis API fails to resolve the assignment when a private property is declared in
+                    // an `actual` class that has a same-named `expect` declaration in the same file (KMP).
+                    // Fall back to a name-based match so the property is not wrongly reported as could-be-val.
+                    containingClassOrObject?.isActual() == true
+                }
             }
         }
 
