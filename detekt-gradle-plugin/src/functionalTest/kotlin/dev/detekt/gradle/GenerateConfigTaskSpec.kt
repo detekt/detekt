@@ -19,6 +19,20 @@ class GenerateConfigTaskSpec {
     }
 
     @Test
+    fun `generates the config file when the worker api is enabled`() {
+        val gradleRunner = DslTestBuilder.kotlin().build()
+
+        gradleRunner.runTasksAndCheckResult(
+            "detektGenerateConfig",
+            "-Pdetekt.use.worker.api=true",
+            "--rerun-tasks",
+        ) { result ->
+            assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+            assertThat(projectFile("config/detekt/detekt.yml")).exists()
+        }
+    }
+
+    @Test
     fun `chooses the last config file when configured`() {
         val builder = DslTestBuilder.kotlin()
         val gradleRunner = builder.withDetektConfig(
