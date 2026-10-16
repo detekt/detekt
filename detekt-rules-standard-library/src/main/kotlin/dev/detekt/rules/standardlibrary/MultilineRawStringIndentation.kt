@@ -102,9 +102,10 @@ class MultilineRawStringIndentation(config: Config) :
             }
 
         if (indentation.isNotEmpty()) {
-            indentation
-                .filter { (_, line, currentIndent) -> line.isNotEmpty() && currentIndent < desiredIndent }
-                .onEach { (lineNumber, line, currentIndent) ->
+            val lines = indentation.filter { (_, line, currentIndent) -> line.isNotEmpty() && currentIndent < desiredIndent }
+
+            if (lines.isNotEmpty()) {
+                lines.forEach { (lineNumber, line, currentIndent) ->
                     val location = containingFile.getLocation(
                         SourceLocation(lineNumber, if (line.isBlank()) 1 else currentIndent + 1),
                         SourceLocation(lineNumber, line.length + 1)
@@ -112,20 +113,20 @@ class MultilineRawStringIndentation(config: Config) :
 
                     report(this, location, message(desiredIndent, currentIndent))
                 }
-                .ifEmpty {
-                    if (indentation.none { (_, _, currentIndent) -> currentIndent == desiredIndent }) {
-                        val location = containingFile.getLocation(
-                            SourceLocation(lineNumberRange.first, desiredIndent + 1),
-                            SourceLocation(lineNumberRange.last, indentation.last().line.length + 1),
-                        )
+            } else {
+                if (indentation.none { (_, _, currentIndent) -> currentIndent == desiredIndent }) {
+                    val location = containingFile.getLocation(
+                        SourceLocation(lineNumberRange.first, desiredIndent + 1),
+                        SourceLocation(lineNumberRange.last, indentation.last().line.length + 1),
+                    )
 
-                        report(
-                            this,
-                            location,
-                            message(desiredIndent, indentation.minOf { (_, _, indent) -> indent }),
-                        )
-                    }
+                    report(
+                        this,
+                        location,
+                        message(desiredIndent, indentation.minOf { (_, _, indent) -> indent }),
+                    )
                 }
+            }
         }
     }
 
@@ -183,7 +184,7 @@ private fun PsiFile.getLocation(start: SourceLocation, end: SourceLocation): Loc
     for (i in start.line..<end.line) {
         endOffset += lines[i - 1].length + 1
     }
-    this.text.lines()
+
     return Location(
         start,
         end,

@@ -33,6 +33,7 @@ import org.junit.jupiter.api.TestFactory
 )
 class BracesOnWhenStatementsSpec {
 
+    @Suppress("RETURN_VALUE_NOT_USED_COERCION")
     @Test
     fun `validate behavior of occurrence function`() {
         val code = "fun f() { if (true) else if (true) if (true) true }"
