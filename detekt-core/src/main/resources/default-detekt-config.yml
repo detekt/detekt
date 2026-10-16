@@ -614,7 +614,7 @@ style:
     active: false
   DestructuringDeclarationWithTooManyEntries:
     active: true
-    maxDestructuringEntries: 3
+    maxDestructuringEntries: 5
   DoubleNegativeExpression:
     active: false
   DoubleNegativeLambda:
