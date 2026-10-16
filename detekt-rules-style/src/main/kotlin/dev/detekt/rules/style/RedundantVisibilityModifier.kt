@@ -103,12 +103,10 @@ class RedundantVisibilityModifier(config: Config) :
 
     /**
      * A constructor of an `internal` class can't be visible outside the module, so `internal` adds nothing.
-     * Sealed classes are skipped as their constructors are `protected` by default, and `@PublishedApi`
-     * requires an explicit `internal` modifier.
+     * `@PublishedApi` requires an explicit `internal` modifier, so it is skipped.
      */
     private fun KtConstructor<*>.isRedundantInternalConstructorOf(klass: KtClassOrObject): Boolean =
         klass.isInternal() &&
-            !klass.hasModifier(KtTokens.SEALED_KEYWORD) &&
             annotationEntries.none { it.shortName?.asString() == "PublishedApi" }
 
     private inner class ClassVisitor : DetektVisitor() {

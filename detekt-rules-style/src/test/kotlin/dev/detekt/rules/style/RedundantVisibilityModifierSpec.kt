@@ -268,14 +268,6 @@ class RedundantVisibilityModifierSpec {
         }
 
         @Test
-        fun `does not report internal constructor of internal sealed class`() {
-            val code = """
-                internal sealed class A internal constructor()
-            """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
-        @Test
         fun `does not report internal top-level declarations`() {
             val code = """
                 internal class A
