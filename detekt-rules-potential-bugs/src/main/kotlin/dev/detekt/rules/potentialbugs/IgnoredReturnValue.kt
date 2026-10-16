@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
 import org.jetbrains.kotlin.analysis.api.types.KaType
-import org.jetbrains.kotlin.load.java.JavaClassFinderImpl
+import org.jetbrains.kotlin.load.java.createJavaClassFinder
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
@@ -173,10 +173,7 @@ class IgnoredReturnValue(config: Config) :
         val origin = (this as? KaClassSymbol)?.origin
         if (origin != KaSymbolOrigin.JAVA_SOURCE && origin != KaSymbolOrigin.JAVA_LIBRARY) return emptyList()
         val packageFqName = this.classId?.packageFqName ?: return emptyList()
-        val javaClassFinder = JavaClassFinderImpl(null).apply {
-            setScope(scope)
-            setProjectInstance(project)
-        }
+        val javaClassFinder = project.createJavaClassFinder(scope, null)
         return javaClassFinder.findPackage(packageFqName)?.annotations?.mapNotNull { it.classId }.orEmpty()
     }
 
