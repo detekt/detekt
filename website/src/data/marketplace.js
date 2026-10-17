@@ -497,7 +497,7 @@ export const extensions = [
     repo: "https://github.com/oxsecurity/megalinter",
     docs: "https://megalinter.io/latest/descriptors/kotlin_detekt/",
     tags: ["integration"],
-  }
+  },
   {
     title: "Project statistics",
     description: "A collection of processors and one reporter to show you counts statistics of your project.",
