@@ -55,4 +55,48 @@ class ComplexConditionSpec {
 
         assertThat(actual).isEmpty()
     }
+
+    @Test
+    fun `should not count logical operators inside line comments`() {
+        // The condition has two real operators (&&, ||) so complexity=3, within default threshold of 3.
+        // A comment containing && must not push the count to 4.
+        val code = """
+            fun check(a: Boolean, b: Boolean, c: Boolean): Boolean {
+                return if (a && b || c /* && d */) true else false
+            }
+        """.trimIndent()
+
+        val actual = ComplexCondition(TestConfig("allowedConditions" to 3)).lint(code)
+
+        assertThat(actual).isEmpty()
+    }
+
+    @Test
+    fun `should not count logical operators inside string literals`() {
+        // The condition has two real operators (&&, ||) so complexity=3, within default threshold of 3.
+        // The string "&&" must not count toward complexity.
+        val code = """
+            fun check(a: Boolean, b: Boolean, c: Boolean): Boolean {
+                val op = "&&"
+                return if (a && b || c) true else false
+            }
+        """.trimIndent()
+
+        val actual = ComplexCondition(TestConfig("allowedConditions" to 3)).lint(code)
+
+        assertThat(actual).isEmpty()
+    }
+
+    @Test
+    fun `should still report conditions that are genuinely too complex even without comments`() {
+        val code = """
+            fun check(a: Boolean, b: Boolean, c: Boolean, d: Boolean): Boolean {
+                return if (a && b || c && d) true else false
+            }
+        """.trimIndent()
+
+        val actual = ComplexCondition(TestConfig("allowedConditions" to 3)).lint(code)
+
+        assertThat(actual).hasSize(1)
+    }
 }

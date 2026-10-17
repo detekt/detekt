@@ -356,6 +356,9 @@ class DetektMultiplatformSpec {
                     ),
                     baselineFiles = listOf("detekt-baseline.xml")
                 )
+            }.apply {
+                // Disabled due to https://youtrack.jetbrains.com/issue/KT-89265. Enable on update to Kotlin 2.5.0.
+                failOnGradleWarnings = false
             }
 
         @Test

@@ -5,10 +5,10 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPER
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.FunctionLiteralRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
@@ -17,9 +17,9 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-@AutoCorrectable(since = "2.0.0")
 internal class FunctionLiteral(config: Config) :
-    KtlintRule(config, "Parameters and -> of a function literal should be on the same line as the opening brace.") {
+    KtlintRule(config, "Parameters and -> of a function literal should be on the same line as the opening brace."),
+    AutoCorrectable {
     override val wrapping = FunctionLiteralRule()
 
     @Configuration("indentation size")

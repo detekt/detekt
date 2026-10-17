@@ -7,10 +7,11 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
+import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.impl.base.references.KaBaseSimpleNameReference
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPackageSymbol
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -82,7 +83,9 @@ class MaxChainedCallsOnSameLine(config: Config) :
         val selectorOrThis = (this as? KtQualifiedExpression)?.selectorExpression ?: this
         if (selectorOrThis !is KtReferenceExpression) return false
         return analyze(selectorOrThis) {
-            val symbol = selectorOrThis.mainReference.resolveToSymbol()
+            @OptIn(KaImplementationDetail::class)
+            @Suppress("DEPRECATION")
+            val symbol = (selectorOrThis.reference as? KaBaseSimpleNameReference)?.resolveToSymbol()
             symbol is KaPackageSymbol || symbol is KaClassSymbol
         }
     }

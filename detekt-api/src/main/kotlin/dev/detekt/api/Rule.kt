@@ -28,9 +28,19 @@ open class Rule(val config: Config, val description: String, val url: URI? = nul
 
     protected lateinit var languageVersionSettings: LanguageVersionSettings
 
+    /**
+     * Whether this rule should correct the code it reports on.
+     *
+     * Only rules implementing [AutoCorrectable] can correct anything. For capable rules, an
+     * `autoCorrect` value on the rule takes precedence over the value on its parent rule set.
+     */
     val autoCorrect: Boolean
-        get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
-            (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, true) != false)
+        get() = this is AutoCorrectable &&
+            (
+                config.valueOrNull<Boolean>(Config.AUTO_CORRECT_KEY)
+                    ?: config.parent?.valueOrNull<Boolean>(Config.AUTO_CORRECT_KEY)
+                    ?: false
+                )
 
     private val findings: MutableList<Finding> = mutableListOf()
 

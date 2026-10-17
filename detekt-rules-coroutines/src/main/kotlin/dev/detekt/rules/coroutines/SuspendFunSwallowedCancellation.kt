@@ -7,6 +7,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.rules.coroutines.utils.CoroutineCallableIds
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
@@ -14,7 +15,6 @@ import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtForExpression
 import org.jetbrains.kotlin.psi.KtFunction
@@ -245,9 +246,8 @@ class SuspendFunSwallowedCancellation(config: Config) :
         when (this) {
             is KtForExpression -> {
                 analyze(this) {
-                    mainReference?.resolveToSymbols()?.filterIsInstance<KaNamedFunctionSymbol>()
-                        .orEmpty()
-                        .any { it.isSuspend }
+                    @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+                    resolveSymbols().filterIsInstance<KaNamedFunctionSymbol>().any { it.isSuspend }
                 }
             }
 
@@ -311,7 +311,8 @@ class SuspendFunSwallowedCancellation(config: Config) :
             .filterIsInstance<KtNameReferenceExpression>()
             .map { expr ->
                 analyze(expr) {
-                    expr.mainReference.resolveToSymbol()?.psi
+                    @OptIn(KaExperimentalApi::class)
+                    expr.resolveSymbol()?.psi
                 }
             }
             .toList()

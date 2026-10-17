@@ -1,0 +1,39 @@
+package dev.detekt.generator
+
+import com.beust.jcommander.JCommander
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
+
+class GeneratorArgsSpec {
+
+    @ParameterizedTest
+    @ValueSource(strings = ["-h", "--help"])
+    fun `parses help flag and outputs usage text`(helpFlag: String) {
+        val args = GeneratorArgs()
+        val parser = JCommander(args)
+        parser.parse(helpFlag)
+        assertThat(args.help).isTrue()
+
+        val usage = StringBuilder()
+        parser.usageFormatter.usage(usage)
+        assertThat(usage.toString().trim()).isEqualTo(expectedHelp)
+    }
+}
+
+private val expectedHelp = """
+    |Usage: <main class> [options]
+    |  Options:
+    |    --config, -c
+    |      Output path for generated detekt config.
+    |    --debug
+    |      Prints extra information about the execution.
+    |      Default: false
+    |    --documentation, -d
+    |      Output path for generated documentation.
+    |    --help, -h
+    |      Shows the usage.
+    |  * --input, -i
+    |      Input paths to analyze.
+    |      Default: []
+""".trimMargin()

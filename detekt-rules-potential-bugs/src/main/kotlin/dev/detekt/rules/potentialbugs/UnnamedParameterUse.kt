@@ -8,8 +8,11 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.FunctionMatcher
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.expressionType
+import org.jetbrains.kotlin.analysis.api.components.isSubtypeOf
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
@@ -160,9 +163,8 @@ class UnnamedParameterUse(config: Config) :
         }
     }
 
-    private fun KaSession.isAdjacentUnnamedParamsAllowed(
-        paramInfos: List<Map.Entry<KtValueArgument, ParamInfo>>,
-    ): Boolean {
+    context(_: KaSession)
+    private fun isAdjacentUnnamedParamsAllowed(paramInfos: List<Map.Entry<KtValueArgument, ParamInfo>>): Boolean {
         fun ParamInfo.isNamedOrVararg() = this.isNamed || this.isVararg
         val (firstEntry, secondEntry) = paramInfos
         if (
@@ -179,8 +181,10 @@ class UnnamedParameterUse(config: Config) :
             (typeCanBeAssigned(firstEntry.key, secondEntry.key).not())
     }
 
+    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
-    private fun KaSession.typeCanBeAssigned(firstParam: KtValueArgument, secondParam: KtValueArgument): Boolean {
+    context(_: KaSession)
+    private fun typeCanBeAssigned(firstParam: KtValueArgument, secondParam: KtValueArgument): Boolean {
         val param1Type = firstParam.getArgumentExpression()?.expressionType ?: return true
         val param2Type = secondParam.getArgumentExpression()?.expressionType ?: return true
         return param1Type.isSubtypeOf(param2Type) || param2Type.isSubtypeOf(param1Type)

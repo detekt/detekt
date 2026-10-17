@@ -77,6 +77,11 @@ tasks.register("generateWebsite") {
     )
 }
 
+tasks.shadowJar {
+    @Suppress("DEPRECATION") // This flag will be disabled and removed in the next major version of Shadow.
+    enableKotlinModuleRemapping = false
+}
+
 val copyDocumentation = tasks.register<Copy>("copyDocumentation") {
     from(generatedDocumentationFiles)
     into("$rootDir/website/docs/rules")

@@ -12,6 +12,8 @@ dependencies {
 
 tasks.shadowJar {
     relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
+    @Suppress("DEPRECATION") // This flag will be disabled and removed in the next major version of Shadow.
+    enableKotlinModuleRemapping = false
 }
 
 java {

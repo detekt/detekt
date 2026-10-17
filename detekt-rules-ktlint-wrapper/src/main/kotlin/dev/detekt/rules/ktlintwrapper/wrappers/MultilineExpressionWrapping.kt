@@ -4,10 +4,10 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProper
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.FunctionSignatureRule.Companion.FUNCTION_BODY_EXPRESSION_WRAPPING_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.MultilineExpressionWrappingRule
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
@@ -18,9 +18,9 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * this rule when the rule is explicitly enabled or if the code style is set to ktlint_official. detekt uses
  * intellij_idea by default.
  */
-@AutoCorrectable(since = "1.23.0")
 internal class MultilineExpressionWrapping(config: Config) :
-    KtlintRule(config, "Multiline expression on the right hand side of an expression must start on a separate line.") {
+    KtlintRule(config, "Multiline expression on the right hand side of an expression must start on a separate line."),
+    AutoCorrectable {
 
     override val wrapping = MultilineExpressionWrappingRule()
 

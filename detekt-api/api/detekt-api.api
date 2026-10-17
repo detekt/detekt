@@ -6,6 +6,9 @@ public abstract interface annotation class dev/detekt/api/Alias : java/lang/anno
 	public abstract fun values ()[Ljava/lang/String;
 }
 
+public abstract interface class dev/detekt/api/AutoCorrectable {
+}
+
 public final class dev/detekt/api/AutocorrectKt {
 	public static final fun getModifiedText (Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/lang/String;
 	public static final fun setModifiedText (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/lang/String;)V

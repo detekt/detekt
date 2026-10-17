@@ -1,5 +1,6 @@
 package dev.detekt.core
 
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Rule
 import dev.detekt.test.utils.compileForTest
@@ -50,7 +51,9 @@ private class NonCorrectable(config: Config) : Rule(config, "") {
     }
 }
 
-private class Correctable(config: Config) : Rule(config, "") {
+private class Correctable(config: Config) :
+    Rule(config, ""),
+    AutoCorrectable {
     override fun visitClass(klass: KtClass) {
         actualLastRuleName = ruleName.value
     }
