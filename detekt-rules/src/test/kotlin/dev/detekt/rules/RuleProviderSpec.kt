@@ -31,11 +31,17 @@ class RuleProviderSpec {
                     .loadClasses(DefaultRuleSetProvider::class.java)
             }
 
+        assertThat(providers).hasSize(ruleMap.size)
+
         providers.forEach { providerType ->
             val packageName = getRulesPackageNameForProvider(providerType)
             val provider = providerType.getDeclaredConstructor().newInstance()
             val rules = getRules(provider)
             val classes = getClasses(packageName)
+
+            assertThat(packageName).matches(getPackageName(providerType))
+            assertThat(classes).withFailMessage("No rules found in $providerType").isNotEmpty
+
             classes.forEach { clazz ->
                 val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
                 assertThat(rule)
@@ -84,3 +90,5 @@ private fun getClasses(packageName: String): List<Class<out Rule>> =
                 .filterNot { "Test" in it.name }
                 .filter { !Modifier.isAbstract(it.modifiers) && !Modifier.isStatic(it.modifiers) }
         }
+
+private fun getPackageName(clazz: Class<*>) = clazz.getName().substring(0, clazz.getName().lastIndexOf('.'))
