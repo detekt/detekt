@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
+import org.jetbrains.kotlin.psi.psiUtil.isSingleQuoted
 import org.jetbrains.kotlin.psi.psiUtil.parents
 
 /**
@@ -135,7 +136,7 @@ class StringShouldBeRawString(config: Config) : Rule(config, "The string can be 
                 }
             }
         return this.getStringSequence().filter {
-            (it.text.startsWith("\"\"\"") && it.text.endsWith("\"\"\"")).not()
+            it.isSingleQuoted()
         }.map {
             it.text
         }
