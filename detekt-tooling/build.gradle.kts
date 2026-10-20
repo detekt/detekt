@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    api(projects.detektApi)
+    api(projects.detektCommonApi)
     testImplementation(libs.assertj.core)
 }
 
