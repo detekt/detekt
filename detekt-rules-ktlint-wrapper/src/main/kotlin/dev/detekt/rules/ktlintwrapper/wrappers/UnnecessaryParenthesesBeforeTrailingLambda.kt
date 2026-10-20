@@ -2,8 +2,8 @@ package dev.detekt.rules.ktlintwrapper.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.rules.UnnecessaryParenthesesBeforeTrailingLambdaRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
@@ -11,9 +11,9 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * for documentation.
  */
 @ActiveByDefault(since = "1.23.0")
-@AutoCorrectable(since = "1.20.0")
 internal class UnnecessaryParenthesesBeforeTrailingLambda(config: Config) :
-    KtlintRule(config, "Ensures there are no unnecessary parentheses before a trailing lambda") {
+    KtlintRule(config, "Ensures there are no unnecessary parentheses before a trailing lambda"),
+    AutoCorrectable {
 
     override val wrapping = UnnecessaryParenthesesBeforeTrailingLambdaRule()
 }

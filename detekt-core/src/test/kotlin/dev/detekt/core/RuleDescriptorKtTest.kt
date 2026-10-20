@@ -1,5 +1,6 @@
 package dev.detekt.core
 
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.RequiresAnalysisApi
@@ -50,7 +51,7 @@ class RuleDescriptorKtTest {
     @Test
     fun returns4RulesAndIgnoreUnknownRule() {
         val rules = getRules(
-            AnalysisMode.full,
+            AnalysisMode.Full,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -83,7 +84,7 @@ class RuleDescriptorKtTest {
     @Test
     fun doesntCrashWhenConfigHasWrongType() {
         val rules = getRules(
-            AnalysisMode.full,
+            AnalysisMode.Full,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -117,7 +118,7 @@ class RuleDescriptorKtTest {
     @Test
     fun `when fullAnalysis is disabled the rules that require full analysis are inactive`() {
         val rules = getRules(
-            AnalysisMode.light,
+            AnalysisMode.Light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -148,10 +149,69 @@ class RuleDescriptorKtTest {
             .isEqualTo("The rule 'RequiresAnalysisApiRule' requires type resolution but it was run without it.\n")
     }
 
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `warns when autoCorrect is configured for a rule which is not able to correct`(autoCorrect: Boolean) {
+        getRules(
+            AnalysisMode.Full,
+            listOf(TestDefaultRuleSetProvider()),
+            yamlConfigFromContent(
+                """
+                    custom:
+                      OneRule:
+                        active: true
+                        autoCorrect: $autoCorrect
+                """.trimIndent()
+            ),
+            log,
+        )
+
+        assertThat(stringBuilder.toString())
+            .isEqualTo("The rule 'OneRule' is not able to correct, so 'autoCorrect' has no effect on it.\n")
+    }
+
+    @Test
+    fun `does not warn when autoCorrect is enabled for a rule which is able to correct`() {
+        getRules(
+            AnalysisMode.Full,
+            listOf(TestDefaultRuleSetProvider()),
+            yamlConfigFromContent(
+                """
+                    custom:
+                      AutoCorrectableRule:
+                        active: true
+                        autoCorrect: true
+                """.trimIndent()
+            ),
+            log,
+        )
+
+        assertThat(stringBuilder.toString()).isEmpty()
+    }
+
+    @Test
+    fun `does not warn when autoCorrect is only inherited from the rule set`() {
+        getRules(
+            AnalysisMode.Full,
+            listOf(TestDefaultRuleSetProvider()),
+            yamlConfigFromContent(
+                """
+                    custom:
+                      autoCorrect: true
+                      OneRule:
+                        active: true
+                """.trimIndent()
+            ),
+            log,
+        )
+
+        assertThat(stringBuilder.toString()).isEmpty()
+    }
+
     @Test
     fun `when fullAnalysis is disabled but the rule is disabled we log nothing`() {
         val rules = getRules(
-            AnalysisMode.light,
+            AnalysisMode.Light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -173,7 +233,7 @@ class RuleDescriptorKtTest {
     @Test
     fun whenRuleSetIsInactiveReturnsAllRuleAreDisabled() {
         val rules = getRules(
-            AnalysisMode.light,
+            AnalysisMode.Light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -209,7 +269,7 @@ class RuleDescriptorKtTest {
         @Test
         fun whenRuleSetIsInactiveReturnsAllRuleAreDisabled() {
             val rules = getRules(
-                AnalysisMode.light,
+                AnalysisMode.Light,
                 listOf(TestCustomRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -242,7 +302,7 @@ class RuleDescriptorKtTest {
         @ValueSource(strings = ["warning", "WARNING", "wArNiNg"])
         fun ignoreCase(candidate: String) {
             val rules = getRules(
-                AnalysisMode.light,
+                AnalysisMode.Light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -272,7 +332,7 @@ class RuleDescriptorKtTest {
         @EnumSource(Severity::class)
         fun supportsAll(severity: Severity) {
             val rules = getRules(
-                AnalysisMode.light,
+                AnalysisMode.Light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -302,7 +362,7 @@ class RuleDescriptorKtTest {
         fun unknownSeverityThrows() {
             assertThatThrownBy {
                 getRules(
-                    AnalysisMode.light,
+                    AnalysisMode.Light,
                     listOf(TestDefaultRuleSetProvider()),
                     yamlConfigFromContent(
                         """
@@ -325,7 +385,7 @@ class RuleDescriptorKtTest {
         @Test
         fun severityOnRuleSet() {
             val rules = getRules(
-                AnalysisMode.light,
+                AnalysisMode.Light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -408,7 +468,8 @@ private fun createRuleInstance(id: String, active: Boolean, url: String?, severi
 
 private class TestDefaultRuleSetProvider : DefaultRuleSetProvider {
     override val ruleSetId = RuleSetId("custom")
-    override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresAnalysisApiRule))
+    override fun instance() =
+        RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresAnalysisApiRule, ::AutoCorrectableRule))
 }
 
 private class TestCustomRuleSetProvider : RuleSetProvider {
@@ -427,3 +488,7 @@ private class AnotherRule(config: Config) : Rule(config, "AnotherRuleDescription
 private class RequiresAnalysisApiRule(config: Config) :
     Rule(config, "RequiresAnalysisApiRuleDescription"),
     RequiresAnalysisApi
+
+private class AutoCorrectableRule(config: Config) :
+    Rule(config, "AutoCorrectableRuleDescription"),
+    AutoCorrectable

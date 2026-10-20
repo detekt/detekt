@@ -13,23 +13,28 @@ import dev.detekt.api.config
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.isCalling
 import dev.detekt.psi.pathGlobToRegex
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.isUsedAsExpression
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
 import org.jetbrains.kotlin.analysis.api.types.KaType
-import org.jetbrains.kotlin.idea.references.mainReference
-import org.jetbrains.kotlin.load.java.JavaClassFinderImpl
+import org.jetbrains.kotlin.load.java.createJavaClassFinder
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
@@ -70,7 +75,7 @@ class IgnoredReturnValue(config: Config) :
 
     @Configuration(
         "List of simple glob patterns for annotation names that require return values to be used. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
     )
     private val returnValueAnnotations: List<Regex> by config(
         listOf(
@@ -85,7 +90,7 @@ class IgnoredReturnValue(config: Config) :
 
     @Configuration(
         "List of simple glob patterns for annotation names that skip this inspection. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
     )
     private val ignoreReturnValueAnnotations: List<Regex> by config(
         listOf(
@@ -98,7 +103,7 @@ class IgnoredReturnValue(config: Config) :
 
     @Configuration(
         "List of simple glob patterns for return type names that should not be ignored. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
     )
     private val returnValueTypes: List<Regex> by config(
         listOf(
@@ -168,14 +173,13 @@ class IgnoredReturnValue(config: Config) :
         val origin = (this as? KaClassSymbol)?.origin
         if (origin != KaSymbolOrigin.JAVA_SOURCE && origin != KaSymbolOrigin.JAVA_LIBRARY) return emptyList()
         val packageFqName = this.classId?.packageFqName ?: return emptyList()
-        val javaClassFinder = JavaClassFinderImpl(null).apply {
-            setScope(scope)
-            setProjectInstance(project)
-        }
+        val javaClassFinder = project.createJavaClassFinder(scope, null)
         return javaClassFinder.findPackage(packageFqName)?.annotations?.mapNotNull { it.classId }.orEmpty()
     }
 
-    private fun KaSession.isUsedAsExpression(call: KtCallExpression, returnType: KaType): Boolean {
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun isUsedAsExpression(call: KtCallExpression, returnType: KaType): Boolean {
         if (returnType is KaFunctionType &&
             call.getStrictParentOfType<KtCallExpression>()?.calleeExpression == KtPsiUtil.safeDeparenthesize(call)
         ) {
@@ -195,18 +199,18 @@ class IgnoredReturnValue(config: Config) :
         return true
     }
 
-    context(session: KaSession)
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
     private fun KtExpression.isLambdaResult(lambda: KtLambdaExpression): Boolean {
         val statement = getQualifiedExpressionForSelectorOrThis().let {
             it.getStrictParentOfType<KtReturnExpression>() ?: it
         }
         return when (statement) {
             is KtReturnExpression -> {
-                with(session) {
-                    val symbol = lambda.functionLiteral.symbol
-                    val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
-                    label?.mainReference?.resolveToSymbol() == symbol
-                }
+                val symbol = lambda.functionLiteral.symbol
+                val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
+                @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+                label?.resolveSymbol() == symbol
             }
 
             else -> {

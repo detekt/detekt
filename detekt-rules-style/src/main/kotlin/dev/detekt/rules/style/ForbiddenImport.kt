@@ -15,7 +15,9 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  *
  * This rule allows to set a list of forbidden [forbiddenImports].
  * This can be used to discourage the use of unstable, experimental or deprecated APIs.
- * Imports are configured as glob patterns and may include a reason that is shown in the finding:
+ * Imports are configured as glob patterns and may be exact imports such as `kotlin.jvm.JvmField`
+ * or wildcard imports such as `java.util.*`. Each entry can also include a reason that is shown in the finding.
+ * Use [allowedImports] to declare exceptions to broader forbidden globs:
  *
  * ```yaml
  * ForbiddenImport:
@@ -37,12 +39,6 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * original name, which means `import java.util.List as JList` is reported by the pattern
  * `java.util.List`.
  *
- * Star imports are matched without their trailing star, so `import java.util.*` is checked
- * as `java.util`. The pattern `java.util.*` consequently does not report it, while the
- * pattern `java.util` does, and `allowedImports: ['java.util.UUID']` also exempts
- * `import java.util.UUID.*`. This is tracked in
- * [#9564](https://github.com/detekt/detekt/issues/9564).
- *
  * <noncompliant>
  * import kotlin.jvm.JvmField
  * import java.util.Date
@@ -63,7 +59,8 @@ class ForbiddenImport(config: Config) :
         "List of imports, specified as glob patterns, that are forbidden. " +
             "A pattern has to match the whole fully qualified name, where `*` matches zero or more " +
             "characters including `.` and `?` matches exactly one character. " +
-            "It is recommended to also specify a reason."
+            "Entries may either be plain strings or value/reason pairs, allowing you to specify the reason why each " +
+            "individual import is forbidden."
     )
     private val forbiddenImports: List<Forbidden> by config(valuesWithReason()) { list ->
         list.map { Forbidden(it.value.pathGlobToRegex(), it.reason) }
@@ -71,7 +68,7 @@ class ForbiddenImport(config: Config) :
 
     @Configuration(
         "List of imports, specified as glob patterns, to explicitly allow. " +
-            "Use this to specify exceptions to the forbidden imports. " +
+            "Use this to specify exceptions to broader forbidden imports. " +
             "An import that matches both lists is not reported."
     )
     private val allowedImports: List<Regex> by config(emptyList<String>()) { list ->
@@ -81,7 +78,7 @@ class ForbiddenImport(config: Config) :
     override fun visitImportDirective(importDirective: KtImportDirective) {
         super.visitImportDirective(importDirective)
 
-        val import = importDirective.importedFqName?.asString() ?: return
+        val import = importDirective.importPath?.pathStr ?: return
         val forbidden = forbiddenImports.find { it.import.matches(import) } ?: return
 
         if (importIsExplicitlyAllowed(import)) {

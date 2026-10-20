@@ -20,7 +20,7 @@ dependencies {
     implementation(libs.snakeyaml.engine)
     implementation(libs.kotlin.reflect)
     implementation(projects.detektParser)
-    implementation(projects.detektPsiUtils)
+    implementation(projects.detektSuppressors)
     implementation(projects.detektUtils)
     generatedConfig(projects.detektRulesComments) { targetConfiguration = "generatedConfig" }
     generatedConfig(projects.detektRulesComplexity) { targetConfiguration = "generatedConfig" }
@@ -53,7 +53,6 @@ dependencies {
     testImplementation(projects.detektReportCheckstyle)
     testImplementation(projects.detektReportSarif)
     testImplementation(projects.detektTest)
-    testImplementation(projects.detektTestJunit)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.classgraph)
@@ -82,26 +81,9 @@ val generateDefaultDetektConfig = tasks.register("generateDefaultDetektConfig") 
                           # when writing own rules with new properties, exclude the property path e.g.: ['my_rule_set', '.*>.*>[my_property]']
                           excludes: []
                         
-                        processors:
-                          active: true
-                          exclude:
-                          # - 'KtFileCountProcessor'
-                          # - 'PackageCountProcessor'
-                          # - 'ClassCountProcessor'
-                          # - 'FunctionCountProcessor'
-                          # - 'PropertyCountProcessor'
-                          # - 'ProjectCyclomaticComplexityProcessor'
-                          # - 'ProjectCognitiveComplexityProcessor'
-                          # - 'ProjectLLOCProcessor'
-                          # - 'ProjectCLOCProcessor'
-                          # - 'ProjectLOCProcessor'
-                          # - 'ProjectSLOCProcessor'
-                        
                         console-reports:
                           active: true
                           exclude:
-                             - 'ProjectStatisticsReport'
-                             - 'ComplexityReport'
                              - 'NotificationReport'
                              - 'IssuesReport'
                              - 'FileBasedIssuesReport'

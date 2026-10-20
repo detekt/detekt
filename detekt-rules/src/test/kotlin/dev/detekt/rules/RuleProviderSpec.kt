@@ -12,6 +12,7 @@ import dev.detekt.rules.exceptions.ExceptionsProvider
 import dev.detekt.rules.naming.NamingProvider
 import dev.detekt.rules.performance.PerformanceProvider
 import dev.detekt.rules.potentialbugs.PotentialBugProvider
+import dev.detekt.rules.standardlibrary.StandardLibraryProvider
 import dev.detekt.rules.style.StyleGuideProvider
 import io.github.classgraph.ClassGraph
 import org.assertj.core.api.Assertions.assertThat
@@ -23,18 +24,24 @@ class RuleProviderSpec {
     @Test
     fun `checks whether all rules are called in the corresponding RuleSetProvider`() {
         val providers = ClassGraph()
-            .acceptPackages("io.gitlab.arturbosch.detekt.rules")
+            .acceptPackages("dev.detekt.rules")
             .scan()
             .use { scanResult ->
                 scanResult.getClassesImplementing(DefaultRuleSetProvider::class.java)
                     .loadClasses(DefaultRuleSetProvider::class.java)
             }
 
+        assertThat(providers).hasSize(ruleMap.size)
+
         providers.forEach { providerType ->
             val packageName = getRulesPackageNameForProvider(providerType)
             val provider = providerType.getDeclaredConstructor().newInstance()
             val rules = getRules(provider)
             val classes = getClasses(packageName)
+
+            assertThat(packageName).matches(getPackageName(providerType))
+            assertThat(classes).withFailMessage("No rules found in $providerType").isNotEmpty
+
             classes.forEach { clazz ->
                 val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
                 assertThat(rule)
@@ -46,13 +53,14 @@ class RuleProviderSpec {
 }
 
 private val ruleMap: Map<Class<out DefaultRuleSetProvider>, String> = mapOf(
-    CommentSmellProvider::class.java to "dev.detekt.rules.documentation",
-    ComplexityProvider::class.java to "io.gitlab.arturbosch.detekt.rules.complexity",
-    EmptyCodeProvider::class.java to "dev.detekt.rules.empty",
+    CommentSmellProvider::class.java to "dev.detekt.rules.comments",
+    ComplexityProvider::class.java to "dev.detekt.rules.complexity",
+    EmptyCodeProvider::class.java to "dev.detekt.rules.emptyblocks",
     ExceptionsProvider::class.java to "dev.detekt.rules.exceptions",
-    NamingProvider::class.java to "io.gitlab.arturbosch.detekt.rules.naming",
+    NamingProvider::class.java to "dev.detekt.rules.naming",
     PerformanceProvider::class.java to "dev.detekt.rules.performance",
-    PotentialBugProvider::class.java to "io.gitlab.arturbosch.detekt.rules.bugs",
+    PotentialBugProvider::class.java to "dev.detekt.rules.potentialbugs",
+    StandardLibraryProvider::class.java to "dev.detekt.rules.standardlibrary",
     StyleGuideProvider::class.java to "dev.detekt.rules.style",
     CoroutinesProvider::class.java to "dev.detekt.rules.coroutines",
 )
@@ -82,3 +90,5 @@ private fun getClasses(packageName: String): List<Class<out Rule>> =
                 .filterNot { "Test" in it.name }
                 .filter { !Modifier.isAbstract(it.modifiers) && !Modifier.isStatic(it.modifiers) }
         }
+
+private fun getPackageName(clazz: Class<*>) = clazz.getName().substring(0, clazz.getName().lastIndexOf('.'))

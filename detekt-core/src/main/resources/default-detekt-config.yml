@@ -5,26 +5,9 @@ config:
   # when writing own rules with new properties, exclude the property path e.g.: ['my_rule_set', '.*>.*>[my_property]']
   excludes: []
 
-processors:
-  active: true
-  exclude:
-  # - 'KtFileCountProcessor'
-  # - 'PackageCountProcessor'
-  # - 'ClassCountProcessor'
-  # - 'FunctionCountProcessor'
-  # - 'PropertyCountProcessor'
-  # - 'ProjectCyclomaticComplexityProcessor'
-  # - 'ProjectCognitiveComplexityProcessor'
-  # - 'ProjectLLOCProcessor'
-  # - 'ProjectCLOCProcessor'
-  # - 'ProjectLOCProcessor'
-  # - 'ProjectSLOCProcessor'
-
 console-reports:
   active: true
   exclude:
-     - 'ProjectStatisticsReport'
-     - 'ComplexityReport'
      - 'NotificationReport'
      - 'IssuesReport'
      - 'FileBasedIssuesReport'
@@ -424,6 +407,8 @@ potential-bugs:
     active: true
   HasPlatformType:
     active: true
+  IgnoredJavaDefaultMethod:
+    active: false
   IgnoredReturnValue:
     active: true
     restrictToConfig: true
@@ -605,6 +590,8 @@ style:
   AbstractClassCanBeInterface:
     active: true
     ignoreSealedClasses: false
+  AvoidDollarLiteralInterpolation:
+    active: false
   BracesOnIfStatements:
     active: false
     singleLine: 'never'
@@ -631,7 +618,7 @@ style:
     active: false
   DestructuringDeclarationWithTooManyEntries:
     active: true
-    maxDestructuringEntries: 3
+    maxDestructuringEntries: 5
   DoubleNegativeExpression:
     active: false
   DoubleNegativeLambda:
@@ -764,6 +751,7 @@ style:
     active: false
   NullableBooleanCheck:
     active: false
+    onlyConditionals: true
   ObjectLiteralToLambda:
     active: true
   OneTopLevelClassOrObjectPerFile:
@@ -814,6 +802,8 @@ style:
     active: false
   UnnecessaryBracesAroundTrailingLambda:
     active: true
+  UnnecessaryChainedSafeCall:
+    active: false
   UnnecessaryCompanionObjectAccess:
     active: false
   UnnecessaryFullyQualifiedName:

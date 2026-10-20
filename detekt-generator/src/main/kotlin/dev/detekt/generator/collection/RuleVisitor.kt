@@ -3,7 +3,6 @@ package dev.detekt.generator.collection
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Alias
 import dev.detekt.api.RequiresAnalysisApi
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -20,7 +19,6 @@ internal class RuleVisitor : KtTreeVisitorVoid() {
     private var name = ""
     private val documentationCollector = DocumentationCollector()
     private var defaultActivationStatus: DefaultActivationStatus = Inactive
-    private var autoCorrect = false
     private var requiresFullAnalysis = false
     private var aliases: List<String> = emptyList()
     private var parent = ""
@@ -45,7 +43,6 @@ internal class RuleVisitor : KtTreeVisitorVoid() {
             aliases = aliases,
             parent = parent,
             configurations = configurationsByAnnotation,
-            autoCorrect = autoCorrect,
             deprecationMessage = deprecationMessage,
             requiresFullAnalysis = requiresFullAnalysis
         )
@@ -94,7 +91,6 @@ internal class RuleVisitor : KtTreeVisitorVoid() {
             defaultActivationStatus = Active(since = activeByDefaultSinceValue)
         }
 
-        autoCorrect = classOrObject.isAnnotatedWith(AutoCorrectable::class)
         requiresFullAnalysis = classOrObject.superTypeListEntries
             .any { it.text.substringAfterLast(".") == fullAnalysisInterface }
         deprecationMessage = classOrObject.firstAnnotationParameterOrNull(Deprecated::class)

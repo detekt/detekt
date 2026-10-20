@@ -6,17 +6,21 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
-import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExperimentalApi
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
@@ -118,11 +122,10 @@ class RedundantHigherOrderMapUsage(config: Config) :
         return lambda
     }
 
+    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
-    private fun KaSession.isRedundant(
-        functionLiteral: KtFunctionLiteral,
-        lambdaStatements: List<KtExpression>,
-    ): Boolean {
+    context(_: KaSession)
+    private fun isRedundant(functionLiteral: KtFunctionLiteral, lambdaStatements: List<KtExpression>): Boolean {
         val symbol = functionLiteral.symbol
         val lambdaParameter = symbol.valueParameters.singleOrNull() ?: return false
         val lastStatement = lambdaStatements.lastOrNull() ?: return false
@@ -130,17 +133,21 @@ class RedundantHigherOrderMapUsage(config: Config) :
         val labeledReturnExpressions = functionLiteral.collectDescendantsOfType<KtReturnExpression> {
             if (it == lastStatement) return@collectDescendantsOfType false
             val label = (it as? KtExpressionWithLabel)?.getTargetLabel() ?: return@collectDescendantsOfType false
-            label.mainReference.resolveToSymbol() == symbol
+            @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
+            label.resolveSymbol() == symbol
         }
         return labeledReturnExpressions.all { isReferenceTo(it, lambdaParameter) }
     }
 
-    private fun KaSession.isReferenceTo(expression: KtExpression, symbol: KaValueParameterSymbol): Boolean {
+    @OptIn(KaContextParameterApi::class)
+    context(_: KaSession)
+    private fun isReferenceTo(expression: KtExpression, symbol: KaValueParameterSymbol): Boolean {
         val nameReference = when (expression) {
             is KtReturnExpression -> expression.returnedExpression
             else -> expression
         } as? KtNameReferenceExpression ?: return false
-        return nameReference.mainReference.resolveToSymbol() == symbol
+        @OptIn(KaExperimentalApi::class)
+        return nameReference.resolveSymbol() == symbol
     }
 
     companion object {
