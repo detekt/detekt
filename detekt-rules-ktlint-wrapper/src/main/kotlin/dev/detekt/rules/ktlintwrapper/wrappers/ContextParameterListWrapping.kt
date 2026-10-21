@@ -1,9 +1,5 @@
 package dev.detekt.rules.ktlintwrapper.wrappers
 
-import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
-import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
-import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
-import com.pinterest.ktlint.ruleset.standard.rules.ContextReceiverListWrappingRule
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
@@ -11,6 +7,10 @@ import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
+import io.github.ktlint.core.ruleset.standard.rules.ContextParameterListWrappingRule
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#context-receiver-list-wrapping) for documentation.
@@ -20,7 +20,7 @@ internal class ContextParameterListWrapping(config: Config) :
     KtlintRule(config, "Wraps the context receiver list containing a context parameter"),
     AutoCorrectable {
 
-    override val wrapping = ContextReceiverListWrappingRule()
+    override val wrapping = ContextParameterListWrappingRule()
 
     @Configuration("maximum line length")
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)
