@@ -20,7 +20,7 @@ dependencies {
     implementation(libs.snakeyaml.engine)
     implementation(libs.kotlin.reflect)
     implementation(projects.detektParser)
-    implementation(projects.detektPsiUtils)
+    implementation(projects.detektSuppressors)
     implementation(projects.detektUtils)
     generatedConfig(projects.detektRulesComments) { targetConfiguration = "generatedConfig" }
     generatedConfig(projects.detektRulesComplexity) { targetConfiguration = "generatedConfig" }
@@ -53,7 +53,6 @@ dependencies {
     testImplementation(projects.detektReportCheckstyle)
     testImplementation(projects.detektReportSarif)
     testImplementation(projects.detektTest)
-    testImplementation(projects.detektTestJunit)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.classgraph)

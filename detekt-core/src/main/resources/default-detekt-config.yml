@@ -407,6 +407,8 @@ potential-bugs:
     active: true
   HasPlatformType:
     active: true
+  IgnoredJavaDefaultMethod:
+    active: false
   IgnoredReturnValue:
     active: true
     restrictToConfig: true
@@ -614,7 +616,7 @@ style:
     active: false
   DestructuringDeclarationWithTooManyEntries:
     active: true
-    maxDestructuringEntries: 3
+    maxDestructuringEntries: 5
   DoubleNegativeExpression:
     active: false
   DoubleNegativeLambda:

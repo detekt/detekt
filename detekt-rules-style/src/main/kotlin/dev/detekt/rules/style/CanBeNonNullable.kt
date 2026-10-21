@@ -334,7 +334,8 @@ class CanBeNonNullable(config: Config) :
         private fun KtExpression?.determineSingleExpression(): Boolean =
             when (this) {
                 is KtReturnExpression -> INELIGIBLE_SINGLE_EXPRESSION
-                is KtIfExpression -> ELIGIBLE_SINGLE_EXPRESSION
+                is KtIfExpression -> `else` == null
+                is KtWhenExpression -> elseExpression == null
                 is KtDotQualifiedExpression -> INELIGIBLE_SINGLE_EXPRESSION
                 is KtCallExpression -> INELIGIBLE_SINGLE_EXPRESSION
                 else -> ELIGIBLE_SINGLE_EXPRESSION

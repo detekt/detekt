@@ -19,7 +19,7 @@ plugins {
     id("com.gradle.plugin-publish") version "2.2.1"
     // We use this published version of the detekt plugin to self analyse this project.
     id("dev.detekt") version "2.0.0-alpha.6"
-    id("com.github.gmazzo.buildconfig") version "6.1.1"
+    id("com.github.gmazzo.buildconfig") version "6.1.2"
 }
 
 group = "dev.detekt"
@@ -155,7 +155,7 @@ dependencies {
     testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle.plugin) {
         attributes {
             // Set this value to the minimum Gradle version tested in testKitGradleMinVersionRuntimeOnly source set
-            attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, named("7.6.3"))
+            attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, named("8.14"))
         }
     }
     jacocoAgentRuntime("org.jacoco:org.jacoco.agent:${libs.versions.jacoco.get()}:runtime")
@@ -260,7 +260,7 @@ tasks {
     // injects the agent into the spawned JVMs via -Dorg.gradle.jvmargs.
     //
     // Only the functionalTest suite is instrumented. functionalTestMinSupportedGradle runs against
-    // Gradle 7.6.3, which does not support a Java agent in a TestKit build that uses the configuration
+    // Gradle 8.14, which does not support a Java agent in a TestKit build that uses the configuration
     // cache (the build under test enables isolated projects); its coverage is redundant with
     // functionalTest anyway.
     named<Test>("functionalTest") {

@@ -10,7 +10,6 @@ import dev.detekt.gradle.internal.existingVariantOrBaseFile
 import dev.detekt.gradle.internal.setCreateBaselineTaskDefaults
 import dev.detekt.gradle.internal.setDetektTaskDefaults
 import dev.detekt.gradle.plugin.internal.mapExplicitArgMode
-import dev.detekt.gradle.plugin.internal.rootProjectDirectoryCompat
 import dev.detekt.gradle.plugin.internal.setVisibleCompat
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -47,11 +46,11 @@ class DetektBasePlugin : Plugin<Project> {
             reportsDir.convention(
                 project.extensions.getByType(ReportingExtension::class.java).baseDirectory.dir("detekt")
             )
-            basePath.convention(project.rootProjectDirectoryCompat())
+            basePath.convention(project.isolated.rootProject.projectDirectory)
         }
 
         val defaultConfigFile =
-            project.file("${project.rootProjectDirectoryCompat().dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
+            project.file("${project.isolated.rootProject.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
         if (defaultConfigFile.exists()) {
             extension.config.setFrom(project.files(defaultConfigFile))
         }

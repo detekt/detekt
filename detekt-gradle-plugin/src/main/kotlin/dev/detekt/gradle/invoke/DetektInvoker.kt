@@ -2,11 +2,11 @@ package dev.detekt.gradle.invoke
 
 import dev.detekt.gradle.internal.ClassLoaderCache
 import dev.detekt.gradle.internal.GlobalClassLoaderCache
-import dev.detekt.gradle.plugin.internal.verificationExceptionCompat
 import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.VerificationException
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import java.io.File
@@ -83,7 +83,7 @@ private fun isAnalysisFailure(msg: String) = "Analysis failed with" in msg && "i
 @Suppress("ThrowsCount")
 private fun processResult(message: String?, reflectionWrapper: Exception, ignoreFailures: Boolean) {
     if (message != null && isAnalysisFailure(message)) {
-        if (!ignoreFailures) throw verificationExceptionCompat(message, reflectionWrapper)
+        if (!ignoreFailures) throw VerificationException(message, reflectionWrapper)
     } else {
         throw GradleException(message ?: "There was a problem running detekt.", reflectionWrapper)
     }
