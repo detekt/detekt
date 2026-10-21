@@ -104,6 +104,14 @@ dependencyResolutionManagement {
                 includeGroupAndSubgroups("com.android")
             }
         }
+        exclusiveContent {
+            forRepository {
+                maven("https://central.sonatype.com/repository/maven-snapshots")
+            }
+            filter {
+                includeGroup("io.github.ktlint.core")
+            }
+        }
         mavenCentral()
     }
 }
