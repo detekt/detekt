@@ -38,7 +38,7 @@ class MaximumLineLengthSpec {
                 "Test.kt"
             ).first()
 
-            assertThat(finding.entity.signature).isEqualTo("}")
+            assertThat(finding.entity.signature).isEqualTo("/* 123456789012345678901234567890 */")
         }
 
         @Test
