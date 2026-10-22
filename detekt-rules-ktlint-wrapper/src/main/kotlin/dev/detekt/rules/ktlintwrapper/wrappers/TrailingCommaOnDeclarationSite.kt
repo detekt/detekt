@@ -4,9 +4,11 @@ import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
+import dev.detekt.api.config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import io.github.ktlint.core.ruleset.standard.rules.TrailingCommaOnDeclarationSiteRule
 
 /**
@@ -32,9 +34,13 @@ internal class TrailingCommaOnDeclarationSite(config: Config) :
         defaultAndroidValue = false,
     )
 
+    @Configuration("indent size")
+    private val indentSize by config(4)
+
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
             TrailingCommaOnDeclarationSiteRule.TRAILING_COMMA_ON_DECLARATION_SITE_PROPERTY to
                 useTrailingCommaOnDeclarationSite.toString(),
+            INDENT_SIZE_PROPERTY to indentSize.toString(),
         )
 }

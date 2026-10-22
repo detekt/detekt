@@ -9,6 +9,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
 import io.github.ktlint.core.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import io.github.ktlint.core.ruleset.standard.rules.IndentationRule
+import io.github.ktlint.core.ruleset.standard.rules.IndentationRule.Companion.INDENT_EXPLICIT_CONSTRUCTOR_PROPERTY
 import io.github.ktlint.core.ruleset.standard.rules.IndentationRule.Companion.INDENT_WHEN_ARROW_ON_NEW_LINE
 
 /**
@@ -27,9 +28,13 @@ internal class Indentation(config: Config) :
     @Configuration("indent when arrow on new line")
     private val indentWhenArrowOnNewLine by config(false)
 
+    @Configuration("indent an explicit constructor of a class")
+    private val indentExplicitConstructorProperty by config(true)
+
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
             INDENT_SIZE_PROPERTY to indentSize.toString(),
             INDENT_WHEN_ARROW_ON_NEW_LINE to indentWhenArrowOnNewLine.toString(),
+            INDENT_EXPLICIT_CONSTRUCTOR_PROPERTY to indentExplicitConstructorProperty.toString(),
         )
 }

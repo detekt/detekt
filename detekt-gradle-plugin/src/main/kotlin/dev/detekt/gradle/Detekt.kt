@@ -161,11 +161,11 @@ abstract class Detekt @Inject constructor(
         projectLayout.projectDirectory.asFile.toPath().relativize(Path(path)).toString()
     }
 
-    @get:Nested
     /*
     Property must be open (as do the @Nested properties in DetektReports), see
     https://github.com/gradle/gradle/pull/12601 and https://github.com/gradle/gradle/issues/6619
      */
+    @get:Nested
     open val reports: DetektReports = objects.newInstance(DetektReports::class.java)
 
     private val isDryRun = project.providers.gradleProperty(DRY_RUN_PROPERTY)
