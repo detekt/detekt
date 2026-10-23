@@ -438,6 +438,8 @@ class StringShouldBeRawStringSpec {
         @JvmStatic
         fun getViolations() =
             listOf(
+                Arguments.of("$$" + """"\n\t"""", 0, listOf("\\n", "\\t")),
+                Arguments.of("$$$" + """"\n\t"""", 0, listOf("\\n", "\\t")),
                 Arguments.of(""""\"[^\"\\\\\\n]*(?:\\\\.[^\"\\\\\\n]*)*\""""", 0, listOf("\\\\", "\\n", "\\\"")),
                 Arguments.of(
                     """
@@ -527,6 +529,8 @@ class StringShouldBeRawStringSpec {
         @JvmStatic
         fun getNonViolations() =
             listOf(
+                Arguments.of("$$" + """""${'"'}${'$'}literal ${'$'}${'$'}a \n\t""${'"'}""", 0),
+                Arguments.of("$$$" + """""${'"'}${'$'}${'$'}literal ${'$'}${'$'}${'$'}a \n\t""${'"'}""", 0),
                 Arguments.of("""""${'"'}\t\t\t""${'"'}""", 0),
                 Arguments.of("""""${'"'}\\\""${'"'}""", 0),
                 Arguments.of("""""${'"'}Normal and long string""${'"'}""", 0),
