@@ -197,7 +197,7 @@ class YamlConfigSpec {
                 )
             }.isInstanceOf(InvalidConfigurationError::class.java)
                 .hasMessageStartingWith(
-                    "Provided configuration file is invalid: Structure must be from type Map<String, Any>!"
+                    "Provided configuration file is invalid: Structure must be of type Map<String, Any>!"
                 )
                 .hasCauseInstanceOf(ClassCastException::class.java)
         }
