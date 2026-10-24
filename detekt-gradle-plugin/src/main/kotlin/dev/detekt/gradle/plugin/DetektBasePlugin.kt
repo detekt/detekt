@@ -13,6 +13,11 @@ import dev.detekt.gradle.plugin.internal.mapExplicitArgMode
 import dev.detekt.gradle.plugin.internal.setVisibleCompat
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.attributes.Bundling
+import org.gradle.api.attributes.Category
+import org.gradle.api.attributes.LibraryElements
+import org.gradle.api.attributes.Usage
+import org.gradle.api.attributes.java.TargetJvmEnvironment
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
@@ -61,6 +66,23 @@ class DetektBasePlugin : Plugin<Project> {
             configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
             configuration.isCanBeResolved = true
             configuration.isCanBeConsumed = false
+
+            configuration.attributes {
+                it.attribute(Category.CATEGORY_ATTRIBUTE, project.objects.named(Category::class.java, Category.LIBRARY))
+                it.attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage::class.java, Usage.JAVA_RUNTIME))
+                it.attribute(
+                    Bundling.BUNDLING_ATTRIBUTE,
+                    project.objects.named(Bundling::class.java, Bundling.EXTERNAL)
+                )
+                it.attribute(
+                    LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
+                    project.objects.named(LibraryElements::class.java, LibraryElements.JAR)
+                )
+                it.attribute(
+                    TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE,
+                    project.objects.named(TargetJvmEnvironment::class.java, TargetJvmEnvironment.STANDARD_JVM)
+                )
+            }
         }
 
         project.setTaskDefaults(extension)
