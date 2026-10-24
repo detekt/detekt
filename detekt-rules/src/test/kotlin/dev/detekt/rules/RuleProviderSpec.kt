@@ -24,11 +24,13 @@ class RuleProviderSpec {
     @Test
     fun `checks whether all rules are called in the corresponding RuleSetProvider`() {
         val providers = ClassGraph()
+            .enableClasspath()
+            .enableClassInfo()
             .acceptPackages("dev.detekt.rules")
             .scan()
-            .use { scanResult ->
-                scanResult.getClassesImplementing(DefaultRuleSetProvider::class.java)
-                    .loadClasses(DefaultRuleSetProvider::class.java)
+            .use { scanResult -> scanResult.getAllClassesImplementing(DefaultRuleSetProvider::class.java) }
+            .map { classInfo ->
+                Class.forName(classInfo.getName()).asSubclass(RuleSetProvider::class.java)
             }
 
         assertThat(providers).hasSize(ruleMap.size)
@@ -37,15 +39,15 @@ class RuleProviderSpec {
             val packageName = getRulesPackageNameForProvider(providerType)
             val provider = providerType.getDeclaredConstructor().newInstance()
             val rules = getRules(provider)
-            val classes = getClasses(packageName)
+            val classNames = getClassNames(packageName)
 
             assertThat(packageName).matches(getPackageName(providerType))
-            assertThat(classes).withFailMessage("No rules found in $providerType").isNotEmpty
+            assertThat(classNames).withFailMessage("No rules found in $providerType").isNotEmpty
 
-            classes.forEach { clazz ->
-                val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
+            classNames.forEach { className ->
+                val rule = rules.singleOrNull { it.javaClass.simpleName == className }
                 assertThat(rule)
-                    .withFailMessage("Rule $clazz is not called in the corresponding RuleSetProvider $providerType")
+                    .withFailMessage("Rule $className is not called in the corresponding RuleSetProvider $providerType")
                     .isNotNull()
             }
         }
@@ -80,15 +82,17 @@ private fun getRules(ruleSetProvider: RuleSetProvider): List<Rule> {
     return rules
 }
 
-private fun getClasses(packageName: String): List<Class<out Rule>> =
+private fun getClassNames(packageName: String): List<String> =
     ClassGraph()
+        .enableClasspath()
+        .enableClassInfo()
         .acceptPackages(packageName)
         .scan()
         .use { scanResult ->
-            scanResult.getSubclasses(Rule::class.java)
-                .loadClasses(Rule::class.java)
+            scanResult.getAllSubclasses(Rule::class.java)
                 .filterNot { "Test" in it.name }
                 .filter { !Modifier.isAbstract(it.modifiers) && !Modifier.isStatic(it.modifiers) }
+                .map { it.simpleName }
         }
 
 private fun getPackageName(clazz: Class<*>) = clazz.getName().substring(0, clazz.getName().lastIndexOf('.'))
