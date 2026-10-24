@@ -213,13 +213,13 @@ class UnnecessaryCompanionObjectAccessSpec(val env: KotlinEnvironmentContainer) 
                 class Outer {
                     class Inner {
                         companion object {
-                            fun build(): Inner = error("TODO")
+                            fun foo(): Inner = 1
                         }
                     }
                 }
 
                 fun main() {
-                    val output = Outer.Inner.build()
+                    val output = Outer.Inner.foo()
                 }
             """.trimIndent()
 
