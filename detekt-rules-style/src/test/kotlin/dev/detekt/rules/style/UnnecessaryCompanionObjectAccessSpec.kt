@@ -213,7 +213,7 @@ class UnnecessaryCompanionObjectAccessSpec(val env: KotlinEnvironmentContainer) 
                 class Outer {
                     class Inner {
                         companion object {
-                            fun foo(): Inner = 1
+                            fun foo() = 1
                         }
                     }
                 }
