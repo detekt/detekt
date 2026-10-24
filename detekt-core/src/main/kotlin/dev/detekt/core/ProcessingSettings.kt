@@ -1,7 +1,6 @@
 package dev.detekt.core
 
 import dev.detekt.api.Config
-import dev.detekt.api.PropertiesAware
 import dev.detekt.api.SetupContext
 import dev.detekt.core.settings.ClassloaderAware
 import dev.detekt.core.settings.EnvironmentAware
@@ -9,7 +8,6 @@ import dev.detekt.core.settings.EnvironmentFacade
 import dev.detekt.core.settings.ExtensionFacade
 import dev.detekt.core.settings.LoggingAware
 import dev.detekt.core.settings.LoggingFacade
-import dev.detekt.core.settings.PropertiesFacade
 import dev.detekt.core.util.PerformanceMonitor
 import dev.detekt.tooling.api.spec.ConfigSpec
 import dev.detekt.tooling.api.spec.ProcessingSpec
@@ -33,7 +31,6 @@ class ProcessingSettings private constructor(
     private val environmentAware: EnvironmentFacade,
 ) : AutoCloseable,
     LoggingAware by LoggingFacade(spec.loggingSpec),
-    PropertiesAware by PropertiesFacade(),
     EnvironmentAware by environmentAware,
     ClassloaderAware by ExtensionFacade(spec.extensionsSpec.plugins),
     SetupContext {
