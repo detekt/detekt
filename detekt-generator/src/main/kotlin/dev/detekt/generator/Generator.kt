@@ -7,7 +7,6 @@ import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Path
-import kotlin.io.path.Path
 import kotlin.time.measureTime
 
 class Generator(
