@@ -1,29 +1,20 @@
 package dev.detekt.core.baseline
 
 import dev.detekt.api.Issue
-import dev.detekt.api.ReportingExtension
-import dev.detekt.api.SetupContext
-import dev.detekt.api.getOrNull
+import dev.detekt.tooling.api.Baseline
+import dev.detekt.tooling.api.spec.BaselineSpec
 import java.nio.file.Path
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.isRegularFile
 
-class BaselineResultMapping : ReportingExtension {
+internal class BaselineResultMapping(baselineSpec: BaselineSpec) {
 
-    private var baselineFile: Path? = null
-    private var createBaseline: Boolean = false
+    private val baselineFile: Path? = baselineSpec.path
+    private val createBaseline: Boolean = baselineSpec.shouldCreateDuringAnalysis
 
-    override val id: String = "BaselineResultMapping"
-
-    override fun init(context: SetupContext) {
-        baselineFile = context.getOrNull(DETEKT_BASELINE_PATH_KEY)
-        createBaseline = context.getOrNull(DETEKT_BASELINE_CREATION_KEY) ?: false
-    }
-
-    override fun transformIssues(issues: List<Issue>): List<Issue> {
-        val baselineFile = baselineFile
-        require(!createBaseline || (createBaseline && baselineFile != null)) {
+    fun transformIssues(issues: List<Issue>): List<Issue> {
+        require(!createBaseline || baselineFile != null) {
             "Invalid baseline options invariant."
         }
 
@@ -31,35 +22,30 @@ class BaselineResultMapping : ReportingExtension {
     }
 
     private fun List<Issue>.transformWithBaseline(baselinePath: Path): List<Issue> {
-        if (createBaseline) {
+        val baseline = if (createBaseline) {
             createOrUpdate(baselinePath, this)
+        } else {
+            loadBaseline(baselinePath)
         }
-
-        return filterByBaseline(baselinePath, this)
+        return baseline?.let { currentBaseline ->
+            filterNot { currentBaseline.contains(it.baselineId) }
+        } ?: this
     }
 
-    fun filterByBaseline(baselineFile: Path, issues: List<Issue>): List<Issue> =
-        if (baselineExists(baselineFile)) {
-            val baseline = DefaultBaseline.load(baselineFile)
-            issues.filterNot { baseline.contains(it.baselineId) }
-        } else {
-            issues
-        }
-
-    fun createOrUpdate(baselineFile: Path, issues: List<Issue>) {
+    private fun createOrUpdate(baselineFile: Path, issues: List<Issue>): Baseline {
         val ids = issues.map { it.baselineId }.toSortedSet()
-        val oldBaseline = if (baselineExists(baselineFile)) {
-            DefaultBaseline.load(baselineFile)
-        } else {
-            DefaultBaseline(emptySet(), emptySet())
-        }
+        val oldBaseline = loadBaseline(baselineFile) ?: DefaultBaseline(emptySet(), emptySet())
         val baselineFormat = BaselineFormat()
         val baseline = baselineFormat.of(oldBaseline.manuallySuppressedIssues, ids)
         if (oldBaseline != baseline) {
             baselineFile.createParentDirectories()
             baselineFormat.write(baselineFile, baseline)
         }
+        return baseline
     }
 
-    private fun baselineExists(baseline: Path) = baseline.exists() && baseline.isRegularFile()
+    private fun loadBaseline(baselineFile: Path): Baseline? =
+        baselineFile
+            .takeIf { it.exists() && it.isRegularFile() }
+            ?.let(DefaultBaseline::load)
 }
