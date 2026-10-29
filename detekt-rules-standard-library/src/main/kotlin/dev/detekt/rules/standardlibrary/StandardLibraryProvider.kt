@@ -38,6 +38,7 @@ class StandardLibraryProvider : DefaultRuleSetProvider {
                 ::UnnecessaryFilter,
                 ::UnnecessaryLet,
                 ::UnnecessaryReversed,
+                ::UnnecessaryRun,
                 ::UseAnyOrNoneInsteadOfFind,
                 ::UseCheckNotNull,
                 ::UseCheckOrError,
