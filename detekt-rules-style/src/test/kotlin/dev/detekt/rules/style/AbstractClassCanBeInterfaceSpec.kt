@@ -178,6 +178,84 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `does not report an abstract class with a private primary constructor`() {
+            val code = """
+                abstract class AccountScope private constructor()
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report an abstract class with only private secondary constructors`() {
+            val code = """
+                abstract class AccountScope {
+                    private constructor()
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports an abstract class with a public secondary constructor`() {
+            val code = """
+                abstract class AccountScope {
+                    constructor() {}
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage(NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `reports an abstract class with a bodyless public secondary constructor`() {
+            val code = """
+                abstract class AccountScope {
+                    constructor()
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage(NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `does not report an abstract class with a parameterized public secondary constructor`() {
+            val code = """
+                abstract class AccountScope private constructor() {
+                    constructor(value: String) : this() {}
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report an abstract class with a non-empty public secondary constructor`() {
+            val code = """
+                abstract class AccountScope {
+                    constructor() {
+                        println("setup")
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report an abstract class with abstract members and a non-empty public secondary constructor`() {
+            val code = """
+                abstract class AccountScope {
+                    abstract fun validate()
+
+                    constructor() {
+                        println("setup")
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `does not report an abstract class extending a class`() {
             val code = """
                 abstract class A : Throwable()

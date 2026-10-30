@@ -43,6 +43,12 @@
       ]
     },
     {
+      "groupName": "Tapmoc",
+      "matchPackageNames": [
+        "com.gradleup.tapmoc:**"
+      ]
+    },
+    {
       "groupName": "detekt",
       "matchPackageNames": [
         "dev.detekt:**"

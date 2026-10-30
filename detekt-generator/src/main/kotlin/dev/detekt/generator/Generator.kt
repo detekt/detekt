@@ -7,17 +7,16 @@ import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Path
-import kotlin.io.path.Path
 import kotlin.time.measureTime
 
 class Generator(
     private val inputPaths: List<Path>,
     documentationPath: Path?,
     configPath: Path?,
-    private val outPrinter: PrintStream = System.out,
+    private val outPrinter: PrintStream,
 ) {
     private val collector = DetektCollector()
-    private val printer = DetektPrinter(documentationPath, configPath)
+    private val printer = DetektPrinter(documentationPath, configPath, outPrinter)
 
     fun execute() {
         val time = measureTime {

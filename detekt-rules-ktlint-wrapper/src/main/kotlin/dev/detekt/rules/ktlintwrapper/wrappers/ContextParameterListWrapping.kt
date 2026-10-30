@@ -16,7 +16,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#context-receiver-list-wrapping) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-internal class ContextReceiverListWrapping(config: Config) :
+internal class ContextParameterListWrapping(config: Config) :
     KtlintRule(config, "Wraps the context receiver list containing a context parameter"),
     AutoCorrectable {
 

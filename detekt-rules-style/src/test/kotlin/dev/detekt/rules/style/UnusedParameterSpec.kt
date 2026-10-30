@@ -2,11 +2,14 @@ package dev.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.test.assertj.assertThat
-import dev.detekt.test.lint
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class UnusedParameterSpec {
+@KotlinCoreEnvironmentTest
+class UnusedParameterSpec(val env: KotlinEnvironmentContainer) {
     val subject = UnusedParameter(Config.empty)
 
     @Nested
@@ -19,7 +22,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -30,7 +33,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -41,7 +44,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -52,7 +55,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -63,7 +66,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -78,7 +81,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -98,7 +101,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -113,7 +116,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -128,7 +131,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -143,7 +146,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -158,7 +161,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -174,7 +177,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -186,7 +189,7 @@ class UnusedParameterSpec {
                 fun foo(@Suppress("UnusedParameter") unused: String){}
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -195,7 +198,7 @@ class UnusedParameterSpec {
                 fun foo(@Suppress("UnusedParameter") unused: String, unusedWithoutAnnotation: String){}
             """.trimIndent()
 
-            val lint = subject.lint(code)
+            val lint = subject.lintWithContext(env, code)
 
             assertThat(lint).singleElement()
                 .hasMessage("Function parameter `unusedWithoutAnnotation` is unused.")
@@ -208,7 +211,7 @@ class UnusedParameterSpec {
                 fun foo(unused: String, otherUnused: String){}
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -221,7 +224,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -233,7 +236,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -249,7 +252,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -261,7 +264,7 @@ class UnusedParameterSpec {
                 fun foo(unused: Int){}
             """.trimIndent()
 
-            val lint = subject.lint(code)
+            val lint = subject.lintWithContext(env, code)
 
             assertThat(lint).singleElement()
                 .hasMessage("Function parameter `unused` is unused.")
@@ -282,7 +285,7 @@ class UnusedParameterSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -292,7 +295,7 @@ class UnusedParameterSpec {
                     println("b")
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -303,7 +306,7 @@ class UnusedParameterSpec {
             val code = """
                 fun test(`foo bar`: Int) = `foo bar`
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -322,7 +325,7 @@ class UnusedParameterSpec {
                     ) = 1
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).singleElement()
+            assertThat(subject.lintWithContext(env, code)).singleElement()
                 .hasStartSourceLocation(6, 9)
         }
     }
@@ -340,7 +343,7 @@ class UnusedParameterSpec {
                     println(modifier)
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).singleElement()
+            assertThat(subject.lintWithContext(env, code)).singleElement()
                 .hasStartSourceLocation(1, 9)
         }
 
@@ -355,7 +358,164 @@ class UnusedParameterSpec {
                     println(modifier)
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports a parameter only named in a recursive call`() {
+            val code = """
+                fun foo(unused: Int) {
+                    if (false) foo(unused = 1)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `constructor parameters` {
+        @Test
+        fun `reports unused parameter of a primary constructor`() {
+            val code = """
+                class A(unused: String)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports unused parameter of a secondary constructor`() {
+            val code = """
+                class A {
+                    constructor(unused: String)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report a used parameter of a primary constructor`() {
+            val code = """
+                class A(used: String) {
+                    val length = used.length
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports unused parameter`() {
+            val code = """
+                class Test(unused: Any)
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report used parameter in init block`() {
+            val code = """
+                class Test(used: Any) {
+                    init {
+                        used.toString()
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report used parameter to initialize property`() {
+            val code = """
+                class Test(used: Any) {
+                    val usedString = used.toString()
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `report unused parameters in secondary constructors`() {
+            val code = """
+                private class ClassWithSecondaryConstructor {
+                    constructor(used: Any, unused: Any) {
+                        used.toString()
+                    }
+                
+                    constructor(used: Any)
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
+        }
+
+        @Test
+        fun `reports unused vararg parameter`() {
+            val code = """
+               class Test(vararg unused: Any)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+        }
+
+        @Test
+        fun `reports for multiple classes with same properties name in the same file`() {
+            val code = """
+                class C(initial:Int = 0){
+                
+                constructor(c:Float, d:Float):this(c.toInt()){
+                   println(c)
+                }
+                  
+               }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isNotEmpty()
+        }
+
+        @Test
+        fun `does not report unused parameters of a data class secondary constructor`() {
+            val code = """
+                data class A(val x: Int) {
+                    constructor(x: Int, unused: Int) : this(x)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report unused parameters of a value class constructor`() {
+            val code = """
+                @JvmInline
+                value class A(private val x: Int) {
+                    constructor(x: Int, unused: Int) : this(x)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+        }
+
+        @Test
+        fun `does not report unused parameters of an inline class constructor`() {
+            val code = """
+                inline class A(private val x: Int) {
+                    constructor(x: Int, unused: Int) : this(x)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+        }
+
+        @Test
+        fun `does not report a constructor property`() {
+            val code = """
+                class A(val unused: String)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -370,7 +530,7 @@ class UnusedParameterSpec {
                     actual fun baz(i: Int, s: String) {}
                 }
             """.trimIndent()
-            assertThat(subject.lint(code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
 
         @Test
@@ -378,7 +538,51 @@ class UnusedParameterSpec {
             val code = """
                 actual class Foo actual constructor(bar: String) {}
             """.trimIndent()
-            assertThat(subject.lint(code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `references are resolved, not matched by name` {
+        @Test
+        fun `reports a parameter whose name is also a property on another receiver`() {
+            val code = """
+                class Other { val unused = 1 }
+                class A {
+                    fun foo(unused: Int) {
+                        println(Other().unused)
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports a parameter shadowed by a local variable of the same name`() {
+            val code = """
+                fun foo(unused: Int) {
+                    val unused = 5
+                    println(unused)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report a parameter used inside an anonymous object`() {
+            val code = """
+                abstract class Base { abstract fun foo() }
+                fun outer(used: Int) {
+                    val obj = object : Base() {
+                        override fun foo() { println(used) }
+                    }
+                    println(obj)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 }

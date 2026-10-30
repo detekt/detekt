@@ -2024,6 +2024,47 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
+
+            @Test
+            fun `issue 7420 - does not report parameter when non-null check is inside nested branch with else`() {
+                val code = """
+                    enum class MessageType { ChecklistItem, Other }
+                    class Message(val sentAt: String?)
+
+                    fun setMessageTimestamp(
+                        messageType: MessageType,
+                        message: Message,
+                        locale: String?,
+                    ) {
+                        if (messageType == MessageType.ChecklistItem) {
+                            println("Marked completed")
+                        } else {
+                            val zonedDateTime = message.sentAt
+                            if (zonedDateTime != null && locale != null) {
+                                println(locale)
+                            }
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `issue 7420 - does not report parameter when non-null check is inside when branch with else`() {
+                val code = """
+                    fun process(status: Int, name: String?) {
+                        when (status) {
+                            0 -> println("zero")
+                            else -> {
+                                if (name != null) {
+                                    println(name)
+                                }
+                            }
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
         }
     }
 

@@ -14,11 +14,15 @@ import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_FILE
 import dev.detekt.gradle.plugin.internal.DetektAndroidCompilations
 import dev.detekt.gradle.plugin.internal.DetektJvmCompilations
 import dev.detekt.gradle.plugin.internal.DetektKmpJvmCompilations
-import dev.detekt.gradle.plugin.internal.conventionCompat
 import dev.detekt.gradle.plugin.internal.setVisibleCompat
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.attributes.Bundling
+import org.gradle.api.attributes.Category
+import org.gradle.api.attributes.LibraryElements
+import org.gradle.api.attributes.Usage
+import org.gradle.api.attributes.java.TargetJvmEnvironment
 import org.gradle.api.provider.ProviderFactory
 
 class DetektPlugin : Plugin<Project> {
@@ -132,13 +136,30 @@ class DetektPlugin : Plugin<Project> {
                 val version = extension.toolVersion.get()
                 dependencySet.add(project.dependencies.create("dev.detekt:detekt-cli:$version"))
             }
+
+            configuration.attributes {
+                it.attribute(Category.CATEGORY_ATTRIBUTE, project.objects.named(Category::class.java, Category.LIBRARY))
+                it.attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage::class.java, Usage.JAVA_RUNTIME))
+                it.attribute(
+                    Bundling.BUNDLING_ATTRIBUTE,
+                    project.objects.named(Bundling::class.java, Bundling.EXTERNAL)
+                )
+                it.attribute(
+                    LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
+                    project.objects.named(LibraryElements::class.java, LibraryElements.JAR)
+                )
+                it.attribute(
+                    TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE,
+                    project.objects.named(TargetJvmEnvironment::class.java, TargetJvmEnvironment.STANDARD_JVM)
+                )
+            }
         }
     }
 
     private fun setTaskDefaults(project: Project, extension: DetektExtension) {
         project.tasks.withType(Detekt::class.java).configureEach { task ->
-            task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
-            task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
+            task.detektClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT))
+            task.pluginClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
             val reportName = if (task.name.startsWith(DETEKT_TASK_NAME) && task.name != DETEKT_TASK_NAME) {
                 task.name.removePrefix(DETEKT_TASK_NAME).replaceFirstChar { it.lowercase() }
             } else {
@@ -163,13 +184,13 @@ class DetektPlugin : Plugin<Project> {
         }
 
         project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach { task ->
-            task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
-            task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
+            task.detektClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT))
+            task.pluginClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
         }
 
         project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach { task ->
-            task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
-            task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
+            task.detektClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT))
+            task.pluginClasspath.convention(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
         }
     }
 

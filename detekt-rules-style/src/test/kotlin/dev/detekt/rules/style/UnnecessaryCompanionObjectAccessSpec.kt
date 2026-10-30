@@ -206,6 +206,106 @@ class UnnecessaryCompanionObjectAccessSpec(val env: KotlinEnvironmentContainer) 
 
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
+
+        @Test
+        fun `does not report implicit companion access on nested interface`() {
+            val code = """
+                class Outer {
+                    class Inner {
+                        companion object {
+                            fun foo() = 1
+                        }
+                    }
+                }
+
+                fun main() {
+                    val output = Outer.Inner.foo()
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report nested class named Companion that has its own companion`() {
+            val code = """
+                class Outer {
+                    class Companion {
+                        companion object {
+                            fun foo() = 1
+                        }
+                    }
+                }
+
+                fun test() {
+                    Outer.Companion.foo()
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports explicit Companion when outer class also has a companion`() {
+            val code = """
+                class Outer {
+                    companion object
+                    class Inner {
+                        companion object {
+                            fun foo() = 1
+                        }
+                    }
+                }
+
+                fun test() {
+                    Outer.Inner.Companion.foo()
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `qualified receivers` {
+
+        @Test
+        fun `does not report fully qualified class with companion`() {
+            val code = """
+                package com.example
+
+                class Outer {
+                    companion object {
+                        fun foo() = 1
+                    }
+                }
+
+                fun test() {
+                    com.example.Outer.foo()
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports explicit Companion on fully qualified class`() {
+            val code = """
+                package com.example
+
+                class Outer {
+                    companion object {
+                        fun foo() = 1
+                    }
+                }
+
+                fun test() {
+                    com.example.Outer.Companion.foo()
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
     }
 
     @Nested

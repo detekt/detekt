@@ -95,7 +95,7 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
         return EditorConfig(properties)
     }
 
-    private fun emitFinding(offset: Int, message: String, canBeAutoCorrected: Boolean, node: ASTNode) {
+    private fun emitFinding(offset: Int, message: String, canBeAutoCorrected: Boolean) {
         // Always convert KtLint offsets to lines/columns.
         // The node used to report the finding may be not the same used for the offset (e.g. in NoUnusedImports).
         val (line, column) = positionByOffset(offset)
@@ -106,7 +106,8 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
             text = TextLocation(offset, offset + 1),
             path = originalFilePath
         )
-        val entity = Entity.from(node.psi, location)
+        val psiElementAtOffset = checkNotNull(root.findElementAt(offset))
+        val entity = Entity.from(psiElementAtOffset, location)
 
         if (canBeAutoCorrected && autoCorrect) {
             report(Finding(entity, message, suppressReasons = listOf("Auto correct")))
@@ -117,14 +118,14 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
 
     private fun beforeVisitChildNodes(node: ASTNode) {
         wrapping.beforeVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
-            emitFinding(offset, errorMessage, canBeAutoCorrected, node)
+            emitFinding(offset, errorMessage, canBeAutoCorrected)
             if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
         }
     }
 
     private fun afterVisitChildNodes(node: ASTNode) {
         wrapping.afterVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
-            emitFinding(offset, errorMessage, canBeAutoCorrected, node)
+            emitFinding(offset, errorMessage, canBeAutoCorrected)
             if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
         }
     }
