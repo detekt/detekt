@@ -101,6 +101,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 ::DoubleNegativeLambda,
                 ::DoubleNegativeExpression,
                 ::UnnecessaryFullyQualifiedName,
+                ::UseContextSensitiveResolution,
             )
         )
 }
