@@ -355,7 +355,7 @@ class YamlConfigSpec {
                             "throws IllegalArgumentException because class ${testCase.name} cannot be cast to $key"
                         ) {
                             assertThatIllegalArgumentException()
-                                .isThrownBy { testCase.read(config, key) }
+                                .isThrownBy { val _ = testCase.read(config, key) }
                                 .withMessage(
                                     """Value "$value" set for config parameter "$key" is not of required type `${testCase.name}`"""
                                 )
