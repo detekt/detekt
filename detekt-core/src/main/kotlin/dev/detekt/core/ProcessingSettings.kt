@@ -63,12 +63,10 @@ class ProcessingSettings private constructor(
 
 private fun ConfigSpec.extractUris(): Collection<URI> {
     fun initFileSystem(uri: URI) {
-        runCatching {
-            try {
-                FileSystems.getFileSystem(uri)
-            } catch (_: FileSystemNotFoundException) {
-                FileSystems.newFileSystem(uri, mapOf("create" to "true"))
-            }
+        try {
+            FileSystems.getFileSystem(uri)
+        } catch (_: FileSystemNotFoundException) {
+            FileSystems.newFileSystem(uri, mapOf("create" to "true"))
         }
     }
 

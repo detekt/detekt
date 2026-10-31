@@ -45,10 +45,10 @@ class BaselineFormatSpec {
             val (manuallySuppressedIssues, currentIssues) = BaselineFormat().read(path)
 
             assertThat(manuallySuppressedIssues).hasSize(2)
-            assertThat(manuallySuppressedIssues).anySatisfy { it.startsWith("LongParameterList") }
-            assertThat(manuallySuppressedIssues).anySatisfy { it.startsWith("LongMethod") }
+            assertThat(manuallySuppressedIssues).anyMatch { it.startsWith("LongParameterList") }
+            assertThat(manuallySuppressedIssues).anyMatch { it.startsWith("LongMethod") }
             assertThat(currentIssues).hasSize(1)
-            assertThat(currentIssues).anySatisfy { it.startsWith("FeatureEnvy") }
+            assertThat(currentIssues).anyMatch { it.startsWith("FeatureEnvy") }
         }
 
         @Test
