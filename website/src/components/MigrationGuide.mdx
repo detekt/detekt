@@ -25,15 +25,12 @@ search-and-replace; the only conceptually new piece is the Analysis API for rule
 
 | Tool                  | detekt 1.23.x | detekt 2.0.x |
 |-----------------------|---------------|--------------|
+| JDK (to run detekt)   | 8             | 17           |
 | Gradle                | 6.8.3         | 8.14         |
 | Android Gradle Plugin | 4.x           | 8.8.2        |
 
 detekt itself is built and tested against the latest JDK 25, Kotlin 2.4, Gradle 9.x and AGP 9.x.
 See the [compatibility table](/docs/introduction/compatibility) for the exact versions each release was built with.
-
-Most detekt artifacts still target JVM 8 bytecode, with one exception:
-`detekt-rules-ktlint-wrapper` targets **JVM 17**, in preparation for the next ktlint major release.
-If you use the ktlint wrapper, detekt must run on JDK 17 or newer.
 
 ### Gradle plugin IDs
 
