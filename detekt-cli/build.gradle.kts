@@ -96,17 +96,33 @@ tasks {
         args = listOf("--help")
     }
 
-    val runWithArgsFile = register<JavaExec>("runWithArgsFile") {
-        // The task generating these jar files run first.
-        inputs.files(pluginsJarFiles)
-        doNotTrackState("The entire root directory is read as the input source.")
-        classpath = files(shadowJar)
-        workingDir = rootDir
-        args = listOf(
-            "@./config/detekt/argsfile",
-            "-p",
-            pluginsJarFiles.get().files.joinToString(File.pathSeparator) { it.path },
-        )
+    val isCiBuild = providers.environmentVariable("CI")
+    val jvms = listOf(null, 17, 21, 25)
+
+    jvms.forEach { jvm ->
+        val runWithArgsFile = register<JavaExec>(if (jvm == null) "runWithArgsFile" else "runWithArgsFileJvm$jvm") {
+            // The task generating these jar files run first.
+            inputs.files(pluginsJarFiles)
+            doNotTrackState("The entire root directory is read as the input source.")
+            classpath = files(shadowJar)
+            workingDir = rootDir
+            args = listOf(
+                "@./config/detekt/argsfile",
+                "-p",
+                pluginsJarFiles.get().files.joinToString(File.pathSeparator) { it.path },
+            )
+            if (jvm != null) {
+                javaLauncher.set(
+                    project.extensions.getByType<JavaToolchainService>().launcherFor {
+                        languageVersion.set(JavaLanguageVersion.of(jvm))
+                    }
+                )
+            }
+        }
+
+        if ((jvm == null) xor isCiBuild.isPresent) {
+            check { dependsOn(runWithArgsFile) }
+        }
     }
 
     withType<Jar>().configureEach {
@@ -116,9 +132,7 @@ tasks {
         }
     }
 
-    check {
-        dependsOn(runWithHelpFlag, runWithArgsFile)
-    }
+    check { dependsOn(runWithHelpFlag) }
 }
 
 val shadowDist = configurations.consumable("shadowDist")
