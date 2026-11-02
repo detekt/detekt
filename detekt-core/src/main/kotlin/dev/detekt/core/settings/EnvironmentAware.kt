@@ -54,7 +54,13 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
         compilerSpec.jdkHome,
         compilerSpec.freeCompilerArgs,
         printStream,
-    )
+    ).also {
+        if (loggingSpec.debug) {
+            println("==== Compiler configuration ====================================================")
+            println(it.toString())
+            println("================================================================================")
+        }
+    }
 
     private val disposable: Disposable = Disposer.newDisposable()
 
