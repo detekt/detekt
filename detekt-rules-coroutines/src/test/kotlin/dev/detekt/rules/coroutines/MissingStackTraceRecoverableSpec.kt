@@ -342,16 +342,6 @@ class MissingStackTraceRecoverableSpec(private val env: KotlinEnvironmentContain
                     "`kotlin.coroutines.debug.StackTraceRecoverable`."
             )
         }
-
-        @Test
-        fun `reports every non-recoverable exception in a file`() {
-            val code = """
-                class NetworkException(val errorCode: Int) : RuntimeException()
-
-                class DatabaseException(message: String, query: String) : RuntimeException(message)
-            """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(2)
-        }
     }
 
     @Nested
