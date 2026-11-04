@@ -26,7 +26,14 @@ internal class WrapperSmokeTestSpec {
     fun ktlintRules(): List<KtlintRule> =
         ClassGraph()
             .acceptPackages("dev.detekt.rules.ktlintwrapper.wrappers")
+            .enableClassInfo()
+            .enableClasspath()
             .scan()
-            .use { scanResult -> scanResult.getSubclasses(KtlintRule::class.java).loadClasses() }
-            .map { it.getDeclaredConstructor(Config::class.java).newInstance(Config.empty) as KtlintRule }
+            .use { scanResult -> scanResult.getAllSubclasses(KtlintRule::class.java) }
+            .map { classInfo ->
+                Class.forName(classInfo.getName())
+                    .getConstructor(Config::class.java)
+                    .newInstance(Config.empty)
+                    as KtlintRule
+            }
 }

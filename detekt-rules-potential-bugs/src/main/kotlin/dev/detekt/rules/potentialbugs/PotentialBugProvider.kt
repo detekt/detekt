@@ -22,6 +22,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 ::ElseCaseInsteadOfExhaustiveWhen,
                 ::EqualsAlwaysReturnsTrueOrFalse,
                 ::EqualsWithHashCodeExist,
+                ::EqualsWithHashCodeUseSameFields,
                 ::ExitOutsideMain,
                 ::ExplicitGarbageCollectionCall,
                 ::HasPlatformType,
@@ -49,6 +50,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 ::UnusedUnaryOperator,
                 ::PropertyUsedBeforeDeclaration,
                 ::MissingSuperCall,
+                ::IgnoredJavaDefaultMethod,
             )
         )
 }

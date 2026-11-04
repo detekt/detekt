@@ -42,12 +42,12 @@ import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
 import org.jetbrains.kotlin.psi.psiUtil.parents
-import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
@@ -155,14 +155,11 @@ class MissingUseCall(config: Config) :
     private fun shouldReport(expression: KtExpression): Boolean {
         val expressionParent = getParentChainExpression(expression) ?: return false
 
-        if (expressionParent.parent is KtProperty) {
-            val property = expressionParent.parent as KtProperty
-            if (property.parent is KtClassBody) {
-                return false
-            }
-        }
+        val isIgnoredProperty = (expressionParent.parent as? KtProperty)?.let {
+            it.parent is KtClassBody || isPropertyUsedWithUse(it)
+        } ?: false
 
-        return when {
+        return !isIgnoredProperty && when {
             expressionParent is KtQualifiedExpression -> {
                 expressionParent.doesEndWithUse().not() &&
                     expressionParent.firstCallableReceiverOrNull().isCloseableNotUsed()
@@ -178,10 +175,6 @@ class MissingUseCall(config: Config) :
 
             isParamForClosableOrFunReturningClosable(expression) -> {
                 false
-            }
-
-            expressionParent is KtProperty -> {
-                traversedParentExpression.contains(expressionParent.children.getOrNull(0)).not()
             }
 
             else -> {
@@ -230,6 +223,26 @@ class MissingUseCall(config: Config) :
     }
 
     context(_: KaSession)
+    private fun isPropertyUsedWithUse(property: KtProperty): Boolean {
+        val propertyName = property.name ?: return false
+        return property.siblings(forward = true, withItself = false)
+            .filter { it.text.isNotBlank() }
+            .mapNotNull { extractQualifiedExpression(it) }
+            .filter { it.doesEndWithUse() }
+            .any { KtPsiUtil.safeDeparenthesize(it.receiverExpression).text == propertyName }
+    }
+
+    private fun extractQualifiedExpression(element: PsiElement): KtQualifiedExpression? {
+        val deparenthesized = if (element is KtExpression) KtPsiUtil.safeDeparenthesize(element) else element
+        return when (deparenthesized) {
+            is KtQualifiedExpression -> deparenthesized
+            is KtReturnExpression -> deparenthesized.returnedExpression?.let { extractQualifiedExpression(it) }
+            is KtProperty -> deparenthesized.initializer?.let { extractQualifiedExpression(it) }
+            else -> null
+        }
+    }
+
+    context(_: KaSession)
     private fun isExpressionUsedOnSameOrNextLine(expression: KtExpression): Boolean {
         val parent = expression.getParentOfTypes(
             true,
@@ -243,16 +256,7 @@ class MissingUseCall(config: Config) :
             }
 
             is KtProperty -> {
-                parent.siblings(forward = true, withItself = false).filter {
-                    it.text.isNotBlank()
-                }.mapNotNull {
-                    it.parentsWithSelf
-                        .firstOrNull { element -> element !is KtParenthesizedExpression } as? KtQualifiedExpression
-                }.filter {
-                    it.doesEndWithUse()
-                }.any {
-                    it.receiverExpression.text == parent.name
-                }
+                isPropertyUsedWithUse(parent)
             }
 
             else -> {

@@ -43,6 +43,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 ::ForbiddenMethodCall,
                 ::ForbiddenNamedParam,
                 ::ForbiddenOptIn,
+                ::ForbiddenSuperclass,
                 ::ForbiddenSuppress,
                 ::FunctionOnlyReturningConstant,
                 ::SpacingAfterPackageAndImports,

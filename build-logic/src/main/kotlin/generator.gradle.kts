@@ -43,8 +43,14 @@ project.plugins.withId("org.jetbrains.kotlin.jvm") {
         }
     }
 
+    val extension = project.extensions.create<DetektGeneratorExtension>("detektGeneratorConfig").apply {
+        addConfigToResources.convention(true)
+    }
+
     val copyConfigToResources = tasks.register<Copy>("copyConfigToResources") {
-        from(generateConfig)
+        onlyIf { extension.addConfigToResources.get() }
+        dependsOn(generateConfig)
+        from(configDir)
         into(mainSourceSet.resources.srcDirs.single().resolve("config"))
         include("config.yml")
     }
@@ -63,10 +69,6 @@ project.plugins.withId("org.jetbrains.kotlin.jvm") {
         add(generatedDocumentation.name, documentationDir) {
             builtBy(generateConfig)
         }
-    }
-
-    val extension = project.extensions.create<DetektGeneratorExtension>("detektGeneratorConfig").apply {
-        addConfigToResources.convention(true)
     }
 
     if (extension.addConfigToResources.get()) {

@@ -9,9 +9,9 @@
 - Make sure your IDE uses [ktlint](https://github.com/pinterest/ktlint) formatting rules as well
   as the settings in [.editorconfig](../.editorconfig).
 - We use [JUnit 5](https://junit.org/junit5/docs/current/user-guide/) for testing. Please use the `Spec.kt` suffix on
-  new test classes. If your new rule requires type resolution (i.e. it utilises `BindingContext`) then annotate your
-  test class with `@KotlinCoreEnvironmentTest` and have the test class accept `KotlinCoreEnvironment` as a parameter.
-  See "Testing a rule that uses type resolution" section of the [Using Type Resolution](../website/docs/gettingstarted/type-resolution.md)
+  new test classes. If your new rule requires type resolution (i.e. it implements `RequiresAnalysisApi`) then annotate
+  your test class with `@KotlinCoreEnvironmentTest` and have the test class accept `KotlinEnvironmentContainer` as a
+  parameter. See "Testing a rule that uses type resolution" section of the [Using Type Resolution](../website/docs/gettingstarted/type-resolution.mdx)
   guide for details.
 - The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on these modules.
 - If some Kotlin code in `resources` folder (like `detekt-rules-ktlint-wrapper`) shows a compilation error, right click on it and use `Mark as plain text`.
@@ -57,7 +57,9 @@ of descriptions, respectively.
 
 ```kotlin
 @ActiveByDefault(since = "1.0.0")
-class SomeRule(config: Config) : Rule(config), RequiresFullAnalysis {
+class SomeRule(config: Config) :
+    Rule(config, "This is the description of what the rule reports."),
+    RequiresAnalysisApi {
 
     @Configuration("This is the description for the configuration parameter below.")
     private val name: String by config(default = "whatever should be the default")
@@ -75,8 +77,8 @@ delegate (and vice versa).
 Rules annotated with `@ActiveByDefault` will be marked as active in the `default-detekt-config.yml`.
 Generally, this will not be the case for new rules.
 
-A rule that requires type resolution must implements `RequiresFullAnalysis`.
-See [the type resolution wiki page](../website/docs/gettingstarted/type-resolution.md) for
+A rule that requires type resolution must implement `RequiresAnalysisApi`.
+See [the type resolution wiki page](../website/docs/gettingstarted/type-resolution.mdx) for
 more detail on this topic.
 
 The rule defined above will translate to a rule entry in the `default-detekt-config.yml`:
@@ -96,18 +98,18 @@ types of descriptions:
    with built-in rules are automatically pulled from the detekt codebase and
    used to generate the rule set overview available on the
    [detekt website](https://detekt.dev).
-2. **Issue description**: The issue description gives a summary of the code
+2. **Rule description**: The rule description gives a summary of the code
    smells that the respective rule is supposed to detect. From an implementation
    point of view, it is the string that `Rule` subclasses pass to the
-   `description` parameter of the [`Issue` class][1]. In generated reports, the
-   issue description is often used to introduce a list of findings that the
+   `description` parameter of the [`Rule` constructor][1]. In generated reports, the
+   rule description is often used to introduce a list of findings that the
    respective rule has identified.
 3. **Finding messages**: A finding message is issued for every code
    smell (or *violation*) identified within the codebase. Implementation-wise,
    such a message is dynamically created during the construction of a
    [`Finding` instance][2]. In generated reports, these messages are listed
-   underneath the issue description. Built-in console reports such as
-   `LiteFindingsReport` use these messages to display identified findings to
+   underneath the rule description. Built-in console reports such as
+   `LiteIssuesReport` use these messages to display identified findings to
    the user.
 
 It is important that you provide a documentation string, an issue description,
@@ -331,8 +333,8 @@ You must follow the steps below:
 
 More information on this process could be found on the [official Develocity documentation][8].
 
-[1]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Issue.kt
-[2]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Finding.kt
+[1]: https://github.com/detekt/detekt/blob/main/detekt-api/src/main/kotlin/dev/detekt/api/Rule.kt
+[2]: https://github.com/detekt/detekt/blob/main/detekt-api/src/main/kotlin/dev/detekt/api/Finding.kt
 [3]: https://kotlinlang.org/docs/kotlin-doc.html
 [4]: https://daringfireball.net/projects/markdown/syntax
 [5]: https://kotlinlang.org/docs/functions.html#named-arguments

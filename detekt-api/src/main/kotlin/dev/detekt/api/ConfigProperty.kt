@@ -129,7 +129,7 @@ private fun Config.getValuesWithReasonOrDefault(
 internal class InvalidConfigurationError(throwable: Throwable) :
     RuntimeException(
         """
-            Provided configuration file is invalid: Structure must be from type Map<String,Any>!
+            Provided configuration file is invalid: Structure must be of type Map<String,Any>!
             ${throwable.message}
         """.trimIndent(),
         throwable,

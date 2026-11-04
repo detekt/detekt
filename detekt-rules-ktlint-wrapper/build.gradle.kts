@@ -35,6 +35,7 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
     testImplementation(libs.classgraph)
+    testImplementation(libs.snakeyaml.engine)
 
     testRuntimeOnly(libs.slf4j.nop)
     testCompileOnly(libs.jetbrains.annotations)
@@ -49,11 +50,6 @@ tasks.jar {
         ktlintToBundle.get().map { zipTree(it) },
         extraDepsToPackage.get().map { zipTree(it) },
     )
-}
-
-tapmoc {
-    @Suppress("MagicNumber")
-    java(17)
 }
 
 tasks.named("generateConfig") {

@@ -8,7 +8,6 @@ import dev.detekt.api.internal.DefaultRuleSetProvider
 import io.github.classgraph.ClassGraph
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
-import java.lang.reflect.Modifier
 
 class ConfigAssert(private val config: Config, private val name: String, private val packageName: String) {
     private val allowedOptions = setOf(
@@ -25,19 +24,18 @@ class ConfigAssert(private val config: Config, private val name: String, private
 
         checkRulesDefinedByRuleSetProvider()
 
-        val ruleClasses = getRuleClassesInPackage()
-        val foundRulesClassNames = ruleClasses.map { it.simpleName }
+        val ruleClassNames = getRuleClassNamesInPackage()
         val ruleNamesInConfig = ymlDeclarations.keys
-        assertThat(foundRulesClassNames).containsExactlyInAnyOrderElementsOf(ruleNamesInConfig)
+        assertThat(ruleClassNames).containsExactlyInAnyOrderElementsOf(ruleNamesInConfig)
 
-        checkRules(ruleClasses, ymlDeclarations)
+        checkRules(ruleClassNames, ymlDeclarations)
     }
 
-    private fun checkRules(ruleClasses: List<Class<out Rule>>, ymlDeclarations: Map<String, Any>) {
-        for (ruleClass in ruleClasses) {
-            val ymlDeclaration = ymlDeclarations.filter { it.key == ruleClass.simpleName }
+    private fun checkRules(ruleClassNames: List<String>, ymlDeclarations: Map<String, Any>) {
+        for (ruleClassName in ruleClassNames) {
+            val ymlDeclaration = ymlDeclarations.filter { it.key == ruleClassName }
             if (ymlDeclaration.keys.size != 1) {
-                fail<String>("${ruleClass.simpleName} rule is not correctly defined in detekt-default-config.yml")
+                fail<String>("$ruleClassName rule is not correctly defined in detekt-default-config.yml")
             }
         }
     }
@@ -65,26 +63,22 @@ class ConfigAssert(private val config: Config, private val name: String, private
 
     private fun getRuleSetProviderInPackageOrNull(): RuleSetProvider? =
         ClassGraph()
+            .enableClasspath()
+            .enableClassInfo()
             .acceptPackages(packageName)
             .scan()
-            .use { scanResult ->
-                scanResult.getClassesImplementing(DefaultRuleSetProvider::class.java)
-                    .loadClasses(DefaultRuleSetProvider::class.java)
-                    .firstOrNull()
-                    ?.getDeclaredConstructor()
-                    ?.newInstance()
-            }
+            .use { scanResult -> scanResult.getAllClassesImplementing(DefaultRuleSetProvider::class.java) }
+            .map { classInfo -> Class.forName(classInfo.getName()).getConstructor().newInstance() as? RuleSetProvider }
+            .singleOrNull()
 
-    private fun getRuleClassesInPackage(): List<Class<out Rule>> =
+    private fun getRuleClassNamesInPackage(): List<String> =
         ClassGraph()
+            .enableClasspath()
+            .enableClassInfo()
+            .enableAnnotationInfo()
             .acceptPackages(packageName)
             .scan()
-            .use { scanResult ->
-                scanResult.getSubclasses(Rule::class.java)
-                    .loadClasses(Rule::class.java)
-                    .filter { rule ->
-                        !Modifier.isAbstract(rule.modifiers) &&
-                            rule.annotations.none { it.annotationClass == Deprecated::class }
-                    }
-            }
+            .use { scanResult -> scanResult.getAllSubclasses(Rule::class.java) }
+            .filter { rule -> !(rule.isAbstract || rule.hasAnnotation(Deprecated::class.java)) }
+            .map { it.simpleName }
 }

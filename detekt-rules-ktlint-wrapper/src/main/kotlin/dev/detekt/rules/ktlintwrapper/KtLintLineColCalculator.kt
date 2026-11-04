@@ -47,10 +47,7 @@ object KtLintLineColCalculator {
 
         init {
             require(sortedArray.size > 1) { "At least two data points are required" }
-            sortedArray.reduce { current, next ->
-                require(current <= next) { "Data points are not sorted (ASC)" }
-                next
-            }
+            require(sortedArray.isSorted()) { "Data points are not sorted (ASC)" }
         }
 
         private val segments: List<Segment> = sortedArray

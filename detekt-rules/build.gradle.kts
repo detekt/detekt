@@ -22,7 +22,7 @@ dependencies {
     testImplementation(projects.detektRulesExceptions)
     testImplementation(projects.detektRulesNaming)
     testImplementation(projects.detektRulesPerformance)
-    testRuntimeOnly(projects.detektRulesStandardLibrary)
+    testImplementation(projects.detektRulesStandardLibrary)
     testImplementation(projects.detektRulesStyle)
     testImplementation(libs.assertj.core)
     testImplementation(libs.classgraph)

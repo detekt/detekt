@@ -3,7 +3,6 @@ package dev.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class OneTopLevelClassOrObjectPerFileSpec {

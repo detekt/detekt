@@ -9,11 +9,13 @@ import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedClassSymbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtConstructorCalleeExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPackageDirective
@@ -92,6 +94,10 @@ class UnnecessaryCompanionObjectAccess(config: Config) :
         analyze(companionNameRef) {
             val companionSymbol = companionNameRef.resolveSymbol() as? KaClassSymbol ?: return@analyze
             if (companionSymbol.classKind != KaClassKind.COMPANION_OBJECT) return@analyze
+            if (companionSymbol.name?.asString() != companionNameRef.getReferencedName()) return@analyze
+            val ownerSymbol = companionSymbol.containingSymbol as? KaNamedClassSymbol ?: return@analyze
+            val receiverSymbol = companionQualifier.receiverExpression.lastNameReference()?.resolveSymbol()
+            if (receiverSymbol != ownerSymbol && receiverSymbol != ownerSymbol.companionObject) return@analyze
 
             fun reportRedundantDotAccess(outer: KtDotQualifiedExpression) {
                 if (outer.receiverExpression != companionQualifier) return
@@ -138,6 +144,13 @@ class UnnecessaryCompanionObjectAccess(config: Config) :
             else -> null
         }
     }
+
+    private fun KtExpression.lastNameReference(): KtNameReferenceExpression? =
+        when (this) {
+            is KtNameReferenceExpression -> this
+            is KtDotQualifiedExpression -> selectorExpression as? KtNameReferenceExpression
+            else -> null
+        }
 
     private fun KtCallExpression.calleeNameReference(): KtNameReferenceExpression? =
         when (val callee = calleeExpression) {

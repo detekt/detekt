@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    id("com.gradleup.tapmoc") version "0.4.2"
+    id("com.gradleup.tapmoc") version "0.5.0"
 }
 
 dependencies {

@@ -12,6 +12,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
+import dev.detekt.psi.isActual
 import dev.detekt.psi.isExpect
 import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
@@ -27,6 +28,7 @@ import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -174,25 +176,60 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
                 else -> return
             }
 
-            references
+            // The analysis API sometimes fails to resolve a reference to a private property declared in an
+            // `actual` class that has a same-named `expect` declaration in the same file (KMP). In that case
+            // `resolveSymbol()` returns null and the property would be wrongly reported as unused, so fall back
+            // to resolving by name against the declarations in the enclosing classes.
+            val fallback = if (references.isEmpty() && expression is KtNameReferenceExpression) {
+                expression.resolveToPropertyByName()
+            } else {
+                emptyList()
+            }
+
+            val usedElements = references
                 .filter { it.isPrivateProperty() || it.isConstructorParameter() }
-                .forEach {
-                    val psi = it.psi ?: return@forEach
-                    when {
-                        psi is KtProperty && psi.isTopLevel -> usedTopLevelProperties.add(psi)
+                .mapNotNull { it.psi } + fallback
 
-                        psi is KtProperty -> usedClassProperties.add(psi)
+            usedElements.forEach { psi ->
+                when {
+                    psi is KtProperty && psi.isTopLevel -> usedTopLevelProperties.add(psi)
 
-                        psi is KtParameter && psi.hasValOrVar() -> {
-                            if (!expression.isInPropertyInitializer(psi)) {
-                                usedClassProperties.add(psi)
-                            } else {
-                                usedConstructorParameters.add(psi)
-                            }
+                    psi is KtProperty -> usedClassProperties.add(psi)
+
+                    psi is KtParameter && psi.hasValOrVar() -> {
+                        if (!expression.isInPropertyInitializer(psi)) {
+                            usedClassProperties.add(psi)
+                        } else {
+                            usedConstructorParameters.add(psi)
                         }
                     }
                 }
+            }
         }
+    }
+
+    /**
+     * Fallback used when the analysis API cannot resolve a name reference (e.g. a private property of an
+     * `actual` class shadowed by a same-named `expect` declaration). Returns the private property or
+     * constructor property parameter declared in one of the enclosing classes whose name matches.
+     */
+    private fun KtNameReferenceExpression.resolveToPropertyByName(): List<PsiElement> {
+        val name = getReferencedName()
+        if (name.isEmpty()) return emptyList()
+
+        val result = mutableListOf<PsiElement>()
+        var klass: KtClassOrObject? = getStrictParentOfType<KtClassOrObject>()
+        while (klass != null) {
+            if (klass.isActual()) {
+                val declarations: List<KtNamedDeclaration> =
+                    klass.body?.properties.orEmpty() + klass.primaryConstructor?.valueParameters.orEmpty()
+                declarations
+                    .filter { it.isPrivate() && it.nameAsSafeName.identifier == name }
+                    .forEach { result.add(it) }
+            }
+            klass = klass.getStrictParentOfType<KtClassOrObject>()
+        }
+        return result
     }
 
     private fun KtReferenceExpression.isInPropertyInitializer(parameter: KtParameter): Boolean {

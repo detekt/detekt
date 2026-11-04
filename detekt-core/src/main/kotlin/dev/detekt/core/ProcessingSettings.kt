@@ -16,8 +16,6 @@ import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.jetbrains.kotlin.utils.closeQuietly
 import java.net.URI
 import java.net.URL
-import java.nio.file.FileSystemNotFoundException
-import java.nio.file.FileSystems
 import java.nio.file.Path
 
 /**
@@ -61,19 +59,4 @@ class ProcessingSettings private constructor(
     }
 }
 
-private fun ConfigSpec.extractUris(): Collection<URI> {
-    fun initFileSystem(uri: URI) {
-        runCatching {
-            try {
-                FileSystems.getFileSystem(uri)
-            } catch (_: FileSystemNotFoundException) {
-                FileSystems.newFileSystem(uri, mapOf("create" to "true"))
-            }
-        }
-    }
-
-    val pathUris = configPaths.map(Path::toUri)
-    val resourceUris = resources.map(URL::toURI)
-    resourceUris.forEach(::initFileSystem)
-    return resourceUris + pathUris
-}
+private fun ConfigSpec.extractUris(): Collection<URI> = configPaths.map(Path::toUri) + resources.map(URL::toURI)
