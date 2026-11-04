@@ -23,7 +23,7 @@ dependencies {
     implementation(projects.detektUtils)
     implementation(libs.kotlin.compiler) {
         version {
-            strictly(libs.versions.kotlin.get())
+            strictly(libs.versions.kotlin.analysisApi.get())
         }
     }
     runtimeOnly(projects.detektCore)
