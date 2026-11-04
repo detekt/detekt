@@ -3,7 +3,7 @@ agp = "9.5.0"
 coroutines = "1.11.0"
 jacoco = "0.8.16"
 junit = "6.1.3"
-kotlin = "2.4.10"
+kotlin-analysisApi = "2.4.10"
 ktlint = "1.8.0"
 slf4j = "2.0.20"
 
@@ -49,9 +49,9 @@ classgraph = { module = "io.github.classgraph:classgraph", version = "5.0.1" }
 jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
 # Version must align to dependency used by Kotlin on compile classpath due to our use of Gradle's consistent resolution
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }
-kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }
-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
-kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }
+kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin-analysisApi" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin-analysisApi" }
+kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin-analysisApi" }
 kotlinx-serializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version = "1.12.0" }
 kotlinx-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version = "0.12.0" }
@@ -65,13 +65,13 @@ slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version = "3.2" }
 
 # Kotlin Analysis API artifacts
-kotlin-analysisApiPlatformInterface = { module = "org.jetbrains.kotlin:analysis-api-platform-interface-for-ide", version.ref = "kotlin" }
-kotlin-analysisApiK2 = { module = "org.jetbrains.kotlin:analysis-api-k2-for-ide", version.ref = "kotlin" }
-kotlin-analysisApi = { module = "org.jetbrains.kotlin:analysis-api-for-ide", version.ref = "kotlin" }
-kotlin-analysisApiStandalone = { module = "org.jetbrains.kotlin:analysis-api-standalone-for-ide", version.ref = "kotlin" }
-kotlin-lowLevelApiFir = { module = "org.jetbrains.kotlin:low-level-api-fir-for-ide", version.ref = "kotlin" }
-kotlin-symbolLightClasses = { module = "org.jetbrains.kotlin:symbol-light-classes-for-ide", version.ref = "kotlin" }
-kotlin-analysisApiImplBase = { module = "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", version.ref = "kotlin" }
+kotlin-analysisApiPlatformInterface = { module = "org.jetbrains.kotlin:analysis-api-platform-interface-for-ide", version.ref = "kotlin-analysisApi" }
+kotlin-analysisApiK2 = { module = "org.jetbrains.kotlin:analysis-api-k2-for-ide", version.ref = "kotlin-analysisApi" }
+kotlin-analysisApi = { module = "org.jetbrains.kotlin:analysis-api-for-ide", version.ref = "kotlin-analysisApi" }
+kotlin-analysisApiStandalone = { module = "org.jetbrains.kotlin:analysis-api-standalone-for-ide", version.ref = "kotlin-analysisApi" }
+kotlin-lowLevelApiFir = { module = "org.jetbrains.kotlin:low-level-api-fir-for-ide", version.ref = "kotlin-analysisApi" }
+kotlin-symbolLightClasses = { module = "org.jetbrains.kotlin:symbol-light-classes-for-ide", version.ref = "kotlin-analysisApi" }
+kotlin-analysisApiImplBase = { module = "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", version.ref = "kotlin-analysisApi" }
 # Should be possible to remove when https://youtrack.jetbrains.com/issue/KT-81457 fixed
 kotlinx-coroutinesCore-intellij = { module = "org.jetbrains.intellij.deps.kotlinx:kotlinx-coroutines-core", version = "1.11.0-intellij-1" }
 # Can likely be removed in future - https://youtrack.jetbrains.com/issue/KT-73751/Analysis-API-Caffeine-dependency
