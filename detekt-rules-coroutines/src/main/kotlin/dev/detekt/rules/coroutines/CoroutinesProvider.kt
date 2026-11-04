@@ -20,6 +20,7 @@ class CoroutinesProvider : DefaultRuleSetProvider {
                 ::CoroutineLaunchedInTestWithoutRunTest,
                 ::GlobalCoroutineUsage,
                 ::InjectDispatcher,
+                ::MissingStackTraceRecoverable,
                 ::RedundantSuspendModifier,
                 ::SleepInsteadOfDelay,
                 ::SuspendFunWithFlowReturnType,
