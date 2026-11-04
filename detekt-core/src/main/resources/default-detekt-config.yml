@@ -690,6 +690,9 @@ style:
   ForbiddenOptIn:
     active: false
     markerClasses: []
+  ForbiddenSuperclass:
+    active: false
+    parentClasses: []
   ForbiddenSuppress:
     active: false
     rules: []
