@@ -13,7 +13,7 @@ slf4j = "2.0.20"
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 android-gradle-builtInKotlin-plugin = { module = "com.android.built-in-kotlin:com.android.built-in-kotlin.gradle.plugin", version.ref = "agp" }
 develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.6.1" }
-dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.2.0" }
+dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.3.0" }
 vanniktech-mavenPublish-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.37.0" }
 # KGP version is decoupled from the Analysis API version and can be updated independently.
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version = "2.4.21" }
