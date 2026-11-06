@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -265,6 +266,41 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             languageVersionSettings = languageVersionSettings,
         )
         assertThat(actual).isEmpty()
+    }
+
+    @Nested
+    @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
+    inner class `Java sources`(val env: KotlinEnvironmentContainer) {
+        private val subject = NullableToStringCall(Config.empty)
+
+        // https://github.com/detekt/detekt/issues/9074
+        @Test
+        fun `does not report when a platform type toString is called safely`() {
+            val code = """
+                import com.example.nullable_to_string.GradleProject
+                
+                fun test(project: GradleProject): Boolean {
+                    val verbose = project.getProperty("verbose")?.toString()
+                    return project.getProperty("verbose")?.toString().toBoolean()
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).isEmpty()
+        }
+
+        @Test
+        fun `reports when a platform type toString is called without safe call`() {
+            val code = """
+                import com.example.nullable_to_string.GradleProject
+                
+                fun test(project: GradleProject) {
+                    val verbose = project.getProperty("verbose").toString()
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).singleElement()
+                .hasMessage("""This call 'project.getProperty("verbose").toString()' may return the string "null".""")
+        }
     }
 
     companion object {

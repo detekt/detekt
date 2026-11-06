@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds.BASE_KOTLIN_PACKAGE
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
@@ -56,7 +57,13 @@ class NullableToStringCall(config: Config) :
         val stringTemplateEntry = (qualifiedExpression ?: callExpression ?: expression).parent as? KtStringTemplateEntry
 
         when {
-            callExpression?.calls(toString) == true -> report(qualifiedExpression ?: callExpression)
+            // A safe call like `a?.toString()` never returns the string "null" (it returns null or a
+            // non-null String), so it is never a finding. With platform type receivers, e.g. from an
+            // unannotated Java method, `a?.toString()` resolves to the `Any?.toString()` extension
+            // even though the safe call already handles nullability. (#9074)
+            qualifiedExpression !is KtSafeQualifiedExpression && callExpression?.calls(toString) == true ->
+                report(qualifiedExpression ?: callExpression)
+
             stringTemplateEntry?.hasNullableExpression() == true -> report(stringTemplateEntry)
         }
     }
