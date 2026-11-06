@@ -42,6 +42,18 @@ class MultilineRawStringIndentationSpec {
         }
 
         @Test
+        fun `raise multiline raw string with a multi-dollar interpolation prefix without indentation`() {
+            val code = """
+                val a = $$$TQ
+                Hello world!
+                $TQ.trimIndent()
+            """.trimIndent()
+            val findings = subject.lint(code)
+            assertThat(findings).singleElement()
+                .hasTextLocation("Hello world!")
+        }
+
+        @Test
         fun `raise multiline raw strings without right indentation`() {
             val code = """
                 val a = $TQ
