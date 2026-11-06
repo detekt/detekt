@@ -3,6 +3,9 @@ package dev.detekt.rules.emptyblocks
 import dev.detekt.api.Config
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
+import org.jetbrains.kotlin.config.LanguageFeature
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class EmptyClassBlockSpec {
@@ -66,4 +69,28 @@ class EmptyClassBlockSpec {
         """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
+
+    @Test
+    @Disabled("False positive with the preview feature `companion block`, https://github.com/detekt/detekt/issues/9744")
+    fun `does not report a class whose body only contains a companion block`() {
+        val code = """
+            data class A(
+                val s: String
+            ) {
+                companion {
+                    @JvmField
+                    val Empty = A("")
+                }
+            }
+        """.trimIndent()
+        assertThat(
+            subject.lint(code, languageVersionSettings = companionBlocksAndExtensionsEnabled)
+        ).isEmpty()
+    }
 }
+
+private val companionBlocksAndExtensionsEnabled = LanguageVersionSettingsImpl(
+    languageVersion = LanguageVersionSettingsImpl.DEFAULT.languageVersion,
+    apiVersion = LanguageVersionSettingsImpl.DEFAULT.apiVersion,
+    specificFeatures = mapOf(LanguageFeature.CompanionBlocksAndExtensions to LanguageFeature.State.ENABLED),
+)
