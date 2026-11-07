@@ -58,9 +58,10 @@ class NullableToStringCall(config: Config) :
 
         when {
             // A safe call like `a?.toString()` never returns the string "null" (it returns null or a
-            // non-null String), so it is never a finding. With platform type receivers, e.g. from an
-            // unannotated Java method, `a?.toString()` resolves to the `Any?.toString()` extension
-            // even though the safe call already handles nullability. (#9074)
+            // non-null String), so it is never a finding. When the receiver is unresolved - e.g.
+            // `project.property(...)` in a Gradle build script that detekt's type resolution cannot
+            // resolve - the safe call binds to the nullable `Any?.toString()` extension and was
+            // reported. (#9074)
             qualifiedExpression !is KtSafeQualifiedExpression && callExpression?.calls(toString) == true ->
                 report(qualifiedExpression ?: callExpression)
 
