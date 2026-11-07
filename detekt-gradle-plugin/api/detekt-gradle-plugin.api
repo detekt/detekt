@@ -19,6 +19,7 @@ public abstract class dev/detekt/gradle/Detekt : org/gradle/api/tasks/SourceTask
 	public abstract fun getJdkHome ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getJvmTarget ()Lorg/gradle/api/provider/Property;
 	public abstract fun getLanguageVersion ()Lorg/gradle/api/provider/Property;
+	public abstract fun getLibraries ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getMultiPlatformEnabled ()Lorg/gradle/api/provider/Property;
 	public abstract fun getNoJdk ()Lorg/gradle/api/provider/Property;
 	public abstract fun getOptIn ()Lorg/gradle/api/provider/ListProperty;

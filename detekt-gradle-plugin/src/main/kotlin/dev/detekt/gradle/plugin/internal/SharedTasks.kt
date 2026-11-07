@@ -30,7 +30,7 @@ internal fun Project.registerJvmCompilationDetektTask(
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
         detektTask.source(source)
-        detektTask.classpath.convention(
+        detektTask.libraries.convention(
             compilation.output.classesDirs,
             siblingTask.map { it.libraries }
         )
