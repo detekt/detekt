@@ -138,6 +138,7 @@ constructor(
             add("--stacktrace")
             add("--info")
             add("--build-cache")
+            add("--configuration-cache")
             add("-Dorg.gradle.jvmargs=${listOfNotNull(jvmArgs, jacocoAgentArg()).joinToString(" ")}")
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
