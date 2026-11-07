@@ -14,7 +14,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@KotlinCoreEnvironmentTest
+// The Java source path must also be declared here on the outer class: JUnit (>= 5.13) inherits cached
+// ExtensionContext.Store values from parent contexts, so the nested `Java sources` class below reuses
+// the environment created for this class instead of building one from its own annotation.
+@KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
 class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = NullableToStringCall(Config.empty)
 
@@ -188,6 +191,21 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
         assertThat(actual).isEmpty()
     }
 
+    // https://github.com/detekt/detekt/issues/9074
+    @Test
+    fun `does not report a safe call toString on an unresolved receiver`() {
+        val code = """
+            // An unresolved receiver, e.g. `project.property("...")` in a Gradle build script where
+            // detekt's type resolution cannot resolve it, binds the safe call to the nullable
+            // `Any?.toString()` extension. A safe call still never returns the string "null".
+            fun test(project: Project): Boolean {
+                return project.property("verbose")?.toString().toBoolean()
+            }
+        """.trimIndent()
+        val actual = subject.lintWithContext(env, code, allowCompilationErrors = true)
+        assertThat(actual).isEmpty()
+    }
+
     // https://github.com/detekt/detekt/issues/6349
     @Test
     fun `reports expressions in lambda`() {
@@ -288,18 +306,20 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             assertThat(actual).isEmpty()
         }
 
+        // A dot call on a platform type receiver binds to the non-null `Any.toString()` member (members
+        // take precedence over extensions), which never returns the string "null" - consistent with the
+        // platform type whitelist in string templates (#4059).
         @Test
-        fun `reports when a platform type toString is called without safe call`() {
+        fun `does not report when a platform type toString is called without safe call`() {
             val code = """
                 import com.example.nullable_to_string.GradleProject
-                
+
                 fun test(project: GradleProject) {
                     val verbose = project.getProperty("verbose").toString()
                 }
             """.trimIndent()
             val actual = subject.lintWithContext(env, code)
-            assertThat(actual).singleElement()
-                .hasMessage("""This call 'project.getProperty("verbose").toString()' may return the string "null".""")
+            assertThat(actual).isEmpty()
         }
     }
 
