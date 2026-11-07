@@ -128,8 +128,8 @@ class DetektBasePlugin : Plugin<Project> {
 
                         createBaselineTask.baseline.convention(
                             project.layout.file(
-                                extension.baseline.flatMap {
-                                    providers.provider { it.asFile.addVariantName("${sourceSet.name}SourceSet") }
+                                extension.baseline.map {
+                                    it.asFile.addVariantName("${sourceSet.name}SourceSet")
                                 }
                             )
                         )
