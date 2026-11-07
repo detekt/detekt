@@ -16,7 +16,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
     inner class `default configuration` {
 
         @Test
-        fun `does not report destructuring declarations with 2 or 3 entries`() {
+        fun `does not report destructuring declarations with 5 or fewer entries`() {
             val code = """
                 fun testFun() {
                     val (x, y) = Pair(3, 4)
@@ -27,29 +27,39 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
                     println(a)
                     println(b)
                     println(c)
+
+                    data class FiveElements(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int)
+                    val (d, e, f, g, h) = FiveElements(1, 2, 3, 4, 5)
+                    println(d)
+                    println(e)
+                    println(f)
+                    println(g)
+                    println(h)
                 }
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
-        fun `reports destructuring declarations with more than 3 entries`() {
+        fun `reports destructuring declarations with more than 5 entries`() {
             val code = """
                 fun testFun() {
-                    data class ManyElements(val a: Int, val b: Int, val c: Int, val d: Int)
+                    data class ManyElements(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int, val f: Int)
                 
-                    val (a, b, c, d) = ManyElements(1, 2, 3, 4)
+                    val (a, b, c, d, e, f) = ManyElements(1, 2, 3, 4, 5, 6)
                     println(a)
                     println(b)
                     println(c)
                     println(d)
+                    println(e)
+                    println(f)
                 }
             """.trimIndent()
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
-        fun `does not report destructuring declarations in lambdas with 2 or 3 entries`() {
+        fun `does not report destructuring declarations in lambdas with 5 or fewer entries`() {
             val code = """
                 fun testFun() {
                     val items = listOf(Pair(3, 4))
@@ -64,17 +74,19 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
         }
 
         @Test
-        fun `reports destructuring declarations in lambdas with more than 3 entries`() {
+        fun `reports destructuring declarations in lambdas with more than 5 entries`() {
             val code = """
                 fun testFun() {
-                    data class ManyElements(val a: Int, val b: Int, val c: Int, val d: Int)
+                    data class ManyElements(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int, val f: Int)
                 
-                    val items = listOf(ManyElements(1, 2, 3, 4))
-                    items.forEach { (a, b, c, d) ->
+                    val items = listOf(ManyElements(1, 2, 3, 4, 5, 6))
+                    items.forEach { (a, b, c, d, e, f) ->
                         println(a)
                         println(b)
                         println(c)
                         println(d)
+                        println(e)
+                        println(f)
                     }
                 }
             """.trimIndent()

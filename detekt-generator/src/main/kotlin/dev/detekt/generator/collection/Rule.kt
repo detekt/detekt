@@ -9,7 +9,6 @@ data class Rule(
     var aliases: List<String>,
     val parent: String,
     val configurations: List<Configuration> = emptyList(),
-    val autoCorrect: Boolean = false,
     val requiresFullAnalysis: Boolean = false,
     val deprecationMessage: String? = null,
 ) {

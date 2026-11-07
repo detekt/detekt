@@ -147,6 +147,8 @@ coroutines:
       - 'IO'
       - 'Default'
       - 'Unconfined'
+  MissingStackTraceRecoverable:
+    active: false
   RedundantSuspendModifier:
     active: true
   SleepInsteadOfDelay:
@@ -401,12 +403,17 @@ potential-bugs:
     active: true
   EqualsWithHashCodeExist:
     active: true
+  EqualsWithHashCodeUseSameFields:
+    active: false
+    allowHashCodeSubset: false
   ExitOutsideMain:
     active: false
   ExplicitGarbageCollectionCall:
     active: true
   HasPlatformType:
     active: true
+  IgnoredJavaDefaultMethod:
+    active: false
   IgnoredReturnValue:
     active: true
     restrictToConfig: true
@@ -614,7 +621,7 @@ style:
     active: false
   DestructuringDeclarationWithTooManyEntries:
     active: true
-    maxDestructuringEntries: 3
+    maxDestructuringEntries: 5
   DoubleNegativeExpression:
     active: false
   DoubleNegativeLambda:
@@ -688,6 +695,9 @@ style:
   ForbiddenOptIn:
     active: false
     markerClasses: []
+  ForbiddenSuperclass:
+    active: false
+    parentClasses: []
   ForbiddenSuppress:
     active: false
     rules: []

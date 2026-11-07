@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
 import org.jetbrains.kotlin.analysis.api.types.KaType
-import org.jetbrains.kotlin.load.java.JavaClassFinderImpl
+import org.jetbrains.kotlin.load.java.createJavaClassFinder
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
@@ -75,7 +75,7 @@ class IgnoredReturnValue(config: Config) :
 
     @Configuration(
         "List of simple glob patterns for annotation names that require return values to be used. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
     )
     private val returnValueAnnotations: List<Regex> by config(
         listOf(
@@ -90,7 +90,7 @@ class IgnoredReturnValue(config: Config) :
 
     @Configuration(
         "List of simple glob patterns for annotation names that skip this inspection. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
     )
     private val ignoreReturnValueAnnotations: List<Regex> by config(
         listOf(
@@ -103,7 +103,7 @@ class IgnoredReturnValue(config: Config) :
 
     @Configuration(
         "List of simple glob patterns for return type names that should not be ignored. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
     )
     private val returnValueTypes: List<Regex> by config(
         listOf(
@@ -173,10 +173,7 @@ class IgnoredReturnValue(config: Config) :
         val origin = (this as? KaClassSymbol)?.origin
         if (origin != KaSymbolOrigin.JAVA_SOURCE && origin != KaSymbolOrigin.JAVA_LIBRARY) return emptyList()
         val packageFqName = this.classId?.packageFqName ?: return emptyList()
-        val javaClassFinder = JavaClassFinderImpl(null).apply {
-            setScope(scope)
-            setProjectInstance(project)
-        }
+        val javaClassFinder = project.createJavaClassFinder(scope, null)
         return javaClassFinder.findPackage(packageFqName)?.annotations?.mapNotNull { it.classId }.orEmpty()
     }
 

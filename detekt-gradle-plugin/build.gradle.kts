@@ -28,7 +28,7 @@ version = Versions.currentOrSnapshot()
 buildConfig {
     buildConfigField("DETEKT_VERSION", project.version.toString())
     buildConfigField("DETEKT_COMPILER_PLUGIN_VERSION", project.version.toString())
-    buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", libs.versions.kotlin.get())
+    buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", libs.versions.kotlin.analysisApi.get())
 }
 
 detekt {

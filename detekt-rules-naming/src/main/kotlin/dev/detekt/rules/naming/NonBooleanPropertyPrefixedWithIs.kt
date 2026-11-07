@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 
 /**
  * Reports when property with 'is' prefix doesn't have a boolean type.
- * Please check [chapter 8.3.2 on the Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
+ * Please check [chapter 8.3.2 on the Java Beans Specification](https://www.oracle.com/java/technologies/javase/javabeans-spec.html)
  *
  * When `allowSingleTypedGenerics` is enabled, single-argument generic wrappers over a boolean (e.g.
  * `StateFlow<Boolean>`, `StateFlow<Boolean?>`, `StateFlow<Boolean>?`) are also accepted, as well as lambda return
