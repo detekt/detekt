@@ -846,6 +846,8 @@ style:
     allowedNames: 'ignored|_'
   UseArrayLiteralsInAnnotations:
     active: true
+  UseContextSensitiveResolution:
+    active: false
   UseDataClass:
     active: false
     allowVars: false
