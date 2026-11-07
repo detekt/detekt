@@ -34,6 +34,20 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `reports when a nullable toString is explicitly called on an implicit receiver`() {
+        val code = """
+            fun test(a: Any?) {
+                with(a) {
+                    toString()
+                }
+            }
+        """.trimIndent()
+        val actual = subject.lintWithContext(env, code)
+        assertThat(actual).singleElement()
+            .hasMessage("This call 'toString()' may return the string \"null\".")
+    }
+
+    @Test
     fun `reports when a nullable toString is implicitly called in a string template`() {
         val code = """
             fun test(a: Any?) {
