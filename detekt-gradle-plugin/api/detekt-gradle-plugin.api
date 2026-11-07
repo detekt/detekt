@@ -73,7 +73,12 @@ public abstract class dev/detekt/gradle/extensions/CustomDetektReport {
 	public fun toString ()Ljava/lang/String;
 }
 
+public abstract interface class dev/detekt/gradle/extensions/DetektDependencies : org/gradle/api/artifacts/dsl/Dependencies {
+	public abstract fun getPlugin ()Lorg/gradle/api/artifacts/dsl/DependencyCollector;
+}
+
 public abstract interface class dev/detekt/gradle/extensions/DetektExtension {
+	public fun dependencies (Lorg/gradle/api/Action;)V
 	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
 	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBasePath ()Lorg/gradle/api/file/DirectoryProperty;
@@ -81,6 +86,7 @@ public abstract interface class dev/detekt/gradle/extensions/DetektExtension {
 	public abstract fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
 	public abstract fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
+	public abstract fun getDependencies ()Ldev/detekt/gradle/extensions/DetektDependencies;
 	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFailOnSeverity ()Lorg/gradle/api/provider/Property;
 	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
