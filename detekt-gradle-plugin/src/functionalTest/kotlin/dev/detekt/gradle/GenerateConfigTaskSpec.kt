@@ -25,7 +25,7 @@ class GenerateConfigTaskSpec {
         gradleRunner.runTasksAndCheckResult(
             "detektGenerateConfig",
             "-Pdetekt.use.worker.api=true",
-            "--rerun-tasks",
+            "--rerun",
         ) { result ->
             assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             assertThat(projectFile("config/detekt/detekt.yml")).exists()

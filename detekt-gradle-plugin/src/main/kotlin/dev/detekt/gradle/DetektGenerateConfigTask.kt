@@ -69,6 +69,7 @@ abstract class DetektGenerateConfigTask @Inject constructor(
                 arguments = arguments,
                 classpath = detektClasspath.plus(pluginClasspath).files,
                 taskName = name,
+                ignoreFailures = false,
             )
         }
     }
