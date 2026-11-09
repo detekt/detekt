@@ -209,7 +209,7 @@ class WhenIndyDirectCandidateSpec(val env: KotlinEnvironmentContainer) {
         val findings = lint(
             """
             typealias Items<T> = MutableList<T>
-            typealias Handler = (String) -> Unit
+            typealias Handler = Function1<*, *>
 
             fun classifyItems(value: Any) = when {
                 value is Items<*> -> 1
