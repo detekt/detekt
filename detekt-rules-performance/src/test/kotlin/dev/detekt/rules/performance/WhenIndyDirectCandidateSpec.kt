@@ -17,9 +17,9 @@ class WhenIndyDirectCandidateSpec(val env: KotlinEnvironmentContainer) {
         val findings = lint(
             """
             fun classify(value: Any?) = when {
-                value is String -> 1
+                ((value)) is String -> 1
                 value is Number -> 2
-                value == null -> 3
+                (null) === (value) -> 3
                 else -> 4
             }
             """.trimIndent()
@@ -48,6 +48,23 @@ class WhenIndyDirectCandidateSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `reports type checks against this`() {
+        val findings = lint(
+            """
+            open class Classifier {
+                fun classify() = when {
+                    this is CharSequence -> 1
+                    this is java.io.Serializable -> 2
+                    else -> 3
+                }
+            }
+            """.trimIndent()
+        )
+
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
     fun `ignores an eligible subject when`() {
         val findings = lint(
             """
@@ -64,6 +81,32 @@ class WhenIndyDirectCandidateSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `ignores empty, duplicate, and non-type conditions`() {
+        val findings = lint(
+            """
+            fun onlyElse() = when {
+                else -> 1
+            }
+
+            fun duplicate(value: Any) = when {
+                value is String -> 1
+                value is String -> 2
+                else -> 3
+            }
+
+            fun nonTypeCondition(value: Any, enabled: Boolean) = when {
+                enabled -> 1
+                value is String -> 2
+                value is Number -> 3
+                else -> 4
+            }
+            """.trimIndent()
+        )
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `ignores checks against different subjects`() {
         val findings = lint(
             """
@@ -71,6 +114,58 @@ class WhenIndyDirectCandidateSpec(val env: KotlinEnvironmentContainer) {
                 first is String -> 1
                 second is Number -> 2
                 else -> 3
+            }
+            """.trimIndent()
+        )
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `ignores invalid type alternatives and comparisons that are not null checks`() {
+        val findings = lint(
+            """
+            fun invalidRightAlternative(value: Any, enabled: Boolean) = when {
+                value is String || enabled -> 1
+                value is Number -> 2
+                else -> 3
+            }
+
+            fun invalidLeftAlternative(value: Any, enabled: Boolean) = when {
+                enabled || value is String -> 1
+                value is Number -> 2
+                else -> 3
+            }
+
+            fun differentSubjects(value: Any, other: Any) = when {
+                value is String || other is StringBuilder -> 1
+                value is Number -> 2
+                else -> 3
+            }
+
+            fun equality(value: Any, other: Any) = when {
+                value == other -> 1
+                value is String -> 2
+                value is Number -> 3
+                else -> 4
+            }
+
+            fun nonNullEquality(value: Any) = when {
+                value == 1 -> 1
+                value is String -> 2
+                value is Number -> 3
+                else -> 4
+            }
+
+            fun unstableNullCheck(): Int {
+                fun next(): Any? = null
+                return when {
+                    next() == null -> 1
+                    null == next() -> 2
+                    next() is String -> 2
+                    next() is Number -> 3
+                    else -> 4
+                }
             }
             """.trimIndent()
         )
@@ -187,11 +282,68 @@ class WhenIndyDirectCandidateSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `ignores a mutable local variable`() {
+        val findings = lint(
+            """
+            fun classify(input: Any): Int {
+                var value: Any = input
+                return when {
+                    value is String -> 1
+                    value is Number -> 2
+                    else -> 3
+                }
+            }
+            """.trimIndent()
+        )
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `reports immutable but not mutable constructor properties`() {
+        val findings = lint(
+            """
+            class ImmutableValue(val value: Any, val result: Int = when {
+                value is String -> 1
+                value is Number -> 2
+                else -> 3
+            })
+
+            class MutableValue(var value: Any, val result: Int = when {
+                value is String -> 1
+                value is Number -> 2
+                else -> 3
+            })
+            """.trimIndent()
+        )
+
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
     fun `reports checks against a non-delegated local val`() {
         val findings = lint(
             """
             fun classify(input: Any): Int {
                 val value = input
+                return when {
+                    value is String -> 1
+                    value is Number -> 2
+                    else -> 3
+                }
+            }
+            """.trimIndent()
+        )
+
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `reports checks against a destructured local val`() {
+        val findings = lint(
+            """
+            fun classify(input: Pair<Any, Any>): Int {
+                val (value, _) = input
                 return when {
                     value is String -> 1
                     value is Number -> 2
@@ -223,6 +375,38 @@ class WhenIndyDirectCandidateSpec(val env: KotlinEnvironmentContainer) {
                 else -> 3
             }
             """.trimIndent()
+        )
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `ignores unresolved references`() {
+        val findings = lint(
+            """
+            fun classify() = when {
+                missing is String -> 1
+                missing is Number -> 2
+                else -> 3
+            }
+            """.trimIndent(),
+            allowCompilationErrors = true
+        )
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `ignores unresolved type checks`() {
+        val findings = lint(
+            """
+            fun classify(value: Any) = when {
+                value is MissingType -> 1
+                value is String -> 2
+                else -> 3
+            }
+            """.trimIndent(),
+            allowCompilationErrors = true
         )
 
         assertThat(findings).isEmpty()
@@ -266,11 +450,36 @@ class WhenIndyDirectCandidateSpec(val env: KotlinEnvironmentContainer) {
                 value is String -> 2
                 else -> 3
             }
+
+            fun classifyCollection(value: Any) = when {
+                value is MutableCollection<*> -> 1
+                value is String -> 2
+                else -> 3
+            }
+
+            fun classifyIterable(value: Any) = when {
+                value is MutableIterable<*> -> 1
+                value is String -> 2
+                else -> 3
+            }
+
+            fun classifyMap(value: Any) = when {
+                value is MutableMap<*, *> -> 1
+                value is String -> 2
+                else -> 3
+            }
+
+            fun classifySet(value: Any) = when {
+                value is MutableSet<*> -> 1
+                value is String -> 2
+                else -> 3
+            }
             """.trimIndent()
         )
 
         assertThat(findings).isEmpty()
     }
 
-    private fun lint(source: String) = rule.lintWithContext(env, source.trimIndent())
+    private fun lint(source: String, allowCompilationErrors: Boolean = false) =
+        rule.lintWithContext(env, source.trimIndent(), allowCompilationErrors = allowCompilationErrors)
 }
