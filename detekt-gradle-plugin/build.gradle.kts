@@ -101,7 +101,7 @@ testing {
 
 kotlin {
     @OptIn(ExperimentalBuildToolsApi::class, ExperimentalKotlinGradlePluginApi::class)
-    compilerVersion = "2.1.21"
+    compilerVersion = "2.4.21"
 
     compilerOptions {
         // The apiVersion Gradle property cannot be used here, so set api version using free compiler args.
