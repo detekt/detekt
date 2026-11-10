@@ -36,7 +36,7 @@ internal fun Project.registerJvmCompilationDetektTask(
         )
         detektTask.friendPaths.convention(
             compilation.output.classesDirs,
-            siblingTask.map { it.friendPaths }
+            siblingTask.flatMap { it.friendPaths.elements }
         )
         detektTask.apiVersion.convention(
             siblingTask.flatMap { it.compilerOptions.apiVersion }.map { it.version }
@@ -94,7 +94,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         )
         createBaselineTask.friendPaths.convention(
             compilation.output.classesDirs,
-            siblingTask.map { it.friendPaths }
+            siblingTask.flatMap { it.friendPaths.elements }
         )
         createBaselineTask.apiVersion.convention(
             siblingTask.flatMap { it.compilerOptions.apiVersion }.map { it.version }
