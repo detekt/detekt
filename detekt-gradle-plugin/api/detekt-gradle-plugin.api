@@ -113,6 +113,7 @@ public final class dev/detekt/gradle/extensions/DetektReportType : java/lang/Enu
 	public static final field HTML Ldev/detekt/gradle/extensions/DetektReportType;
 	public static final field MARKDOWN Ldev/detekt/gradle/extensions/DetektReportType;
 	public static final field SARIF Ldev/detekt/gradle/extensions/DetektReportType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getExtension ()Ljava/lang/String;
 	public final fun getReportId ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Ldev/detekt/gradle/extensions/DetektReportType;
@@ -139,6 +140,7 @@ public final class dev/detekt/gradle/extensions/FailOnSeverity : java/lang/Enum 
 	public static final field Info Ldev/detekt/gradle/extensions/FailOnSeverity;
 	public static final field Never Ldev/detekt/gradle/extensions/FailOnSeverity;
 	public static final field Warning Ldev/detekt/gradle/extensions/FailOnSeverity;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Ldev/detekt/gradle/extensions/FailOnSeverity;
 	public static fun values ()[Ldev/detekt/gradle/extensions/FailOnSeverity;
 }

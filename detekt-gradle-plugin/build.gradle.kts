@@ -40,7 +40,7 @@ detekt {
 
 dokka {
     dokkaSourceSets.configureEach {
-        apiVersion = "1.4"
+        apiVersion = "2.0"
 
         externalDocumentationLinks {
             create("gradle") {
@@ -106,8 +106,8 @@ kotlin {
     compilerOptions {
         // The apiVersion Gradle property cannot be used here, so set api version using free compiler args.
         // https://youtrack.jetbrains.com/issue/KT-72247/KGP-Cannot-use-unsupported-API-version-with-compilerVersion-that-supports-it#focus=Comments-27-11050897.0-0
-        freeCompilerArgs.addAll("-language-version", "1.8")
-        freeCompilerArgs.addAll("-api-version", "1.7")
+        freeCompilerArgs.addAll("-language-version", "2.0")
+        freeCompilerArgs.addAll("-api-version", "2.0")
         // Suppress warning about deprecated API version. When DGP compiles with Kotlin 2.4 change this to suppress DEPRECATED_LANGUAGE_VERSION diagnostic (see KT-83765)
         freeCompilerArgs.add("-Xsuppress-version-warnings")
     }
