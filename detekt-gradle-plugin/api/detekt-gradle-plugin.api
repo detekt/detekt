@@ -19,6 +19,7 @@ public abstract class dev/detekt/gradle/Detekt : org/gradle/api/tasks/SourceTask
 	public abstract fun getJdkHome ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getJvmTarget ()Lorg/gradle/api/provider/Property;
 	public abstract fun getLanguageVersion ()Lorg/gradle/api/provider/Property;
+	public abstract fun getLibraries ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getMultiPlatformEnabled ()Lorg/gradle/api/provider/Property;
 	public abstract fun getNoJdk ()Lorg/gradle/api/provider/Property;
 	public abstract fun getOptIn ()Lorg/gradle/api/provider/ListProperty;
@@ -73,7 +74,12 @@ public abstract class dev/detekt/gradle/extensions/CustomDetektReport {
 	public fun toString ()Ljava/lang/String;
 }
 
+public abstract interface class dev/detekt/gradle/extensions/DetektDependencies : org/gradle/api/artifacts/dsl/Dependencies {
+	public abstract fun getPlugin ()Lorg/gradle/api/artifacts/dsl/DependencyCollector;
+}
+
 public abstract interface class dev/detekt/gradle/extensions/DetektExtension {
+	public fun dependencies (Lorg/gradle/api/Action;)V
 	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
 	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBasePath ()Lorg/gradle/api/file/DirectoryProperty;
@@ -81,6 +87,7 @@ public abstract interface class dev/detekt/gradle/extensions/DetektExtension {
 	public abstract fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
 	public abstract fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
+	public abstract fun getDependencies ()Ldev/detekt/gradle/extensions/DetektDependencies;
 	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFailOnSeverity ()Lorg/gradle/api/provider/Property;
 	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
@@ -106,6 +113,7 @@ public final class dev/detekt/gradle/extensions/DetektReportType : java/lang/Enu
 	public static final field HTML Ldev/detekt/gradle/extensions/DetektReportType;
 	public static final field MARKDOWN Ldev/detekt/gradle/extensions/DetektReportType;
 	public static final field SARIF Ldev/detekt/gradle/extensions/DetektReportType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getExtension ()Ljava/lang/String;
 	public final fun getReportId ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Ldev/detekt/gradle/extensions/DetektReportType;
@@ -132,6 +140,7 @@ public final class dev/detekt/gradle/extensions/FailOnSeverity : java/lang/Enum 
 	public static final field Info Ldev/detekt/gradle/extensions/FailOnSeverity;
 	public static final field Never Ldev/detekt/gradle/extensions/FailOnSeverity;
 	public static final field Warning Ldev/detekt/gradle/extensions/FailOnSeverity;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Ldev/detekt/gradle/extensions/FailOnSeverity;
 	public static fun values ()[Ldev/detekt/gradle/extensions/FailOnSeverity;
 }

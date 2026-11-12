@@ -39,6 +39,7 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.model.ReplacedBy
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.ProviderFactory
@@ -84,9 +85,13 @@ abstract class Detekt @Inject constructor(
     @get:PathSensitive(PathSensitivity.NONE)
     abstract val config: ConfigurableFileCollection
 
+    @get:ReplacedBy("libraries")
+    @get:Deprecated("Use 'libraries' instead.", ReplaceWith("libraries"))
+    abstract val classpath: ConfigurableFileCollection
+
     @get:Classpath
     @get:Optional
-    abstract val classpath: ConfigurableFileCollection
+    abstract val libraries: ConfigurableFileCollection
 
     @get:Internal
     abstract val friendPaths: ConfigurableFileCollection
@@ -173,7 +178,7 @@ abstract class Detekt @Inject constructor(
     internal val arguments
         get() = listOf(
             InputArgument(source),
-            ClasspathArgument(classpath),
+            ClasspathArgument(libraries),
             ApiVersionArgument(apiVersion.orNull),
             LanguageVersionArgument(languageVersion.orNull),
             JvmTargetArgument(jvmTarget.orNull),

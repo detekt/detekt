@@ -67,6 +67,8 @@ class DetektBasePlugin : Plugin<Project> {
             configuration.isCanBeResolved = true
             configuration.isCanBeConsumed = false
 
+            configuration.fromDependencyCollector(extension.dependencies.plugin)
+
             configuration.attributes {
                 it.attribute(Category.CATEGORY_ATTRIBUTE, project.objects.named(Category::class.java, Category.LIBRARY))
                 it.attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage::class.java, Usage.JAVA_RUNTIME))
@@ -128,8 +130,8 @@ class DetektBasePlugin : Plugin<Project> {
 
                         createBaselineTask.baseline.convention(
                             project.layout.file(
-                                extension.baseline.flatMap {
-                                    providers.provider { it.asFile.addVariantName("${sourceSet.name}SourceSet") }
+                                extension.baseline.map {
+                                    it.asFile.addVariantName("${sourceSet.name}SourceSet")
                                 }
                             )
                         )

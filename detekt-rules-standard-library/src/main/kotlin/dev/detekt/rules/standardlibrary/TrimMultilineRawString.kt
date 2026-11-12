@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.isSingleQuoted
 
 /**
  * All the Raw strings that have more than one line should be followed by `trimMargin()` or `trimIndent()`.
@@ -68,8 +69,7 @@ class TrimMultilineRawString(config: Config) :
 }
 
 fun KtStringTemplateExpression.isRawStringWithLineBreak(): Boolean =
-    text.startsWith("\"\"\"") &&
-        text.endsWith("\"\"\"") &&
+    !isSingleQuoted() &&
         entries.any {
             val literalText = (it as? KtLiteralStringTemplateEntry)?.text
             literalText != null && "\n" in literalText

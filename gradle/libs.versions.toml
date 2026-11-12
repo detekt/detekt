@@ -1,5 +1,5 @@
 [versions]
-agp = "9.5.0"
+agp = "9.5.1"
 coroutines = "1.11.0"
 jacoco = "0.8.16"
 junit = "6.1.3"
@@ -13,7 +13,7 @@ slf4j = "2.0.20"
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 android-gradle-builtInKotlin-plugin = { module = "com.android.built-in-kotlin:com.android.built-in-kotlin.gradle.plugin", version.ref = "agp" }
 develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.6.1" }
-dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.2.0" }
+dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.3.0" }
 vanniktech-mavenPublish-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.37.0" }
 # KGP version is decoupled from the Analysis API version and can be updated independently.
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version = "2.4.21" }
@@ -30,7 +30,7 @@ android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "
 # we need to be on a newer version until KGP minimum version gets bumped higher (https://youtrack.jetbrains.com/issue/KT-84114)
 gradle-publicApi = { module = "org.gradle.experimental:gradle-public-api", version = "8.14.3" }
 github-api = { module = "org.kohsuke:github-api", version = "1.330" }
-jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version = "2.22.4" }
+jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version = "2.23.0" }
 
 # This represents the oldest JUnit version supported by detekt-test-junit.
 # This should only be updated when updating the minimum version supported by detekt-test-junit.
@@ -45,7 +45,7 @@ assertj-core = { module = "org.assertj:assertj-core", version = "3.27.7" }
 # This should only be updated when updating the minimum version supported by detekt-test-assertj.
 # Any update to the lower-bound version should also be reflected at renovate.json to lock this version.
 assertj-coreMinimum = { module = "org.assertj:assertj-core", version = "3.27.4" }
-classgraph = { module = "io.github.classgraph:classgraph", version = "5.0.1" }
+classgraph = { module = "io.github.classgraph:classgraph", version = "5.0.2" }
 clikt-core = { module = "com.github.ajalt.clikt:clikt-core", version = "5.1.0" }
 # Version must align to dependency used by Kotlin on compile classpath due to our use of Gradle's consistent resolution
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }

@@ -4,7 +4,7 @@ import dev.detekt.gradle.report.ReportMergeTask
 plugins {
     id("releasing")
     id("dev.detekt")
-    id("org.jetbrains.dokka") version "2.2.0"
+    id("org.jetbrains.dokka") version "2.3.0"
 }
 
 dependencies {
@@ -54,13 +54,16 @@ allprojects {
     detekt {
         buildUponDefaultConfig = true
         baseline = file("$rootDir/config/detekt/baseline.xml")
+
+        dependencies {
+            plugin(project(":detekt-rules-ktlint-wrapper"))
+            plugin(project(":detekt-rules-libraries"))
+            plugin(project(":detekt-rules-ruleauthors"))
+        }
     }
 
     dependencies {
         detekt(project(":detekt-cli"))
-        detektPlugins(project(":detekt-rules-ktlint-wrapper"))
-        detektPlugins(project(":detekt-rules-libraries"))
-        detektPlugins(project(":detekt-rules-ruleauthors"))
     }
 
     tasks.withType<Detekt>().configureEach {

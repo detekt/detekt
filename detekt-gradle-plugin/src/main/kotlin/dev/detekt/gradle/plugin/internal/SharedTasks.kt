@@ -30,24 +30,24 @@ internal fun Project.registerJvmCompilationDetektTask(
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
         detektTask.source(source)
-        detektTask.classpath.convention(
+        detektTask.libraries.convention(
             compilation.output.classesDirs,
-            siblingTask.map { it.libraries }
+            siblingTask.flatMap { it.libraries.elements }
         )
         detektTask.friendPaths.convention(
             compilation.output.classesDirs,
-            siblingTask.map { it.friendPaths }
+            siblingTask.flatMap { it.friendPaths.elements }
         )
         detektTask.apiVersion.convention(
-            siblingTask.flatMap { task -> task.compilerOptions.apiVersion.map { it.version } }
+            siblingTask.flatMap { it.compilerOptions.apiVersion }.map { it.version }
         )
         detektTask.languageVersion.convention(
-            siblingTask.flatMap { task -> task.compilerOptions.languageVersion.map { it.version } }
+            siblingTask.flatMap { it.compilerOptions.languageVersion }.map { it.version }
         )
         /* Note: jvmTarget convention is also set in setDetektTaskDefaults. There may be a race between setting it here
            as well, but they should both set the same value. This should possibly be revisited in the future. */
         detektTask.jvmTarget.convention(
-            siblingTask.flatMap { task -> task.compilerOptions.jvmTarget.map { it.target } }
+            siblingTask.flatMap { it.compilerOptions.jvmTarget }.map { it.target }
         )
         detektTask.freeCompilerArgs.convention(siblingTask.flatMap { it.compilerOptions.freeCompilerArgs })
         detektTask.optIn.convention(siblingTask.flatMap { it.compilerOptions.optIn })
@@ -90,22 +90,22 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         createBaselineTask.source(source)
         createBaselineTask.classpath.convention(
             compilation.output.classesDirs,
-            siblingTask.map { it.libraries }
+            siblingTask.flatMap { it.libraries.elements }
         )
         createBaselineTask.friendPaths.convention(
             compilation.output.classesDirs,
-            siblingTask.map { it.friendPaths }
+            siblingTask.flatMap { it.friendPaths.elements }
         )
         createBaselineTask.apiVersion.convention(
-            siblingTask.flatMap { task -> task.compilerOptions.apiVersion.map { it.version } }
+            siblingTask.flatMap { it.compilerOptions.apiVersion }.map { it.version }
         )
         createBaselineTask.languageVersion.convention(
-            siblingTask.flatMap { task -> task.compilerOptions.languageVersion.map { it.version } }
+            siblingTask.flatMap { it.compilerOptions.languageVersion }.map { it.version }
         )
         /* Note: jvmTarget convention is also set in setCreateBaselineTaskDefaults. There may be a race between setting
            it here as well, but they should both set the same value. This should possibly be revisited in the future. */
         createBaselineTask.jvmTarget.convention(
-            siblingTask.flatMap { task -> task.compilerOptions.jvmTarget.map { it.target } }
+            siblingTask.flatMap { it.compilerOptions.jvmTarget }.map { it.target }
         )
         createBaselineTask.freeCompilerArgs.convention(siblingTask.flatMap { it.compilerOptions.freeCompilerArgs })
         createBaselineTask.optIn.convention(siblingTask.flatMap { it.compilerOptions.optIn })
@@ -117,8 +117,8 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
 
         createBaselineTask.baseline.convention(
             project.layout.file(
-                extension.baseline.flatMap {
-                    providers.provider { it.asFile.addVariantName(compilation.name) }
+                extension.baseline.map {
+                    it.asFile.addVariantName(compilation.name)
                 }
             )
         )
