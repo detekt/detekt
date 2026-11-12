@@ -15,13 +15,16 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtDelegatedSuperTypeEntry
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
+import org.jetbrains.kotlin.psi.KtWhenEntry
 
 /**
  * This rule reports unnecessary parentheses around expressions.
@@ -63,6 +66,8 @@ class UnnecessaryParentheses(config: Config) :
         val inner = expression.expression ?: return
 
         if (expression.parent is KtDelegatedSuperTypeEntry) return
+
+        if (inner is KtLambdaExpression && expression.isControlStructureBody()) return
 
         if (!KtPsiUtil.areParenthesesUseless(expression)) return
 
@@ -154,6 +159,10 @@ class UnnecessaryParentheses(config: Config) :
 
             return childToUnclearPrecedenceParentsMapping[innerOp]?.contains(outerOp) == true
         }
+
+        // Without parentheses, a lambda here would be parsed as a block instead
+        private fun KtParenthesizedExpression.isControlStructureBody(): Boolean =
+            parent is KtContainerNodeForControlStructureBody || parent is KtWhenEntry
 
         /**
          * Determines whether this is unary operation whose precedence is unclear

@@ -648,6 +648,29 @@ class UnnecessaryParenthesesSpec {
         assertThat(testCase.rule.lint(code)).hasSize(2)
     }
 
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `lambda in if branch`(testCase: RuleTestCase) {
+        val code = """
+            fun onClick(enabled: Boolean): (() -> Unit)? =
+                if (enabled) ({ println("clicked") }) else null
+        """.trimIndent()
+        assertThat(testCase.rule.lint(code)).isEmpty()
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `lambda in when branch`(testCase: RuleTestCase) {
+        val code = """
+            fun onClick(enabled: Boolean): (() -> Unit)? =
+                when (enabled) {
+                    true -> ({ println("clicked") })
+                    false -> null
+                }
+        """.trimIndent()
+        assertThat(testCase.rule.lint(code)).isEmpty()
+    }
+
     companion object {
         class RuleTestCase(val allowForUnclearPrecedence: Boolean) {
             val rule = UnnecessaryParentheses(
