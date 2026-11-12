@@ -26,7 +26,7 @@ dependencies {
     implementation(projects.detektKotlinAnalysisApiStandalone)
     detektCli(projects.detektCli)
     implementation(projects.detektUtils)
-    implementation(libs.jcommander)
+    implementation(libs.clikt.core)
     generatedDocumentation(projects.detektRulesComments) { targetConfiguration = "generatedDocumentation" }
     generatedDocumentation(projects.detektRulesComplexity) { targetConfiguration = "generatedDocumentation" }
     generatedDocumentation(projects.detektRulesCoroutines) { targetConfiguration = "generatedDocumentation" }
