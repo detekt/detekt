@@ -2,12 +2,15 @@ package dev.detekt.gradle
 
 import dev.detekt.gradle.testkit.DslGradleRunner
 import dev.detekt.gradle.testkit.DslTestBuilder.Companion.kotlin
+import dev.detekt.gradle.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
+import org.gradle.api.Project
 import org.gradle.testkit.runner.TaskOutcome
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import java.io.File
 import java.nio.file.Files
 
 /**
@@ -144,3 +147,41 @@ class PluginTaskBehaviorSpec {
         }
     }
 }
+
+@Suppress("LongParameterList")
+fun DslGradleRunner.copy(
+    projectLayout: ProjectLayout = this.projectLayout,
+    buildFileName: String = this.buildFileName,
+    mainBuildFileContent: String = this.mainBuildFileContent,
+    settingsContent: String = this.settingsContent,
+    configFileOrNone: String? = this.configFileOrNone,
+    baselineFiles: List<String> = this.baselineFiles,
+    gradleVersionOrNone: String? = this.gradleVersionOrNone,
+    dryRun: Boolean = this.dryRun,
+    disableIP: Boolean = this.disableIP,
+    failOnGradleWarnings: Boolean = this.failOnGradleWarnings,
+    jvmArgs: String = this.jvmArgs,
+    gradleProperties: Map<String, String> = this.gradleProperties,
+    customPluginClasspath: List<File> = this.customPluginClasspath,
+    projectScript: Project.() -> Unit = this.projectScript,
+    rootDir: File = this.rootDir,
+    randomString: String = this.randomString,
+): DslGradleRunner =
+    DslGradleRunner(
+        projectLayout = projectLayout,
+        buildFileName = buildFileName,
+        mainBuildFileContent = mainBuildFileContent,
+        settingsContent = settingsContent,
+        configFileOrNone = configFileOrNone,
+        baselineFiles = baselineFiles,
+        gradleVersionOrNone = gradleVersionOrNone,
+        dryRun = dryRun,
+        disableIP = disableIP,
+        failOnGradleWarnings = failOnGradleWarnings,
+        jvmArgs = jvmArgs,
+        gradleProperties = gradleProperties,
+        customPluginClasspath = customPluginClasspath,
+        projectScript = projectScript,
+        rootDir = rootDir,
+        randomString = randomString,
+    )
