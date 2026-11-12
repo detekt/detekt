@@ -8,7 +8,6 @@ import org.gradle.api.Project
 import org.gradle.testkit.runner.TaskOutcome
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.nio.file.Files
@@ -76,7 +75,6 @@ class PluginTaskBehaviorSpec {
     }
 
     @Test
-    @Disabled("https://github.com/detekt/detekt/issues/7170")
     fun `should pick up build artifacts from the build cache on a 2nd run even if it is in another directory`() {
         gradleRunner.runDetektTaskAndCheckResult { result ->
             assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
