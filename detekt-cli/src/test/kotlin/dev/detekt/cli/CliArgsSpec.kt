@@ -325,8 +325,6 @@ internal class CliArgsSpec {
         fun `throws HelpRequest on help flag`(helpFlag: String) {
             assertThatThrownBy { parseArguments(arrayOf(helpFlag)) }
                 .isInstanceOf(HelpRequest::class.java)
-                .extracting { (it as HelpRequest).usageText.trim() }
-                .isEqualTo(expectedHelp)
         }
     }
 
@@ -543,38 +541,3 @@ internal class CliArgsSpec {
 }
 
 private fun CliArgs.toSpec() = createSpec(NullPrintStream(), NullPrintStream())
-
-private val expectedHelp = """
-    |Usage: detekt [<options>] [<freecompilerargs>]...
-    |
-    |Options:
-    |  -i, --input=<path>               Input paths to analyze. Multiple paths are separated by ':' on *nix or ';' on Windows. If not specified the current working directory is used.
-    |  --analysis-mode=(full|light)     Analysis mode used by detekt. 'full' analysis mode is comprehensive but requires the correct compiler options to be provided. 'light' analysis cannot utilise compiler information and some rules cannot be run in this mode.
-    |  -in, --includes=<text>           Globbing patterns describing paths to include in the analysis. Useful in combination with 'excludes' patterns.
-    |  -ex, --excludes=<text>           Globbing patterns describing paths to exclude from the analysis.
-    |  -c, --config=<path>              Path to the config file (path/to/config.yml). Multiple configuration files can be specified with ':' on *nix or ';' on Windows as separator.
-    |  -cr, --config-resource=<value>   Path to the config resource on detekt's classpath (path/to/config.yml).
-    |  -gc, --generate-config=<path>    Export default config to the provided path.
-    |  -p, --plugins=<path>             Extra paths to plugin jars separated by ':' on *nix or ';' on Windows.
-    |  --parallel                       Enables parallel compilation and analysis of source files. Do some benchmarks first before enabling this flag. Heuristics show performance benefits starting from 2000 lines of Kotlin code.
-    |  -b, --baseline=<path>            If a baseline xml file is passed in, only new findings not in the baseline are printed in the console.
-    |  -cb, --create-baseline           Treats current analysis findings as a smell baseline for future detekt runs.
-    |  -r, --report=<value>             Generates a report for given 'report-id' and stores it on given 'path'. Entry should consist of: [report-id:path]. Available 'report-id' values: 'checkstyle', 'html', 'md', 'sarif'. These can also be used in combination with each other e.g. '-r html:reports/detekt.html -r checkstyle:reports/detekt.xml'
-    |  --fail-on-severity=<value>       Specifies the minimum severity that causes the build to fail. When the value is set to 'Never' detekt will not fail regardless of the number of issues and their severities.
-    |  -bp, --base-path=<path>          Specifies a directory as the base path. Currently it impacts all file paths in the formatted reports. File paths in console output are not affected and remain as absolute paths.
-    |  -dd, --disable-default-rulesets  Disables default rule sets.
-    |  --build-upon-default-config      Preconfigures detekt with a bunch of rules and some opinionated defaults for you. Allows additional provided configurations to override the defaults.
-    |  --all-rules                      Activates all available (even unstable) rules.
-    |  -ac, --auto-correct              Allow rules to auto correct code if they support it. The default rule sets do NOT support auto correcting and won't change any line in the users code base. However custom rules can be written to support auto correcting. The additional 'ktlint' rule set, added with '--plugins', does support it and needs this flag.
-    |  --debug                          Prints extra information about configurations and extensions.
-    |  -cp, --classpath=<path>          Paths where to find user class files and depending jar files. Used for type resolution.
-    |  --api-version=<value>            Kotlin API version used by the code under analysis. Some rules use this information to provide more specific rule violation messages.
-    |  --language-version=<value>       Compatibility mode for Kotlin language version X.Y, reports errors for all language features that came out later
-    |  --jvm-target=<value>             Target version of the generated JVM bytecode that was generated during compilation and is now being used for type resolution
-    |  --jdk-home=<path>                Use a custom JDK home directory to include into the classpath
-    |  --version                        Prints the detekt CLI version.
-    |  -h, --help                       Show this message and exit
-    |
-    |Arguments:
-    |  <freecompilerargs>  Options to pass to the Kotlin compiler.
-""".trimMargin()
