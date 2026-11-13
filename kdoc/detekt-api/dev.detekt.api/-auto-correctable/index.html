@@ -93,7 +93,7 @@
   <div class="breadcrumbs"><a href="../../index.html">detekt-api</a><span class="delimiter">/</span><a href="../index.html">dev.detekt.api</a><span class="delimiter">/</span><span class="current">AutoCorrectable</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Auto</span><wbr><span><span>Correctable</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">AutoCorrectable</a></div><p class="paragraph">Marks a <a href="../-rule/index.html">Rule</a> which is able to correct the code it reports on.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">AutoCorrectable</a></div><p class="paragraph">Marks a <a href="../-rule/index.html">Rule</a> which is able to correct the code it reports on.</p><p class="paragraph">Only rules implementing this interface can be auto-corrected: for every other rule <a href="../-rule/auto-correct.html">Rule.autoCorrect</a> is always <code class="lang-kotlin">false</code>, regardless of configuration. This allows detekt to tell apart "this rule was asked to correct" from "this rule is able to correct", and to warn about configuration which would otherwise silently do nothing.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"></div>
