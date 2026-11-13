@@ -26,9 +26,6 @@ internal data class DefaultBaseline(
     }
 }
 
-const val DETEKT_BASELINE_PATH_KEY = "detekt.baseline.path.key"
-const val DETEKT_BASELINE_CREATION_KEY = "detekt.baseline.creation.key"
-
 internal const val SMELL_BASELINE = "SmellBaseline"
 internal const val MANUALLY_SUPPRESSED_ISSUES = "ManuallySuppressedIssues"
 internal const val CURRENT_ISSUES = "CurrentIssues"
