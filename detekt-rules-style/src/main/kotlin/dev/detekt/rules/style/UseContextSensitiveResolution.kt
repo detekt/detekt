@@ -583,7 +583,7 @@ class UseContextSensitiveResolution(config: Config) :
         parameter: KaTypeParameterSymbol,
         type: KaType,
     ): Boolean =
-        call.valueArgumentMapping.any { (other, signature) ->
+        call.valueArgumentMapping.any { [other, signature] ->
             other != argument &&
                 (signature.symbol.returnType as? KaTypeParameterType)?.symbol == parameter &&
                 !mayLoseQualifier(other) &&

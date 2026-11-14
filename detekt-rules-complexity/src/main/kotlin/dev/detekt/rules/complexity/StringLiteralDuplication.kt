@@ -62,7 +62,7 @@ class StringLiteralDuplication(config: Config) :
         val visitor = StringLiteralVisitor()
         file.accept(visitor)
         visitor.getLiteralsOverThreshold().keys.forEach { name ->
-            val (main, references) = visitor.entitiesForLiteral(name)
+            val [main, references] = visitor.entitiesForLiteral(name)
             report(
                 Finding(
                     main,

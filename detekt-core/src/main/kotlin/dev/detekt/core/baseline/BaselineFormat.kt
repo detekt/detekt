@@ -48,7 +48,7 @@ internal class BaselineFormat : BaselineProvider {
                 it.streamXml().prettyPrinter().save(baseline)
             }
         } catch (error: XMLStreamException) {
-            val (line, column) = error.positions
+            val [line, column] = error.positions
             throw InvalidState("Error on position $line:$column while writing the baseline xml file!", error)
         }
     }

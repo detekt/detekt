@@ -68,7 +68,7 @@ class UseIfEmptyOrIfBlank(config: Config) :
         val elseExpression = expression.`else` ?: return
         if (elseExpression is KtIfExpression) return
 
-        val (condition, isNegatedCondition) = expression.condition() ?: return
+        val [condition, isNegatedCondition] = expression.condition() ?: return
         val conditionCallExpression = condition.getPossiblyQualifiedCallExpression() ?: return
         val conditionCalleeExpression = conditionCallExpression.calleeExpression ?: return
         val conditionCalleeExpressionText = conditionCalleeExpression.text

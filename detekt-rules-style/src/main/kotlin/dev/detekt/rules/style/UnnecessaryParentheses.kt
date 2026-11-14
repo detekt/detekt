@@ -110,10 +110,10 @@ class UnnecessaryParentheses(config: Config) :
             // (a && b) || c
             BinaryOperationPrecedence.CONJUNCTION to arrayOf(BinaryOperationPrecedence.DISJUNCTION),
         )
-            .onEach { (child, parents) ->
+            .onEach { [child, parents] ->
                 parents.forEach { check(child <= it) }
             }
-            .flatMap { (child, parents) ->
+            .flatMap { [child, parents] ->
                 child.tokens.map { childOp ->
                     childOp to parents.flatMapTo(mutableSetOf()) { parentOp -> parentOp.tokens.toList() }
                 }

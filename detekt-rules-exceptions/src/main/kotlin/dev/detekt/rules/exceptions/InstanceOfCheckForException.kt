@@ -62,7 +62,7 @@ class InstanceOfCheckForException(config: Config) :
     }
 
     private fun KtExpression.isCheckForSubTypeOf(catchParameter: KtParameter): Boolean {
-        val (left, right) = when (this) {
+        val [left, right] = when (this) {
             is KtIsExpression -> leftHandSide to typeReference
             is KtBinaryExpressionWithTypeRHS -> if (KtPsiUtil.isUnsafeCast(this)) left to right else null
             else -> null

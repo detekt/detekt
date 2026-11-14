@@ -31,7 +31,7 @@ fun YamlNode.node(name: String, node: YamlNode.() -> Unit) {
 }
 
 inline fun YamlNode.keyValue(comment: String = "", keyValue: () -> Pair<String, String>) {
-    val (key, value) = keyValue()
+    val [key, value] = keyValue()
     if (comment.isBlank()) {
         append("$key: $value")
     } else {

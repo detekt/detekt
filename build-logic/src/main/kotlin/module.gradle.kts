@@ -62,6 +62,7 @@ kotlin {
 
         jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
         freeCompilerArgs.add("-Xreturn-value-checker=check")
+        freeCompilerArgs.add("-Xname-based-destructuring=name-mismatch")
 
         if (project.name != "detekt-gradle-plugin") {
             // Only enable progressive mode in non-DGP modules. DGP doesn't compile with latest language version so

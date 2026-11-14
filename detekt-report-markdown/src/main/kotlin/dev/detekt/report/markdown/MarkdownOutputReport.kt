@@ -95,8 +95,8 @@ private fun MarkdownContent.renderGroup(issues: List<Issue>, basePath: Path) {
     issues
         .groupBy { it.ruleInstance }
         .toList()
-        .sortedBy { (ruleInstance, _) -> ruleInstance.id }
-        .forEach { (ruleInstance, ruleIssues) ->
+        .sortedBy { [ruleInstance] -> ruleInstance.id }
+        .forEach { [ruleInstance, ruleIssues] ->
             renderRule(ruleInstance, ruleIssues, basePath)
         }
 }
@@ -132,8 +132,8 @@ private fun MarkdownContent.renderIssues(issues: List<Issue>, basePath: Path) {
     issues
         .groupBy { it.ruleInstance.ruleSetId }
         .toList()
-        .sortedBy { (group, _) -> group.value }
-        .forEach { (_, groupIssues) ->
+        .sortedBy { [group] -> group.value }
+        .forEach { [_, groupIssues] ->
             renderGroup(groupIssues, basePath)
         }
 }

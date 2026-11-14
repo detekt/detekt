@@ -6,7 +6,7 @@ import java.nio.file.Path
 
 internal fun printIssues(issues: Map<String, List<Issue>>, basePath: Path): String =
     buildString {
-        issues.forEach { (key, nestedIssues) ->
+        issues.forEach { [key, nestedIssues] ->
             append(key)
             append("\n")
             nestedIssues.forEach {

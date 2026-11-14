@@ -80,7 +80,7 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
             propertyDelegates.flatMap { it.symbols() }
         }
         return functionDeclarations
-            .flatMap { (functionName, functions) ->
+            .flatMap { [functionName, functions] ->
                 val isOperator = functions.any { it.isOperator() }
                 val references = functionReferences[functionName].orEmpty()
                 val unusedFunctions = when {

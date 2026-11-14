@@ -161,7 +161,7 @@ class CanBeNonNullable(config: Config) :
                         parameter.symbol
                     } to parameter
                 }
-                .forEach { (descriptor, param) ->
+                .forEach { [descriptor, param] ->
                     candidateDescriptors.add(descriptor)
                     nullableParams[descriptor] = NullableParam(param)
                 }

@@ -39,7 +39,7 @@ internal object CheckstyleReportMerger {
         mergedCheckstyleNode.setAttribute("version", "4.3")
         mergedDocument.appendChild(mergedCheckstyleNode)
 
-        distinctErrorsBySourceFile.forEach { (fileName, errorNodes) ->
+        distinctErrorsBySourceFile.forEach { [fileName, errorNodes] ->
             mergedCheckstyleNode.appendChild(
                 mergedDocument.createElement("file").apply {
                     setAttribute("name", fileName)

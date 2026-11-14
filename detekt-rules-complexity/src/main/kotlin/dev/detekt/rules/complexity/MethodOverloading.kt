@@ -52,7 +52,7 @@ class MethodOverloading(config: Config) :
         private val methods = HashMap<String, Int>()
 
         fun reportIfAllowedNumberExceeded(entity: Entity) {
-            for ((name, value) in methods.filterValues { it > allowedOverloads }) {
+            for ([name, value] in methods.filterValues { it > allowedOverloads }) {
                 report(
                     Finding(
                         entity,

@@ -60,10 +60,10 @@ class ClassOrdering(config: Config) :
 
         val declarations = classBody.declarations.filterNotNull()
         if (declarations.isEmpty()) return
-        val (violatingDeclarationWithSections, increasingDeclarationWithSections) = getMinimalNumberOfViolations(
+        val [violatingDeclarationWithSections, increasingDeclarationWithSections] = getMinimalNumberOfViolations(
             declarations
         ) ?: return
-        violatingDeclarationWithSections.forEach { (violatingDeclaration, violatingSection) ->
+        violatingDeclarationWithSections.forEach { [violatingDeclaration, violatingSection] ->
             val increasingDeclarationsBeforeViolatingElement =
                 declarations.takeWhile { it != violatingDeclaration }
             val increasingDeclarationSectionBeforeViolatingElement =
@@ -72,7 +72,7 @@ class ClassOrdering(config: Config) :
                 }
             // for finding section from which violatingSection should be before we are only
             // taking declarations which is already before the violatingSection
-            val (directionMsg, anchorSection) = increasingDeclarationSectionBeforeViolatingElement
+            val [directionMsg, anchorSection] = increasingDeclarationSectionBeforeViolatingElement
                 .find {
                     it.section.priority > violatingSection.priority
                 }
