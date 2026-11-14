@@ -8,6 +8,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.Finding
 import dev.detekt.api.Issue
+import dev.detekt.api.Location
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleSetId
@@ -15,6 +16,8 @@ import dev.detekt.api.Severity
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
 import dev.detekt.api.config
+import dev.detekt.test.junit.KotlinAnalysisApiEngineTest
+import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.test.utils.compileForTest
 import dev.detekt.test.utils.resourceAsPath
@@ -23,6 +26,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.junit.jupiter.api.Nested
@@ -32,6 +37,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import java.net.URI
 import java.util.concurrent.CompletionException
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 class AnalyzerSpec {
 
@@ -406,6 +412,61 @@ class AnalyzerSpec {
                     .run(listOf(compileContentForTest(code)))
             }
             assertThat(findings).isEmpty()
+        }
+    }
+
+    // https://github.com/detekt/detekt/issues/9297
+    @Nested
+    @KotlinAnalysisApiEngineTest
+    inner class `Findings reported on a copy of the file`(private val analysisApiEngine: KotlinAnalysisApiEngine) {
+        private val code = """
+            package foo
+
+            annotation class Preview
+
+            @Preview
+            fun ignored(parameter: String) = Unit
+
+            fun reported(parameter: String) = Unit
+        """.trimIndent()
+
+        @Test
+        fun `are filtered by ignoreAnnotated with full analysis`() {
+            val findings = createProcessingSettings().use { settings ->
+                Analyzer(
+                    settings,
+                    createRuleDescriptor(
+                        ::ReportOnFileCopy,
+                        """
+                            custom:
+                              ReportOnFileCopy:
+                                active: true
+                                ignoreAnnotated: ["Preview"]
+                        """.trimIndent()
+                            .toConfig("custom", "ReportOnFileCopy")
+                    ),
+                    analysisMode = AnalysisMode.Full,
+                )
+                    .run(listOf(analysisApiEngine.compile(code)))
+            }
+            assertThat(findings.map { it.entity.signature }).hasSize(1).allMatch { "reported" in it }
+        }
+    }
+}
+
+/**
+ * Reports every function on a non-analysed copy of the file, like the ktlint wrapper does.
+ */
+private class ReportOnFileCopy(config: Config) : Rule(config, "TestDescription") {
+    override fun visitKtFile(file: KtFile) {
+        val copy = KtPsiFactory(file.project).createPhysicalFile(file.name, file.text)
+        // Like the ktlint wrapper, report the location with the path of the analysed file. `Path("/").absolute()`
+        // keeps that path absolute on Windows too, so that it can be relativized against the base path.
+        val path = Path("/").absolute().resolve(file.name)
+        copy.declarations.filterIsInstance<KtNamedFunction>().forEach {
+            val location = Location.from(it)
+            val entity = Entity.from(it, Location(location.source, location.endSource, location.text, path))
+            report(Finding(entity, description))
         }
     }
 }

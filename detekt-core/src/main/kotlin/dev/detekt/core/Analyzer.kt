@@ -80,18 +80,26 @@ internal class Analyzer(
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
-                .filterSuppressedFindings(rule, analysisMode)
+                .filterSuppressedFindings(rule, analysisMode, file)
                 .map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
         }
     }
 }
 
-private fun List<Finding>.filterSuppressedFindings(rule: Rule, analysisMode: AnalysisMode): List<Finding> {
+private fun List<Finding>.filterSuppressedFindings(
+    rule: Rule,
+    analysisMode: AnalysisMode,
+    file: KtFile,
+): List<Finding> {
     val suppressors = buildSuppressors(rule, analysisMode)
-    return if (suppressors.isNotEmpty()) {
-        filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
-    } else {
-        this
+    if (suppressors.isEmpty()) return this
+    // Some rules (e.g. the ktlint wrapper) report findings on a copy of the file. That copy is not part of the
+    // analysis session, so its elements can't be resolved and only the suppressors of the light mode are safe.
+    val lightSuppressors by lazy(LazyThreadSafetyMode.NONE) { buildSuppressors(rule, AnalysisMode.Light) }
+    return filter { finding ->
+        val applicableSuppressors =
+            if (finding.entity.ktElement.containingKtFile == file) suppressors else lightSuppressors
+        applicableSuppressors.none { suppressor -> suppressor.shouldSuppress(finding) }
     }
 }
 
