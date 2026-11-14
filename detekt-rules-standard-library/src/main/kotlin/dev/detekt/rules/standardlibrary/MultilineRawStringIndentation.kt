@@ -102,7 +102,7 @@ class MultilineRawStringIndentation(config: Config) :
             }
 
         if (indentation.isNotEmpty()) {
-            val lines = indentation.filter { (_, line, currentIndent) ->
+            val lines = indentation.filter { (val line, val currentIndent) ->
                 line.isNotEmpty() && currentIndent < desiredIndent
             }
 
@@ -116,7 +116,7 @@ class MultilineRawStringIndentation(config: Config) :
                     report(this, location, message(desiredIndent, currentIndent))
                 }
             } else {
-                if (indentation.none { (_, _, currentIndent) -> currentIndent == desiredIndent }) {
+                if (indentation.none { (val currentIndent) -> currentIndent == desiredIndent }) {
                     val location = containingFile.getLocation(
                         SourceLocation(lineNumberRange.first, desiredIndent + 1),
                         SourceLocation(lineNumberRange.last, indentation.last().line.length + 1),
@@ -125,7 +125,7 @@ class MultilineRawStringIndentation(config: Config) :
                     report(
                         this,
                         location,
-                        message(desiredIndent, indentation.minOf { (_, _, indent) -> indent }),
+                        message(desiredIndent, indentation.minOf { (val currentIndent) -> currentIndent }),
                     )
                 }
             }

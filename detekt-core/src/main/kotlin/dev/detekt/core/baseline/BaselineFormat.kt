@@ -35,8 +35,10 @@ internal class BaselineFormat : BaselineProvider {
                 return handler.createBaseline()
             }
         } catch (error: SAXParseException) {
-            val (line, column) = error.lineNumber to error.columnNumber
-            throw InvalidState("Error on position $line:$column while reading the baseline xml file!", error)
+            throw InvalidState(
+                "Error on position ${error.lineNumber}:${error.columnNumber} while reading the baseline xml file!",
+                error
+            )
         }
     }
 
@@ -46,7 +48,7 @@ internal class BaselineFormat : BaselineProvider {
                 it.streamXml().prettyPrinter().save(baseline)
             }
         } catch (error: XMLStreamException) {
-            val (line, column) = error.positions
+            val [line, column] = error.positions
             throw InvalidState("Error on position $line:$column while writing the baseline xml file!", error)
         }
     }

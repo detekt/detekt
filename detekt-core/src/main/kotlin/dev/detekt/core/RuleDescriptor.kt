@@ -51,7 +51,7 @@ private fun RuleSet.getRules(
     config.subConfigKeys()
         .asSequence()
         .mapNotNull { ruleId -> extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName } }
-        .mapNotNull { (ruleId, ruleName) ->
+        .mapNotNull { [ruleId, ruleName] ->
             this.rules[ruleName]?.let { ruleProvider ->
                 val rule = ruleProvider(Config.empty)
                 val ruleConfig = config.subConfig(ruleId)

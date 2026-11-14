@@ -17,7 +17,7 @@ class OutputFacade(private val settings: ProcessingSettings) {
 
     init {
         reports.values.groupBy { it.path }
-            .forEach { (path: Path, reports: List<ReportsSpec.Report>) ->
+            .forEach { [path: Path, reports: List<ReportsSpec.Report>] ->
                 check(reports.count() == 1) {
                     "The path $path is defined in multiple reports: ${reports.map { it.type }}"
                 }

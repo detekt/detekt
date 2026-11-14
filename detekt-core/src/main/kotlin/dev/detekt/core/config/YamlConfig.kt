@@ -111,7 +111,7 @@ private fun Map<*, *>.toPrettyString(recursive: Int): String =
         "{}"
     } else {
         toList()
-            .joinToString(separator = ",\n    ", prefix = "{\n    ", postfix = ",\n}") { (key, value) ->
+            .joinToString(separator = ",\n    ", prefix = "{\n    ", postfix = ",\n}") { [key, value] ->
                 when {
                     recursive == 0 -> "$key=$value"
                     value is Map<*, *> -> "$key=${value.toPrettyString(recursive - 1).indentCompat(4).trim()}"

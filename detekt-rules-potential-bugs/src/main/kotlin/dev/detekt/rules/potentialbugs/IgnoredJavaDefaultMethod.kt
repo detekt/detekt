@@ -87,7 +87,7 @@ class IgnoredJavaDefaultMethod(config: Config) :
                 .toSet()
             if (ignoredOriginals.isEmpty()) return@analyze
 
-            javaInterfaces.forEach { (entry, symbol) ->
+            javaInterfaces.forEach { [entry, symbol] ->
                 reportIgnoredDefaultMethods(entry, symbol, ignoredOriginals)
             }
         }

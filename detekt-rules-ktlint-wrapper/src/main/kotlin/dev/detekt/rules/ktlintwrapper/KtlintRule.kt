@@ -80,7 +80,7 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
         )
 
         val properties = buildMap {
-            usesEditorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->
+            usesEditorConfigProperties.forEach { [editorConfigProperty, defaultValue] ->
                 put(
                     key = editorConfigProperty.name,
                     value = Property.builder()
@@ -98,7 +98,7 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
     private fun emitFinding(offset: Int, message: String, canBeAutoCorrected: Boolean) {
         // Always convert KtLint offsets to lines/columns.
         // The node used to report the finding may be not the same used for the offset (e.g. in NoUnusedImports).
-        val (line, column) = positionByOffset(offset)
+        val [line, column] = positionByOffset(offset)
         val location = Location(
             source = SourceLocation(line, column),
             endSource = SourceLocation(line, column),

@@ -134,7 +134,7 @@ class ForbiddenMethodCall(config: Config) :
 
             val successfulCall = call.successfulCallOrNull<KaCall>() ?: return
 
-            getCallInfos(successfulCall, expression).forEach { (expressionPropertySymbol, symbol) ->
+            getCallInfos(successfulCall, expression).forEach { [expressionPropertySymbol, symbol] ->
                 symbol ?: return@forEach
                 val forbiddenMethod = methods.find { method ->
                     method.value.match(expressionPropertySymbol, symbol)

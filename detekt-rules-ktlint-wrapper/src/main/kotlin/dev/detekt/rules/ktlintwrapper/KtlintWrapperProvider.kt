@@ -264,20 +264,20 @@ internal fun List<(Config) -> KtlintRule>.sorted(): List<(Config) -> KtlintRule>
 
     // Initially the list only contains the rules without any VisitorModifiers
     unprocessedRules
-        .filter { (_, rule) -> !rule.runAsLateAsPossible && rule.hasNoRunAfterRules() }
-        .forEach { (provider, rule) ->
+        .filter { [_, rule] -> !rule.runAsLateAsPossible && rule.hasNoRunAfterRules() }
+        .forEach { [provider, rule] ->
             sortedRules.add(provider)
             sortedRuleIds.add(rule.wrappingRuleId)
         }
-    unprocessedRules.removeAll { (provider, _) -> provider in sortedRules }
+    unprocessedRules.removeAll { [provider] -> provider in sortedRules }
 
     // Then we add the rules that have a RunAsLateAsPossible modifier
     // and we obey the RunAfterRule modifiers as well.
     while (unprocessedRules.isNotEmpty()) {
-        val (provider, rule) =
+        val [provider, rule] =
             checkNotNull(
                 unprocessedRules
-                    .firstOrNull { (_, rule) ->
+                    .firstOrNull { [_, rule] ->
                         rule
                             .runAfterRules()
                             .all { it.ruleId in sortedRuleIds }
@@ -287,7 +287,7 @@ internal fun List<(Config) -> KtlintRule>.sorted(): List<(Config) -> KtlintRule>
             }
         sortedRuleIds.add(rule.wrappingRuleId)
         sortedRules.add(provider)
-        unprocessedRules.removeAll { (provider, _) -> provider in sortedRules }
+        unprocessedRules.removeAll { [provider] -> provider in sortedRules }
     }
 
     return sortedRules
@@ -296,11 +296,11 @@ internal fun List<(Config) -> KtlintRule>.sorted(): List<(Config) -> KtlintRule>
 private fun defaultRuleOrderComparator() =
 // The sort order below should guarantee a stable order of the rule between multiple invocations of KtLint given
     // the same set of input parameters. There should be no dependency on data ordering outside this class.
-    compareBy<Pair<(Config) -> KtlintRule, KtlintRule>> { (_, rule) ->
+    compareBy<Pair<(Config) -> KtlintRule, KtlintRule>> { [_, rule] ->
         if (rule.runAsLateAsPossible) 1 else 0
-    }.thenBy { (_, rule) ->
+    }.thenBy { [_, rule] ->
         if (rule.wrappingRuleId.ruleSetId == KtlintRuleSetId.STANDARD) 0 else 1
-    }.thenBy { (_, rule) -> rule.wrappingRuleId.value }
+    }.thenBy { [_, rule] -> rule.wrappingRuleId.value }
 
 internal val KtlintRule.wrappingRuleId
     get() = wrapping.ruleId

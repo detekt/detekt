@@ -141,7 +141,7 @@ class AbstractClassCanBeInterface(config: Config) :
         // non-const initializer (e.g. open val x = computeSomething()) stores a value evaluated once per instance.
         // In an interface it would become a getter evaluated on every access, changing the behavior and preventing
         // a safe refactoring.
-        val (abstractMembers, concreteMembers) = members.partition { member ->
+        val [abstractMembers, concreteMembers] = members.partition { member ->
             member.isAbstract() || (member.isOpen() && member.hasConstOrNoBackingField())
         }
 

@@ -38,7 +38,7 @@ internal class Lifecycle(
             measure(Phase.ValidateClasspath) { validateClasspath(filesToAnalyze) }
         }
         val analysisMode = settings.spec.projectSpec.analysisMode
-        val (processors, rules) = measure(Phase.LoadingExtensions) {
+        val [processors, rules] = measure(Phase.LoadingExtensions) {
             val rules = getRules(
                 analysisMode = analysisMode,
                 ruleSetProviders = ruleSetsProvider.invoke(),

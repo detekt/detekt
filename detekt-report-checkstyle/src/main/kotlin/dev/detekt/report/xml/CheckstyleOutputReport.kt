@@ -24,7 +24,7 @@ class CheckstyleOutputReport : OutputReport {
         detektion.issues
             .filterNot { it.suppressed }
             .groupBy { it.location.path }
-            .forEach { (filePath, issues) ->
+            .forEach { [filePath, issues] ->
                 lines += "<file name=\"${filePath.invariantSeparatorsPathString.toXmlString()}\">"
                 issues.forEach {
                     lines += arrayOf(

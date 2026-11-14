@@ -166,7 +166,7 @@ class UnnamedParameterUse(config: Config) :
     context(_: KaSession)
     private fun isAdjacentUnnamedParamsAllowed(paramInfos: List<Map.Entry<KtValueArgument, ParamInfo>>): Boolean {
         fun ParamInfo.isNamedOrVararg() = this.isNamed || this.isVararg
-        val (firstEntry, secondEntry) = paramInfos
+        val [firstEntry, secondEntry] = paramInfos
         if (
             ignoreArgumentsMatchingNames &&
             (firstEntry.value.isSameNamed || secondEntry.value.isSameNamed)

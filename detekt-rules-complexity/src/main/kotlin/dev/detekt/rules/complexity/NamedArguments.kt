@@ -98,8 +98,8 @@ class NamedArguments(config: Config) :
             }
 
             unnamedArguments.isNotEmpty() &&
-                unnamedArguments.count { (argument, _) -> argument.isSpread } <= 1 &&
-                unnamedArguments.all { (argument, parameter) -> argument.isSpread || !parameter.symbol.isVararg }
+                unnamedArguments.count { [argument] -> argument.isSpread } <= 1 &&
+                unnamedArguments.all { [argument, parameter] -> argument.isSpread || !parameter.symbol.isVararg }
         }
 
     internal data class ForbiddenMethod(val value: FunctionMatcher, val reason: String?)

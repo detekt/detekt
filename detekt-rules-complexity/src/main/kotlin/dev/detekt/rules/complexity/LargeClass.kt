@@ -40,7 +40,7 @@ class LargeClass(config: Config) :
     }
 
     override fun postVisit(root: KtFile) {
-        for ((clazz, lines) in classToLinesCache) {
+        for ([clazz, lines] in classToLinesCache) {
             if (lines > allowedLines) {
                 report(
                     Finding(

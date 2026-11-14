@@ -67,7 +67,7 @@ class AbstractClassCanBeConcreteClass(config: Config) :
     }
 
     private fun KtClass.checkMembers(members: List<KtCallableDeclaration>, nameIdentifier: PsiElement) {
-        val (abstractMembers, _) = members.partition { it.isAbstract() }
+        val abstractMembers = members.filter { it.isAbstract() }
         if (abstractMembers.isEmpty() && !hasInheritedMember()) {
             report(Finding(Entity.from(nameIdentifier), noAbstractMember))
         }

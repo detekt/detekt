@@ -60,7 +60,7 @@ internal class Analyzer(
     }
 
     private fun analyze(file: KtFile, languageVersionSettings: LanguageVersionSettings): List<Issue> {
-        val (correctableRules, otherRules) = rules.asSequence()
+        val [correctableRules, otherRules] = rules.asSequence()
             .filter { ruleDescriptor ->
                 ruleDescriptor.config.parent?.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) != false
             }
@@ -70,12 +70,12 @@ internal class Analyzer(
             .map { ruleDescriptor ->
                 ruleDescriptor.ruleInstance to ruleDescriptor.ruleProvider(ruleDescriptor.config)
             }
-            .filterNot { (ruleInstance, rule) ->
+            .filterNot { [ruleInstance, rule] ->
                 file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
             }
-            .partition { (_, rule) -> rule.autoCorrect }
+            .partition { [_, rule] -> rule.autoCorrect }
 
-        return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
+        return (correctableRules + otherRules).flatMap { [ruleInstance, rule] ->
             rule.visitFile(file, languageVersionSettings)
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)

@@ -99,8 +99,8 @@ class HtmlOutputReport : OutputReport {
             issues
                 .groupBy { it.ruleInstance.ruleSetId }
                 .toList()
-                .sortedBy { (group, _) -> group.value }
-                .forEach { (group, groupIssues) ->
+                .sortedBy { [group] -> group.value }
+                .forEach { [group, groupIssues] ->
                     renderGroup(group, groupIssues)
                 }
         }
@@ -111,8 +111,8 @@ class HtmlOutputReport : OutputReport {
         issues
             .groupBy { it.ruleInstance }
             .toList()
-            .sortedBy { (ruleInstance, _) -> ruleInstance.id }
-            .forEach { (ruleInstance, ruleIssues) ->
+            .sortedBy { [ruleInstance] -> ruleInstance.id }
+            .forEach { [ruleInstance, ruleIssues] ->
                 renderRule(ruleInstance, ruleIssues)
             }
     }

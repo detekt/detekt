@@ -269,7 +269,7 @@ class MissingUseCall(config: Config) :
     context(_: KaSession)
     private fun isPartOfIfElseExpressionReturningCloseable(expression: KtExpression): Boolean {
         val expressionAfterParens = expression.parents.firstOrNull { it !is KtParenthesizedExpression } ?: return false
-        val (ifExpression, containerExpression) =
+        val [ifExpression, containerExpression] =
             @Suppress("BracesOnIfStatements")
             if (expressionAfterParens is KtContainerNodeForControlStructureBody) {
                 expressionAfterParens.parent to expressionAfterParens.expression

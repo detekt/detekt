@@ -101,7 +101,7 @@ class UseOrEmpty(config: Config) :
             StandardClassIds.BASE_COLLECTIONS_PACKAGE to "emptyMap",
             StandardClassIds.BASE_SEQUENCES_PACKAGE to "emptySequence",
             StandardClassIds.BASE_KOTLIN_PACKAGE to "emptyArray",
-        ).associate { (pkg, functionName) ->
+        ).associate { [pkg, functionName] ->
             functionName to CallableId(pkg, Name.identifier(functionName))
         }
 
@@ -111,7 +111,7 @@ class UseOrEmpty(config: Config) :
             StandardClassIds.BASE_COLLECTIONS_PACKAGE to "mapOf",
             StandardClassIds.BASE_SEQUENCES_PACKAGE to "sequenceOf",
             StandardClassIds.BASE_KOTLIN_PACKAGE to "arrayOf",
-        ).associate { (pkg, functionName) ->
+        ).associate { [pkg, functionName] ->
             functionName to CallableId(pkg, Name.identifier(functionName))
         }
     }

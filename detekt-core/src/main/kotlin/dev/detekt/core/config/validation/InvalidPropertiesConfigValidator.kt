@@ -101,8 +101,8 @@ internal class InvalidPropertiesConfigValidator(
             val threshold = maxOf(1, name.length / 3)
             return candidates
                 .map { it to levenshteinDistance(name.lowercase(), it.lowercase()) }
-                .filter { (_, distance) -> distance <= threshold }
-                .minByOrNull { (_, distance) -> distance }
+                .filter { [_, distance] -> distance <= threshold }
+                .minByOrNull { [_, distance] -> distance }
                 ?.first
         }
 

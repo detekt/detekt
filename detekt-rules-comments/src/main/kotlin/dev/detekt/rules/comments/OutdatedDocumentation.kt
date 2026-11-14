@@ -224,7 +224,7 @@ class OutdatedDocumentation(config: Config) :
                 }
                 if (inFencedCodeBlock) return@mapNotNull null
                 swallowedTagRegex.find(line)?.let { match ->
-                    val (tagName, subjectName) = match.destructured
+                    val [tagName, subjectName] = match.destructured
                     val type = if (tagName == "param") DeclarationType.PARAM else DeclarationType.PROPERTY
                     Declaration(subjectName, type)
                 }
@@ -253,8 +253,8 @@ class OutdatedDocumentation(config: Config) :
     private fun getDeclarationsMismatches(doc: List<Declaration>, element: List<Declaration>): List<String> {
         val docNames = doc.map { it.name }
         val elementNames = element.map { it.name }
-        val (docWithMissingElement, docWithPresentElement) = doc.partition { it.name !in elementNames }
-        val (elementWithMissingDoc, elementWithPresentDoc) = element.partition { it.name !in docNames }
+        val [docWithMissingElement, docWithPresentElement] = doc.partition { it.name !in elementNames }
+        val [elementWithMissingDoc, elementWithPresentDoc] = element.partition { it.name !in docNames }
 
         val missingElementReasons =
             docWithMissingElement.map {
@@ -275,13 +275,13 @@ class OutdatedDocumentation(config: Config) :
         }
 
         return finalWarnings + if (
-            !zippedElements.all { (docItr, elementItr) ->
+            !zippedElements.all { [docItr, elementItr] ->
                 declarationNameMatches(docItr, elementItr)
             }
         ) {
             listOf("Documentation elements order is mismatched with declaration.")
         } else {
-            zippedElements.mapNotNull { (docItr, elementItr) ->
+            zippedElements.mapNotNull { [docItr, elementItr] ->
                 getDeclarationTypeMismatchMsgOrNull(docItr, elementItr)
             }
         }
