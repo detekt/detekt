@@ -27,7 +27,9 @@ abstract class Exclusions {
             "jvmTest",
             "androidUnitTest",
             "androidInstrumentedTest",
+            "androidHostTest",
             "jsTest",
+            "webTest",
             "iosTest",
         )
     }
