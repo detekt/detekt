@@ -7,15 +7,15 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isOverride
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.expressionType
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.isFunctionalInterface
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -51,14 +51,12 @@ class ObjectLiteralToLambda(config: Config) :
     ),
     RequiresAnalysisApi {
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.containsThisReference(objectSymbol: KaClassSymbol) =
         anyDescendantOfType<KtThisExpression> {
             it.expressionType?.symbol == objectSymbol
         }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.containsOwnMethodCall(objectSymbol: KaClassSymbol) =
         anyDescendantOfType<KtExpression> { expr ->
@@ -69,7 +67,6 @@ class ObjectLiteralToLambda(config: Config) :
             ).any { it.type.symbol == objectSymbol }
         }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.containsMethodOf(declaration: KtObjectDeclaration): Boolean {
         val objectSymbol = declaration.symbol

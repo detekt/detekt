@@ -6,9 +6,14 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.arrayElementType
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.analysis.api.types.type
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
@@ -56,7 +61,7 @@ class ArrayPrimitive(config: Config) :
         analyze(this) {
             val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
             val returnType = functionCall.signature.returnType
-            return returnType.arrayElementType?.isPrimitive == true
+            return returnType.arrayElementType?.classId in KaStandardTypeClassIds.PRIMITIVES
         }
 
     override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
@@ -74,7 +79,8 @@ class ArrayPrimitive(config: Config) :
 
     private fun KtTypeReference.isArrayPrimitive(): Boolean =
         analyze(this) {
-            type.symbol?.classId == StandardClassIds.Array && type.arrayElementType?.isPrimitive == true
+            type.symbol?.classId == StandardClassIds.Array &&
+                type.arrayElementType?.classId in KaStandardTypeClassIds.PRIMITIVES
         }
 
     companion object {

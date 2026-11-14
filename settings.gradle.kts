@@ -54,7 +54,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("com.autonomousapps.build-health") version "3.20.2"
     // Kotlin plugin must be added to classpath to support build-health analysis
-    id("org.jetbrains.kotlin.jvm") version "2.4.21" apply false
+    id("org.jetbrains.kotlin.jvm") version "2.5.0-RC" apply false
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
@@ -102,6 +102,14 @@ dependencyResolutionManagement {
             }
             filter {
                 includeGroupAndSubgroups("com.android")
+            }
+        }
+        exclusiveContent {
+            forRepository {
+                maven("https://central.sonatype.com/repository/maven-snapshots")
+            }
+            filter {
+                includeGroup("io.github.ktlint.core")
             }
         }
         mavenCentral()

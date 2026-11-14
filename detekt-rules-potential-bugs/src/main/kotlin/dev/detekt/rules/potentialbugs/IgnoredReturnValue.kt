@@ -13,21 +13,24 @@ import dev.detekt.api.config
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.isCalling
 import dev.detekt.psi.pathGlobToRegex
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.isUsedAsExpression
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.expressions.isUsedAsExpression
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.analysis.api.symbols.containingDeclaration
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.load.java.createJavaClassFinder
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
@@ -133,7 +136,7 @@ class IgnoredReturnValue(config: Config) :
             val functionCall = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
             val symbol = functionCall.symbol
             val returnType = functionCall.signature.returnType
-            if (returnType.isUnitType || returnType.isNothingType) return
+            if (returnType.classId in setOf(KaStandardTypeClassIds.UNIT, KaStandardTypeClassIds.NOTHING)) return
 
             if (ignoreFunctionCall.any { it.match(symbol) }) return
 
@@ -177,7 +180,6 @@ class IgnoredReturnValue(config: Config) :
         return javaClassFinder.findPackage(packageFqName)?.annotations?.mapNotNull { it.classId }.orEmpty()
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isUsedAsExpression(call: KtCallExpression, returnType: KaType): Boolean {
         if (returnType is KaFunctionType &&
@@ -199,7 +201,6 @@ class IgnoredReturnValue(config: Config) :
         return true
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.isLambdaResult(lambda: KtLambdaExpression): Boolean {
         val statement = getQualifiedExpressionForSelectorOrThis().let {
@@ -210,7 +211,7 @@ class IgnoredReturnValue(config: Config) :
                 val symbol = lambda.functionLiteral.symbol
                 val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
                 @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-                label?.resolveSymbol() == symbol
+                label?.resolveSuccessfulSymbol() == symbol
             }
 
             else -> {

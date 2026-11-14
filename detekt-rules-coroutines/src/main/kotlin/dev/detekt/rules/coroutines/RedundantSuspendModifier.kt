@@ -9,14 +9,17 @@ import dev.detekt.api.Rule
 import dev.detekt.psi.isOpen
 import dev.detekt.rules.coroutines.utils.CoroutineCallableIds
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbols
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -94,7 +97,7 @@ class RedundantSuspendModifier(config: Config) :
             is KtForExpression -> {
                 analyze(this) {
                     @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-                    this@hasSuspendCalls.resolveSymbols()
+                    this.resolveSuccessfulSymbols()
                         .filterIsInstance<KaNamedFunctionSymbol>()
                         .any { it.isSuspend }
                 }

@@ -6,15 +6,16 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.isSubtypeOf
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
@@ -122,7 +123,6 @@ class RedundantHigherOrderMapUsage(config: Config) :
         return lambda
     }
 
-    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun isRedundant(functionLiteral: KtFunctionLiteral, lambdaStatements: List<KtExpression>): Boolean {
@@ -134,12 +134,11 @@ class RedundantHigherOrderMapUsage(config: Config) :
             if (it == lastStatement) return@collectDescendantsOfType false
             val label = (it as? KtExpressionWithLabel)?.getTargetLabel() ?: return@collectDescendantsOfType false
             @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-            label.resolveSymbol() == symbol
+            label.resolveSuccessfulSymbol() == symbol
         }
         return labeledReturnExpressions.all { isReferenceTo(it, lambdaParameter) }
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun isReferenceTo(expression: KtExpression, symbol: KaValueParameterSymbol): Boolean {
         val nameReference = when (expression) {
@@ -147,7 +146,7 @@ class RedundantHigherOrderMapUsage(config: Config) :
             else -> expression
         } as? KtNameReferenceExpression ?: return false
         @OptIn(KaExperimentalApi::class)
-        return nameReference.resolveSymbol() == symbol
+        return nameReference.resolveSuccessfulSymbol() == symbol
     }
 
     companion object {

@@ -6,6 +6,12 @@ plugins {
 dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
+    compileOnly(libs.kotlin.analysisApiIntellijImplementationComponents)
+
+    api(libs.kotlin.analysisApiSurface)
+    implementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
+
+    implementation(libs.kotlin.analysisApiImplementation)
 
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)

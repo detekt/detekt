@@ -11,11 +11,11 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
+import org.jetbrains.kotlin.K1Deprecation
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDeclaration
@@ -139,13 +139,13 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
         }
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.resolveToLocalVariableSymbol(): KaVariableSymbol? =
         @OptIn(KtExperimentalApi::class, KaExperimentalApi::class)
-        (this as? KtResolvable)?.resolveSymbol() as? KaVariableSymbol
+        (this as? KtResolvable)?.resolveSuccessfulSymbol() as? KaVariableSymbol
 
     private fun registerNewDeclaration(declaration: KtNamedDeclaration) {
+        @OptIn(K1Deprecation::class)
         declaration.toSourceElement().getPsi()?.also {
             variables[it] = declaration
         }

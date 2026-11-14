@@ -3,14 +3,6 @@ package dev.detekt.rules.ktlintwrapper
 import com.intellij.lang.ASTNode
 import com.intellij.psi.impl.source.JavaDummyElement
 import com.intellij.psi.impl.source.JavaDummyHolder
-import com.pinterest.ktlint.rule.engine.core.api.AutocorrectDecision
-import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
-import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
-import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
-import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_STYLE_PROPERTY
-import com.pinterest.ktlint.rule.engine.core.api.editorconfig.createRuleExecutionEditorConfigProperty
-import com.pinterest.ktlint.ruleset.standard.StandardRule
-import com.pinterest.ktlint.ruleset.standard.rules.MAX_LINE_LENGTH_RULE_ID
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -21,6 +13,14 @@ import dev.detekt.api.TextLocation
 import dev.detekt.api.modifiedText
 import dev.detekt.api.valueOrNull
 import dev.detekt.psi.absolutePath
+import io.github.ktlint.core.rule.engine.core.api.AutocorrectDecision
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfig
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.INDENT_STYLE_PROPERTY
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.createRuleExecutionEditorConfigProperty
+import io.github.ktlint.core.ruleset.standard.StandardRule
+import io.github.ktlint.core.ruleset.standard.rules.MAX_LINE_LENGTH_RULE_ID
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
@@ -53,6 +53,10 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
         originalFilePath = root.absolutePath()
         positionByOffset = KtLintLineColCalculator.calculateLineColByOffset(fileCopy.text)
 
+        wrapping.startTraversalOfAST { offset, _, errorMessage, canBeAutoCorrected ->
+            emitFinding(offset, errorMessage, canBeAutoCorrected)
+            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
+        }
         wrapping.beforeFirstNode(computeEditorConfigProperties())
         this.root.node.visitASTNodes()
         wrapping.afterLastNode()
@@ -116,29 +120,15 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
         }
     }
 
-    private fun beforeVisitChildNodes(node: ASTNode) {
-        wrapping.beforeVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
-            emitFinding(offset, errorMessage, canBeAutoCorrected)
-            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
-        }
-    }
-
-    private fun afterVisitChildNodes(node: ASTNode) {
-        wrapping.afterVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
-            emitFinding(offset, errorMessage, canBeAutoCorrected)
-            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
-        }
-    }
-
     private fun ASTNode.visitASTNodes() {
         if (isNotDummyElement()) {
-            beforeVisitChildNodes(this)
+            wrapping.beforeVisitChildNodes(this)
         }
         getChildren(null).forEach {
             it.visitASTNodes()
         }
         if (isNotDummyElement()) {
-            afterVisitChildNodes(this)
+            wrapping.afterVisitChildNodes(this)
         }
     }
 

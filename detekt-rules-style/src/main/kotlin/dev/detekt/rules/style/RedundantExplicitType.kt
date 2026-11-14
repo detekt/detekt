@@ -6,16 +6,12 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.isBooleanType
-import org.jetbrains.kotlin.analysis.api.components.isCharType
-import org.jetbrains.kotlin.analysis.api.components.isDoubleType
-import org.jetbrains.kotlin.analysis.api.components.isFloatType
-import org.jetbrains.kotlin.analysis.api.components.isIntType
-import org.jetbrains.kotlin.analysis.api.components.isLongType
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.classId
+import org.jetbrains.kotlin.analysis.api.types.type
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -59,7 +55,7 @@ class RedundantExplicitType(config: Config) :
 
             when (val initializer = property.initializer) {
                 is KtConstantExpression -> if (!typeIsSameAs(initializer, type)) return
-                is KtStringTemplateExpression -> if (!type.isStringType) return
+                is KtStringTemplateExpression -> if (type.classId != KaStandardTypeClassIds.STRING) return
                 is KtNameReferenceExpression -> if (typeReference.text != initializer.getReferencedName()) return
                 is KtCallExpression -> if (typeReference.text != initializer.calleeExpression?.text) return
                 else -> return
@@ -69,27 +65,26 @@ class RedundantExplicitType(config: Config) :
         super.visitProperty(property)
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun typeIsSameAs(expression: KtConstantExpression, type: KaType) =
         when (expression.node.elementType) {
-            KtNodeTypes.BOOLEAN_CONSTANT -> type.isBooleanType
+            KtNodeTypes.BOOLEAN_CONSTANT -> type.classId == KaStandardTypeClassIds.BOOLEAN
 
-            KtNodeTypes.CHARACTER_CONSTANT -> type.isCharType
+            KtNodeTypes.CHARACTER_CONSTANT -> type.classId == KaStandardTypeClassIds.CHAR
 
             KtNodeTypes.INTEGER_CONSTANT -> {
                 if (expression.text.endsWith("L")) {
-                    type.isLongType
+                    type.classId == KaStandardTypeClassIds.LONG
                 } else {
-                    type.isIntType
+                    type.classId == KaStandardTypeClassIds.INT
                 }
             }
 
             KtNodeTypes.FLOAT_CONSTANT -> {
                 if (expression.text.endsWith("f") || expression.text.endsWith("F")) {
-                    type.isFloatType
+                    type.classId == KaStandardTypeClassIds.FLOAT
                 } else {
-                    type.isDoubleType
+                    type.classId == KaStandardTypeClassIds.DOUBLE
                 }
             }
 

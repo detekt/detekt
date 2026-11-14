@@ -23,11 +23,13 @@ dependencies {
 
     runtimeOnly(libs.slf4j.api)
 
-    testImplementation(projects.detektRulesKtlintWrapper.ktlintRepackage) {
+    testRuntimeOnly(projects.detektRulesKtlintWrapper.ktlintRepackage) {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
         }
     }
+    implementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
+    implementation(libs.kotlin.analysisApiIntellijImplementationComponents)
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
