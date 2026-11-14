@@ -210,6 +210,26 @@ class ReturnCountSpec {
     }
 
     @Nested
+    inner class `a file with an annotated guard clause between other guard clauses` {
+        private val code = """
+            fun test(a: Int?, b: Int?, c: Int?): Int {
+                if (a == null) return 0
+                @Suppress("DEPRECATION")
+                if (b == null) return 1
+                if (c == null) return 2
+                return a + b + c
+            }
+        """.trimIndent()
+
+        @Test
+        fun `should not count an annotated guard clause or the guard clauses after it`() {
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to true))
+                .lint(code)
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
     inner class `a file with multiple guard clauses` {
         val code = """
             var x = 1

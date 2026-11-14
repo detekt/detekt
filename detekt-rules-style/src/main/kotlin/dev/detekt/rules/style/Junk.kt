@@ -3,6 +3,7 @@ package dev.detekt.rules.style
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtAnnotatedExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -33,12 +34,23 @@ inline fun <reified T : KtExpression> KtNamedFunction.yieldStatementsSkippingGua
         this@yieldStatementsSkippingGuardClauses.bodyBlockExpression?.statements?.forEach {
             if (firstNonGuardFound) {
                 yield(it)
-            } else if (!it.isGuardClause<T>() && !it.isSuperCall() && !it.isLocalVariableDeclaration()) {
-                firstNonGuardFound = true
-                yield(it)
+            } else {
+                val statement = it.withoutAnnotations()
+                if (!statement.isGuardClause<T>() &&
+                    !statement.isSuperCall() &&
+                    !statement.isLocalVariableDeclaration()
+                ) {
+                    firstNonGuardFound = true
+                    yield(it)
+                }
             }
         }
     }
+
+/**
+ * An annotated statement like `@Suppress("X") if (a) return` is wrapped in a [KtAnnotatedExpression].
+ */
+fun KtExpression.withoutAnnotations(): KtExpression = (this as? KtAnnotatedExpression)?.baseExpression ?: this
 
 fun KtExpression.isSuperCall(): Boolean = (this as? KtDotQualifiedExpression)?.receiverExpression is KtSuperExpression
 
