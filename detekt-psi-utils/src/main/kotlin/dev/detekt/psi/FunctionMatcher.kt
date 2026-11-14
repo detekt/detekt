@@ -184,13 +184,12 @@ private fun KaType.asFqNameString(): String? =
     }
 
 private fun changeIfLambda(param: String): String? {
-    val (paramsRaw, _) = splitLambda(param) ?: return null
-    val params = paramsRaw.splitParams()
+    val params = splitLambda(param)?.splitParams() ?: return null
 
     return "kotlin.Function${params.count()}"
 }
 
-private fun splitLambda(param: String): Pair<String, String>? {
+private fun splitLambda(param: String): String? {
     if (!param.startsWith("(")) return null
 
     var nestingLevel = 0
@@ -217,7 +216,7 @@ private fun splitLambda(param: String): Pair<String, String>? {
 
     check(returnValue.trim().startsWith("->"))
 
-    return paramsRaw.toString().trim() to returnValue.toString().substringAfter("->").trim()
+    return paramsRaw.toString().trim()
 }
 
 private val functionSignatureRegex = """((?:[^()`]|`.*`)*)(?:\((.*)\))?""".toRegex()

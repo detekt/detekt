@@ -35,8 +35,10 @@ internal class BaselineFormat : BaselineProvider {
                 return handler.createBaseline()
             }
         } catch (error: SAXParseException) {
-            val (line, column) = error.lineNumber to error.columnNumber
-            throw InvalidState("Error on position $line:$column while reading the baseline xml file!", error)
+            throw InvalidState(
+                "Error on position ${error.lineNumber}:${error.columnNumber} while reading the baseline xml file!",
+                error
+            )
         }
     }
 

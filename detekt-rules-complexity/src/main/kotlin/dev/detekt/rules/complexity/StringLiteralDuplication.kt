@@ -61,7 +61,7 @@ class StringLiteralDuplication(config: Config) :
     override fun visitKtFile(file: KtFile) {
         val visitor = StringLiteralVisitor()
         file.accept(visitor)
-        for ((name, _) in visitor.getLiteralsOverThreshold()) {
+        visitor.getLiteralsOverThreshold().keys.forEach { name ->
             val (main, references) = visitor.entitiesForLiteral(name)
             report(
                 Finding(
