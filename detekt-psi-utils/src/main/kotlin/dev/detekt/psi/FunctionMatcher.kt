@@ -191,7 +191,17 @@ private fun changeIfLambda(param: String): String? {
 }
 
 private fun splitLambda(param: String): Pair<String, String>? {
-    if (!param.startsWith("(")) return null
+    val lambdaParam = if (param.startsWith('(')) {
+        param
+    } else {
+        // Function type with receiver, e.g. `Foo.(Bar) -> Baz` or `Foo.() -> Baz`:
+        // the receiver is passed to the resulting function type as its first parameter,
+        // so `Foo.(Bar) -> Baz` matches `kotlin.Function2` and `Foo.() -> Baz` matches `kotlin.Function1`.
+        val receiverEnd = param.indexOf(".(")
+        if (receiverEnd <= 0) return null
+        val receiver = param.take(receiverEnd)
+        "($receiver, ${param.substring(receiverEnd + 2)}"
+    }
 
     var nestingLevel = 0
     val paramsRaw = StringBuilder()
@@ -201,7 +211,7 @@ private fun splitLambda(param: String): Pair<String, String>? {
      * We don't count the first `(` so as soon as the nestingLevel reaches the last `)` we know that we read all the
      * params. Then we handle the rest of the String as the result.
      */
-    param.toCharArray()
+    lambdaParam.toCharArray()
         .drop(1)
         .forEach { c ->
             if (nestingLevel >= 0) {
