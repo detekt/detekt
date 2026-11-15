@@ -87,6 +87,28 @@ class FunctionMatcherSpec(
                     ),
                 ),
             ),
+            TestCase(
+                testDescription = "should return method name and param list when it has lambdas with receiver",
+                functionSignature = "hello((Bar) -> Unit, Bar.(Foo) -> Foo, Bar.() -> Unit)",
+                expectedFunctionMatcher = FunctionMatcher.WithParameters(
+                    "hello",
+                    listOf(
+                        "kotlin.Function1",
+                        "kotlin.Function2",
+                        "kotlin.Function1",
+                    ),
+                ),
+            ),
+            TestCase(
+                testDescription = "should count the receiver of a function type with receiver as its first parameter",
+                functionSignature = "hello(Bar.() -> Unit)",
+                expectedFunctionMatcher = FunctionMatcher.WithParameters(
+                    "hello",
+                    listOf(
+                        "kotlin.Function1",
+                    ),
+                ),
+            ),
         ).map { testCase ->
             dynamicTest(testCase.testDescription) {
                 val functionMatcher = FunctionMatcher.fromFunctionSignature(testCase.functionSignature)

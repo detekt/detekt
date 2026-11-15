@@ -520,6 +520,25 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `should report functions with lambda params with receiver`() {
+        val code = """
+            package org.example
+
+            fun bar(b: NavOptionsBuilder.() -> Unit) = Unit
+
+            class NavOptionsBuilder
+
+            fun foo() {
+                bar { }
+            }
+        """.trimIndent()
+        val findings = ForbiddenMethodCall(
+            TestConfig(METHODS to listOf("org.example.bar(org.example.NavOptionsBuilder.() -> kotlin.Unit)"))
+        ).lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
     fun `should report extension functions`() {
         val code = """
             package org.example

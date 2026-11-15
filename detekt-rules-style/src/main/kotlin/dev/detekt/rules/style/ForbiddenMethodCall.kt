@@ -77,7 +77,10 @@ class ForbiddenMethodCall(config: Config) :
             "example as `TestClass.Companion.hello()` (even if it is marked `@JvmStatic`). " +
             "To match function type parameters like `initializer` in `fun <T> lazy(initializer: () -> T)`, " +
             "use `kotlin.Function{N}` where N is the number of parameters the function takes. For example, " +
-            "`kotlin.lazy(kotlin.Function0)` matches calls to `lazy { ... }`."
+            "`kotlin.lazy(kotlin.Function0)` matches calls to `lazy { ... }`. " +
+            "Function types with a receiver are also supported: a signature like " +
+            "`foo(Foo.(Bar) -> Baz)` matches because the receiver is counted as the first parameter of the " +
+            "function type (`kotlin.Function2`), the same as its equivalent form `foo((Foo, Bar) -> Baz)`."
     )
     private val methods: List<ForbiddenMethod> by config(
         valuesWithReason(
