@@ -191,7 +191,7 @@ private fun changeIfLambda(param: String): String? {
 }
 
 private fun splitLambda(param: String): Pair<String, String>? {
-    val lambdaParam = if (param.startsWith("(")) {
+    val lambdaParam = if (param.startsWith('(')) {
         param
     } else {
         // Function type with receiver, e.g. `Foo.(Bar) -> Baz` or `Foo.() -> Baz`:
