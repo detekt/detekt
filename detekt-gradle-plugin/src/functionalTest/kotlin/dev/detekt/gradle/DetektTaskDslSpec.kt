@@ -322,7 +322,7 @@ class DetektTaskDslSpec {
             fun `fails the build`() {
                 gradleRunner.runDetektTaskAndExpectFailure { result ->
                     assertThat(result.output)
-                        .contains("property 'reports.custom.\$0.outputLocation' doesn't have a configured value")
+                        .contains("If a custom report is specified, the destination must be present")
                 }
             }
         }

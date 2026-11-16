@@ -68,6 +68,16 @@ the merging makes most sense in a multi-module project. In this spirit, only Gra
 At the moment, merging Checkstyle and SARIF are supported. You can refer to the sample build script below and 
 run `./gradlew detekt reportMerge --continue` to execute detekt tasks and merge the corresponding reports.
 
+:::note
+
+To merge [custom reports](../gettingstarted/gradle.mdx#reports) as well, wire the detekt tasks' `outputs.files`, which
+include the custom report locations. Wiring the `outputLocation` of a single custom report instead makes Gradle fail
+the merge task with an implicit dependency validation problem, because Gradle cannot associate a producing task with
+output properties of beans that are part of a collection. Alternatively, declare an explicit `dependsOn` on the detekt
+tasks so the merge task runs after they have produced their reports.
+
+:::
+
 ### Groovy DSL
 ```groovy
 tasks.register("reportMerge", dev.detekt.gradle.report.ReportMergeTask) {
