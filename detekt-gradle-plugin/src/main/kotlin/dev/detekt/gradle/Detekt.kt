@@ -180,14 +180,6 @@ abstract class Detekt @Inject constructor(
 
     init {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
-
-        // Custom report locations must not be declared as output properties on [CustomDetektReport]: Gradle cannot
-        // associate a producing task with output properties of nested beans that are part of a collection, and wiring
-        // such a property into another task fails the build. Registering them here keeps them tracked as outputs of
-        // this task, and wiring `outputs.files` of this task into another task creates the implicit dependency.
-        outputs.files(
-            providers.provider { reports.custom.mapNotNull { it.outputLocation.orNull } }
-        )
     }
 
     @get:Internal

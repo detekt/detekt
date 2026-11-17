@@ -155,7 +155,7 @@ class DetektReportMergeSpec {
 
     @Test
     @Suppress("LongMethod")
-    fun `Custom report merge task which does not declare its dependency fails with a helpful validation problem`() {
+    fun `Consuming a custom report output location without declaring a dependency does not fail while scheduling the build`() {
         val builder = DslTestBuilder.kotlin()
         val buildFileContent = """
             ${builder.gradlePlugins.reIndent()}
@@ -214,22 +214,24 @@ class DetektReportMergeSpec {
         )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "customReportMerge", "--continue") { result ->
-            // Before the custom report locations were registered as task outputs, consuming one of them failed with
-            // an IllegalStateException ("does not have a task associated with it") while scheduling the build.
+            // When custom report locations were declared as output properties, consuming one of them failed with an
+            // IllegalStateException ("does not have a task associated with it") while scheduling the build. They are
+            // no longer output properties, so the build is scheduled and only the detekt tasks fail (they fail
+            // because the source files contain findings). The merge task may run before or after the detekt tasks as
+            // no dependency is declared - the wiring shown here is intentionally incomplete.
             assertThat(result.output).doesNotContain("does not have a task associated with it")
-            assertThat(result.output).contains("FAILURE: Build completed with 3 failures.")
-            assertThat(result.output).contains(
-                "uses this output of task ':child1:detekt' without declaring an explicit or implicit dependency"
-            )
-            assertThat(result.output).contains(
-                "uses this output of task ':child2:detekt' without declaring an explicit or implicit dependency"
-            )
+            assertThat(result.output).doesNotContain("without declaring an explicit or implicit dependency")
+            assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
+            assertThat(result.task(":child1:detekt")?.outcome).isEqualTo(TaskOutcome.FAILED)
+            assertThat(result.task(":child2:detekt")?.outcome).isEqualTo(TaskOutcome.FAILED)
+            assertThat(result.task(":customReportMerge")?.outcome)
+                .isIn(TaskOutcome.SUCCESS, TaskOutcome.FROM_CACHE)
         }
     }
 
     @Test
     @Suppress("LongMethod")
-    fun `Reports including custom reports are merged when wired via the outputs of the detekt tasks`() {
+    fun `Custom reports are merged when the merge task declares explicit ordering on the detekt tasks`() {
         val builder = DslTestBuilder.kotlin()
         val buildFileContent = """
             ${builder.gradlePlugins.reIndent()}
@@ -251,7 +253,17 @@ class DetektReportMergeSpec {
                 }
 
                 customReportMerge {
-                    input.from(tasks.withType<dev.detekt.gradle.Detekt>().map { it.outputs.files })
+                    // Custom report locations do not carry an implicit task dependency (they are not task outputs),
+                    // so the ordering on the detekt tasks is declared explicitly. Locations of default reports such
+                    // as `reports.checkstyle.outputLocation` create the dependency implicitly. `mustRunAfter` keeps
+                    // the merge task running when the detekt tasks fail (they fail because the source files contain
+                    // findings), which is what the documented `--continue` merging pattern relies on.
+                    mustRunAfter(tasks.withType<dev.detekt.gradle.Detekt>())
+                    input.from(tasks.withType<dev.detekt.gradle.Detekt>().map { it.reports.checkstyle.outputLocation })
+                    input.from(
+                        tasks.withType<dev.detekt.gradle.Detekt>()
+                            .map { it.reports.custom.first { it.reportId == "customXml" }.outputLocation }
+                    )
                 }
             }
         """.trimIndent()
@@ -286,13 +298,17 @@ class DetektReportMergeSpec {
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "customReportMerge", "--continue") { result ->
             assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
-            assertThat(result.output).doesNotContain("without declaring an explicit or implicit dependency")
+            assertThat(result.output).doesNotContain("does not have a task associated with it")
             assertThat(result.task(":child1:detekt")?.outcome).isEqualTo(TaskOutcome.FAILED)
             assertThat(result.task(":child2:detekt")?.outcome).isEqualTo(TaskOutcome.FAILED)
-            assertThat(result.task(":customReportMerge")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+            assertThat(result.task(":customReportMerge")?.outcome)
+                .isIn(TaskOutcome.SUCCESS, TaskOutcome.FROM_CACHE)
             assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
             assertThat(projectFile("build/reports/detekt/merge.xml").readText())
-                .contains(""""version": "2.1.0"""")
+                .contains("""<error column="31" line="4"""")
+            projectLayout.submodules.forEach {
+                assertThat(projectFile("${it.name}/build/reports/detekt/custom.xml")).doesNotExist()
+            }
         }
     }
 }

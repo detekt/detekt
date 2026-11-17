@@ -4,9 +4,11 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.Internal
 
 /**
- * Keep [outputLocation] internal: Gradle cannot associate a producing task with output properties of nested beans
- * that are part of a collection, so annotating it as an output property makes builds fail when the property is wired
- * into another task. The detekt task registers the custom report locations as its own outputs instead.
+ * [outputLocation] is intentionally not annotated as an output property: Gradle cannot associate a producing task
+ * with output properties of nested beans that are part of a collection, so annotating it as an output property makes
+ * builds fail when the property is wired into another task. Custom report locations are user-configured destinations,
+ * not task outputs managed by Gradle; consuming them in another task therefore requires that task to declare its
+ * ordering or dependency on the detekt tasks explicitly.
  */
 abstract class CustomDetektReport {
 
