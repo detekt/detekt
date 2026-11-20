@@ -60,6 +60,7 @@ abstract class DetektGenerateConfigTask @Inject constructor(
             workQueue.submit(DetektWorkAction::class.java) { workParameters ->
                 workParameters.arguments.set(arguments)
                 workParameters.classpath.setFrom(detektClasspath, pluginClasspath)
+                workParameters.ignoreFailures.set(false)
                 workParameters.taskName.set(name)
             }
         } else {
@@ -68,6 +69,7 @@ abstract class DetektGenerateConfigTask @Inject constructor(
                 arguments = arguments,
                 classpath = detektClasspath.plus(pluginClasspath).files,
                 taskName = name,
+                ignoreFailures = false,
             )
         }
     }
