@@ -28,6 +28,19 @@ class PluginTaskBehaviorSpec {
         }
     """.trimIndent()
 
+    private val detektConfigWithCustomReport = """
+        $detektConfig
+
+        tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
+            reports {
+                custom {
+                    reportId = "csv"
+                    outputLocation.set(file("reports/custom.csv"))
+                }
+            }
+        }
+    """.trimIndent()
+
     lateinit var gradleRunner: DslGradleRunner
 
     @BeforeEach
@@ -39,6 +52,13 @@ class PluginTaskBehaviorSpec {
             .build()
     }
 
+    private fun customReportGradleRunner(): DslGradleRunner =
+        kotlin()
+            .withDetektConfig(detektConfigWithCustomReport)
+            .withBaseline(baselineFileName)
+            .withConfigFile(configFileName)
+            .build()
+
     @Test
     fun `should be UP-TO-DATE the 2nd run without changes`() {
         gradleRunner.runDetektTaskAndCheckResult { result ->
@@ -46,6 +66,55 @@ class PluginTaskBehaviorSpec {
         }
         gradleRunner.runDetektTaskAndCheckResult { result ->
             assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.UP_TO_DATE)
+        }
+    }
+
+    @Test
+    fun `should be UP-TO-DATE the 2nd run without changes when a custom report is configured`() {
+        val customReportGradleRunner = customReportGradleRunner()
+        customReportGradleRunner.runDetektTaskAndCheckResult { result ->
+            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        }
+        customReportGradleRunner.runDetektTaskAndCheckResult { result ->
+            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.UP_TO_DATE)
+        }
+    }
+
+    @Test
+    fun `should not re-run when a custom report location is modified externally`() {
+        val customReportGradleRunner = customReportGradleRunner()
+        customReportGradleRunner.runDetektTaskAndCheckResult { result ->
+            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        }
+
+        // Custom report locations are not task outputs managed by Gradle, so an external writer at that location
+        // (the user's own report task, another build task, a human) must not invalidate the detekt task.
+        val customReportFile = customReportGradleRunner.projectFile("reports/custom.csv")
+        customReportFile.parentFile.mkdirs()
+        customReportFile.writeText("written by something other than the detekt task")
+
+        customReportGradleRunner.runDetektTaskAndCheckResult { result ->
+            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.UP_TO_DATE)
+            assertThat(customReportFile.readText()).isEqualTo("written by something other than the detekt task")
+        }
+    }
+
+    @Test
+    fun `should not let the build cache manage custom report locations`() {
+        val customReportGradleRunner = customReportGradleRunner()
+        customReportGradleRunner.runDetektTaskAndCheckResult { result ->
+            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        }
+
+        val customReportFile = customReportGradleRunner.projectFile("reports/custom.csv")
+        customReportFile.parentFile.mkdirs()
+        customReportFile.writeText("written by something other than the detekt task")
+
+        customReportGradleRunner.runTasksAndCheckResult("clean", "detekt") { result ->
+            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
+            // The custom report location is outside the build dir and not a task output, so the cache restore of
+            // the detekt task must not touch it.
+            assertThat(customReportFile.readText()).isEqualTo("written by something other than the detekt task")
         }
     }
 
