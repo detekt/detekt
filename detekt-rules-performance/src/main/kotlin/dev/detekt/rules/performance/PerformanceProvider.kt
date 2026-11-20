@@ -18,7 +18,7 @@ class PerformanceProvider : DefaultRuleSetProvider {
             ruleSetId,
             listOf(
                 ::SpreadOperator,
-                ::WhenIndyDirectCandidate,
+                ::UnnecessarySubjectlessWhen,
                 ::UnnecessaryInitOnArray,
                 ::UnnecessaryTemporaryInstantiation,
                 ::UnnecessaryTypeCasting,

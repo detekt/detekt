@@ -381,7 +381,7 @@ performance:
     active: true
   UnnecessaryTypeCasting:
     active: false
-  WhenIndyDirectCandidate:
+  UnnecessarySubjectlessWhen:
     active: false
 
 potential-bugs:

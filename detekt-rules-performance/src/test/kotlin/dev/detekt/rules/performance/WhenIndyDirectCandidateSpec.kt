@@ -8,9 +8,9 @@ import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class WhenIndyDirectCandidateSpec(val env: KotlinEnvironmentContainer) {
+class UnnecessarySubjectlessWhenSpec(val env: KotlinEnvironmentContainer) {
 
-    private val rule = WhenIndyDirectCandidate(Config.empty)
+    private val rule = UnnecessarySubjectlessWhen(Config.empty)
 
     @Test
     fun `reports positive type checks against one subject`() {

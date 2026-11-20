@@ -51,7 +51,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * }
  * </compliant>
  */
-class WhenIndyDirectCandidate(config: Config) :
+class UnnecessarySubjectlessWhen(config: Config) :
     Rule(
         config,
         "A subjectless `when` expression with type checks against one stable value can use a subject to enable " +
