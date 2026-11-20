@@ -9,11 +9,14 @@ import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@KotlinCoreEnvironmentTest
+// Declared on the outer class too: the nested `Java sources` class reuses the environment cached
+// for this class (JUnit >= 5.13) instead of creating one from its own annotation.
+@KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
 class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = NullableToStringCall(Config.empty)
 
@@ -27,6 +30,20 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
         val actual = subject.lintWithContext(env, code)
         assertThat(actual).singleElement()
             .hasMessage("This call 'a.toString()' may return the string \"null\".")
+    }
+
+    @Test
+    fun `reports when a nullable toString is explicitly called on an implicit receiver`() {
+        val code = """
+            fun test(a: Any?) {
+                with(a) {
+                    toString()
+                }
+            }
+        """.trimIndent()
+        val actual = subject.lintWithContext(env, code)
+        assertThat(actual).singleElement()
+            .hasMessage("This call 'toString()' may return the string \"null\".")
     }
 
     @Test
@@ -187,6 +204,18 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
         assertThat(actual).isEmpty()
     }
 
+    // https://github.com/detekt/detekt/issues/9074
+    @Test
+    fun `does not report a safe call toString on an unresolved receiver`() {
+        val code = """
+            fun test(project: Project): Boolean {
+                return project.property("verbose")?.toString().toBoolean()
+            }
+        """.trimIndent()
+        val actual = subject.lintWithContext(env, code, allowCompilationErrors = true)
+        assertThat(actual).isEmpty()
+    }
+
     // https://github.com/detekt/detekt/issues/6349
     @Test
     fun `reports expressions in lambda`() {
@@ -265,6 +294,42 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             languageVersionSettings = languageVersionSettings,
         )
         assertThat(actual).isEmpty()
+    }
+
+    @Nested
+    @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
+    inner class `Java sources`(val env: KotlinEnvironmentContainer) {
+        private val subject = NullableToStringCall(Config.empty)
+
+        // https://github.com/detekt/detekt/issues/9074
+        @Test
+        fun `does not report when a platform type toString is called safely`() {
+            val code = """
+                import com.example.nullable_to_string.GradleProject
+                
+                fun test(project: GradleProject): Boolean {
+                    val verbose = project.getProperty("verbose")?.toString()
+                    return project.getProperty("verbose")?.toString().toBoolean()
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).isEmpty()
+        }
+
+        // A dot call binds to the non-null `Any.toString()` member (members take precedence over
+        // extensions), consistent with the platform type whitelist in string templates (#4059).
+        @Test
+        fun `does not report when a platform type toString is called without safe call`() {
+            val code = """
+                import com.example.nullable_to_string.GradleProject
+
+                fun test(project: GradleProject) {
+                    val verbose = project.getProperty("verbose").toString()
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).isEmpty()
+        }
     }
 
     companion object {
