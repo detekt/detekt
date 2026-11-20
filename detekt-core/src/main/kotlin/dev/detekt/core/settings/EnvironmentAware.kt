@@ -6,6 +6,7 @@ import com.intellij.pom.PomModel
 import com.intellij.pom.tree.TreeAspect
 import dev.detekt.core.parser.createCompilerConfiguration
 import dev.detekt.parser.DetektPomModel
+import dev.detekt.parser.registerTreeCopyHandlerExtensionPoint
 import dev.detekt.tooling.api.spec.CompilerSpec
 import dev.detekt.tooling.api.spec.LoggingSpec
 import dev.detekt.tooling.api.spec.ProjectSpec
@@ -69,6 +70,7 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
             // Required for autocorrect support
             registerProjectService(TreeAspect::class.java)
             registerProjectService(PomModel::class.java, DetektPomModel(project))
+            registerTreeCopyHandlerExtensionPoint(application)
 
             buildKtModuleProvider {
                 val targetPlatform =

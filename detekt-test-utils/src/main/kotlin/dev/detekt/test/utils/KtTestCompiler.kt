@@ -7,6 +7,7 @@ import com.intellij.pom.PomModel
 import com.intellij.pom.tree.TreeAspect
 import com.intellij.psi.util.PsiUtilCore
 import dev.detekt.parser.DetektPomModel
+import dev.detekt.parser.registerTreeCopyHandlerExtensionPoint
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
@@ -43,6 +44,7 @@ private fun createDefaultAnalysisAPISession() =
     buildStandaloneAnalysisAPISession {
         registerProjectService(TreeAspect::class.java)
         registerProjectService(PomModel::class.java, DetektPomModel(project))
+        registerTreeCopyHandlerExtensionPoint(application)
 
         buildKtModuleProvider {
             platform = JvmPlatforms.defaultJvmPlatform
