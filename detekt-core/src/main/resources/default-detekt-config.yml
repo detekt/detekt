@@ -377,11 +377,11 @@ performance:
     active: false
   UnnecessaryPartOfBinaryExpression:
     active: false
+  UnnecessarySubjectlessWhen:
+    active: false
   UnnecessaryTemporaryInstantiation:
     active: true
   UnnecessaryTypeCasting:
-    active: false
-  UnnecessarySubjectlessWhen:
     active: false
 
 potential-bugs:
