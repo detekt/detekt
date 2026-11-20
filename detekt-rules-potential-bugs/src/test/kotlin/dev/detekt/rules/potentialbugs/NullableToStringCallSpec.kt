@@ -14,9 +14,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-// The Java source path must also be declared here on the outer class: JUnit (>= 5.13) inherits cached
-// ExtensionContext.Store values from parent contexts, so the nested `Java sources` class below reuses
-// the environment created for this class instead of building one from its own annotation.
+// Declared on the outer class too: the nested `Java sources` class reuses the environment cached
+// for this class (JUnit >= 5.13) instead of creating one from its own annotation.
 @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
 class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = NullableToStringCall(Config.empty)
@@ -209,9 +208,6 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
     @Test
     fun `does not report a safe call toString on an unresolved receiver`() {
         val code = """
-            // An unresolved receiver, e.g. `project.property("...")` in a Gradle build script where
-            // detekt's type resolution cannot resolve it, binds the safe call to the nullable
-            // `Any?.toString()` extension. A safe call still never returns the string "null".
             fun test(project: Project): Boolean {
                 return project.property("verbose")?.toString().toBoolean()
             }
@@ -320,9 +316,8 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             assertThat(actual).isEmpty()
         }
 
-        // A dot call on a platform type receiver binds to the non-null `Any.toString()` member (members
-        // take precedence over extensions), which never returns the string "null" - consistent with the
-        // platform type whitelist in string templates (#4059).
+        // A dot call binds to the non-null `Any.toString()` member (members take precedence over
+        // extensions), consistent with the platform type whitelist in string templates (#4059).
         @Test
         fun `does not report when a platform type toString is called without safe call`() {
             val code = """

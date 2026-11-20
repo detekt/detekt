@@ -57,11 +57,8 @@ class NullableToStringCall(config: Config) :
         val stringTemplateEntry = (qualifiedExpression ?: callExpression ?: expression).parent as? KtStringTemplateEntry
 
         when {
-            // A safe call like `a?.toString()` never returns the string "null" (it returns null or a
-            // non-null String), so it is never a finding. When the receiver is unresolved - e.g.
-            // `project.property(...)` in a Gradle build script that detekt's type resolution cannot
-            // resolve - the safe call binds to the nullable `Any?.toString()` extension and was
-            // reported. (#9074)
+            // A safe call never returns the string "null". With an unresolved receiver it binds to
+            // the nullable `Any?.toString()` extension and was reported (#9074).
             qualifiedExpression !is KtSafeQualifiedExpression && callExpression?.calls(toString) == true ->
                 report(qualifiedExpression ?: callExpression)
 
