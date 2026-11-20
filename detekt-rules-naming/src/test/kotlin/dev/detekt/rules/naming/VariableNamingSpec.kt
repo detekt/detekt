@@ -7,6 +7,7 @@ import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
@@ -144,10 +145,55 @@ class VariableNamingSpec {
 
         assertThat(VariableNaming(Config.empty).lint(code)).hasSize(1)
     }
+
+    @Test
+    @Disabled("False positive with the preview feature `companion block`, https://github.com/detekt/detekt/issues/9744")
+    fun `should not flag properties in a companion block`() {
+        val code = """
+            data class A(
+                val s: String
+            ) {
+                companion {
+                    @JvmField
+                    val Empty = A("")
+                }
+            }
+        """.trimIndent()
+        assertThat(
+            VariableNaming(Config.empty).lint(
+                content = code,
+                languageVersionSettings = companionBlocksAndExtensionsEnabled,
+            )
+        ).isEmpty()
+    }
+
+    @Test
+    @Disabled("False positive with the preview feature `companion block`, https://github.com/detekt/detekt/issues/9744")
+    fun `should not flag const properties in a companion block`() {
+        val code = """
+            class B {
+                companion {
+                    const val TAG = "B"
+                }
+            }
+        """.trimIndent()
+        assertThat(
+            VariableNaming(Config.empty).lint(
+                content = code,
+                languageVersionSettings = companionBlocksAndExtensionsEnabled,
+            )
+        ).isEmpty()
+    }
 }
 
 private val unnamedLocalVariablesEnabled = LanguageVersionSettingsImpl(
     languageVersion = LanguageVersionSettingsImpl.DEFAULT.languageVersion,
     apiVersion = LanguageVersionSettingsImpl.DEFAULT.apiVersion,
     specificFeatures = mapOf(LanguageFeature.UnnamedLocalVariables to LanguageFeature.State.ENABLED),
+)
+
+private val companionBlocksAndExtensionsEnabled = LanguageVersionSettingsImpl(
+    languageVersion = LanguageVersionSettingsImpl.DEFAULT.languageVersion,
+    apiVersion = LanguageVersionSettingsImpl.DEFAULT.apiVersion,
+    specificFeatures = mapOf(LanguageFeature.CompanionBlocksAndExtensions to LanguageFeature.State.ENABLED),
 )
