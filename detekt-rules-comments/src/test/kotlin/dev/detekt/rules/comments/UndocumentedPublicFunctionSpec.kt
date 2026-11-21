@@ -2,12 +2,13 @@ package dev.detekt.rules.comments
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val SEARCH_PROTECTED_FUN = "searchProtectedFunction"
+private const val REPORT_UNDOCUMENTED_RECEIVER = "reportUndocumentedReceiver"
 
 class UndocumentedPublicFunctionSpec {
     val subject = UndocumentedPublicFunction(Config.empty)
@@ -164,6 +165,59 @@ class UndocumentedPublicFunctionSpec {
         """.trimIndent()
         val subject = UndocumentedPublicFunction(TestConfig(SEARCH_PROTECTED_FUN to true))
         assertThat(subject.lint(code)).hasSize(1)
+    }
+
+    @Nested
+    inner class `receiver documentation` {
+        private val subject =
+            UndocumentedPublicFunction(TestConfig(REPORT_UNDOCUMENTED_RECEIVER to true))
+
+        @Test
+        fun `reports undocumented receiver of extension function`() {
+            val code = """
+                /**
+                 * Comment
+                 */
+                fun String.reversedTwice() = reversed().reversed()
+            """.trimIndent()
+            assertThat(subject.lint(code)).singleElement()
+                .hasMessage("The receiver of the function reversedTwice is missing documentation.")
+        }
+
+        @Test
+        fun `does not report documented receiver of extension function`() {
+            val code = """
+                /**
+                 * Comment
+                 *
+                 * @receiver The string to reverse.
+                 */
+                fun String.reversedTwice() = reversed().reversed()
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report functions without receiver`() {
+            val code = """
+                /**
+                 * Comment
+                 */
+                fun reversedTwice(value: String) = value.reversed().reversed()
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report receivers by default`() {
+            val code = """
+                /**
+                 * Comment
+                 */
+                fun String.reversedTwice() = reversed().reversed()
+            """.trimIndent()
+            assertThat(UndocumentedPublicFunction(Config.empty).lint(code)).isEmpty()
+        }
     }
 
     @Nested
