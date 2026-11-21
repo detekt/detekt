@@ -6,17 +6,19 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.allSupertypes
-import org.jetbrains.kotlin.analysis.api.components.containingDeclaration
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.analysis.api.symbols.containingDeclaration
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.allSupertypes
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -90,7 +92,6 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             else -> false
         } && unusedReturnValue(expression)
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtCallExpression.getFunctionSymbol(): KaNamedFunctionSymbol? =
         resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
@@ -116,7 +117,6 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         return required..max
     }
 
-    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun shouldReplace(function: KaNamedFunctionSymbol): Boolean {
@@ -134,7 +134,6 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         )
     }
 
-    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun isCallerMap(expression: KtCallExpression): Boolean {
@@ -156,7 +155,7 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         val functionLiteral = block.parent as? KtFunctionLiteral
         if (functionLiteral != null && block.statements.lastOrNull() == expression.parent) {
             return analyze(functionLiteral) {
-                functionLiteral.symbol.returnType.isUnitType
+                functionLiteral.symbol.returnType.classId == KaStandardTypeClassIds.UNIT
             }
         }
         return true

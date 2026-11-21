@@ -71,6 +71,8 @@ ktlint:
     active: false
   FunctionSignature:
     functionBodyExpressionWrapping: multiline
+  Indentation:
+    indentExplicitConstructorProperty: false
   Kdoc:
     excludes: ['**/*.kts']
   MaximumLineLength:

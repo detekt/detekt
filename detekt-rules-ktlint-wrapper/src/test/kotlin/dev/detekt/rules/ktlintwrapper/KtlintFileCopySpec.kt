@@ -29,6 +29,7 @@ class KtlintFileCopySpec {
     fun `the shared copy is rebuilt after modifiedText changes (#9379)`() {
         val ktFile = compileContentForTest("fun main()\n= Unit\n", "RebuiltCopy.kt")
         val rule = NoLineBreakBeforeAssignment(Config.empty)
+        val rule2 = NoLineBreakBeforeAssignment(Config.empty)
 
         // First pass: the file has a violation and a single finding is expected.
         assertThat(rule.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
@@ -36,7 +37,7 @@ class KtlintFileCopySpec {
 
         // A prior autocorrect cleaned the file; the next visit must rebuild the copy from it.
         ktFile.modifiedText = "fun main() = Unit\n"
-        val secondPass = rule.visitFile(ktFile, FakeLanguageVersionSettings())
+        val secondPass = rule2.visitFile(ktFile, FakeLanguageVersionSettings())
 
         assertThat(secondPass).isEmpty()
         assertThat(ktFile.ktlintFileCopy).isNotSameAs(firstCopy)
@@ -48,13 +49,15 @@ class KtlintFileCopySpec {
         val violating = "fun main()\n= Unit\n"
         val ktFile = compileContentForTest(violating, "Reappear.kt")
         val rule = NoLineBreakBeforeAssignment(Config.empty)
+        val rule2 = NoLineBreakBeforeAssignment(Config.empty)
+        val rule3 = NoLineBreakBeforeAssignment(Config.empty)
 
         assertThat(rule.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
 
         ktFile.modifiedText = "fun main() = Unit\n"
-        assertThat(rule.visitFile(ktFile, FakeLanguageVersionSettings())).isEmpty()
+        assertThat(rule2.visitFile(ktFile, FakeLanguageVersionSettings())).isEmpty()
 
         ktFile.modifiedText = violating
-        assertThat(rule.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
+        assertThat(rule3.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
     }
 }

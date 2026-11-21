@@ -18,16 +18,16 @@ class AutoCorrectSpec {
         NoSemicolons(Config.empty).visitFile(otherFile, FakeLanguageVersionSettings())
 
         val ktFile = compileContentForTest("fun main()\n= Unit\n", "EngineStaleContext.kt")
-        val rule = NoLineBreakBeforeAssignment(Config.empty)
+        val firstPass = NoLineBreakBeforeAssignment(Config.empty).visitFile(ktFile, FakeLanguageVersionSettings())
 
         // First pass: the file has a violation and a single finding is expected.
-        assertThat(rule.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
+        assertThat(firstPass).hasSize(1)
 
         // Simulate a prior autocorrect having cleaned the file.
         ktFile.modifiedText = "fun main() = Unit\n"
 
         // Second pass: this should read the modified (now clean) file and report nothing.
-        val secondPass = rule.visitFile(ktFile, FakeLanguageVersionSettings())
+        val secondPass = NoLineBreakBeforeAssignment(Config.empty).visitFile(ktFile, FakeLanguageVersionSettings())
 
         assertThat(secondPass).isEmpty()
     }

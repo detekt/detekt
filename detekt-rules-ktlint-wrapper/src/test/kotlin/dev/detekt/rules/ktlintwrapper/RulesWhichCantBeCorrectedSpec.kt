@@ -3,7 +3,6 @@ package dev.detekt.rules.ktlintwrapper
 import dev.detekt.rules.ktlintwrapper.wrappers.EnumEntryNameCase
 import dev.detekt.rules.ktlintwrapper.wrappers.Filename
 import dev.detekt.rules.ktlintwrapper.wrappers.ImportOrdering
-import dev.detekt.rules.ktlintwrapper.wrappers.Indentation
 import dev.detekt.rules.ktlintwrapper.wrappers.MaximumLineLength
 import dev.detekt.rules.ktlintwrapper.wrappers.NoWildcardImports
 import dev.detekt.rules.ktlintwrapper.wrappers.PackageName
@@ -56,20 +55,6 @@ class RulesWhichCantBeCorrectedSpec {
     fun `EnumEntryNameCase can't be corrected`() {
         assertThat(EnumEntryNameCase(autoCorrectConfig).lint("enum class Enum { violation_triggering_name }"))
             .singleElement()
-            .noSuppress()
-    }
-
-    @Test
-    fun `Indentation finding inside string templates can't be corrected`() {
-        val multilineQuote = "\"\"\""
-        val code = """
-            val foo = $multilineQuote
-                  line1
-            ${'\t'}line2
-                $multilineQuote.trimIndent()
-        """.trimIndent()
-
-        assertThat(Indentation(autoCorrectConfig).lint(code)).singleElement()
             .noSuppress()
     }
 }

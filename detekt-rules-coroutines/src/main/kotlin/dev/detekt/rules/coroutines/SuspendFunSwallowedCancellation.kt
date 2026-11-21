@@ -8,13 +8,24 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.rules.coroutines.utils.CoroutineCallableIds
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.expressions.expectedType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbols
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.findTypeAlias
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.defaultType
+import org.jetbrains.kotlin.analysis.api.types.isSubtypeOf
+import org.jetbrains.kotlin.analysis.api.types.isSuspendFunctionType
+import org.jetbrains.kotlin.analysis.api.types.semanticallyEquals
+import org.jetbrains.kotlin.analysis.api.types.type
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
@@ -247,7 +258,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
             is KtForExpression -> {
                 analyze(this) {
                     @OptIn(KaExperimentalApi::class, KtExperimentalApi::class)
-                    resolveSymbols().filterIsInstance<KaNamedFunctionSymbol>().any { it.isSuspend }
+                    resolveSuccessfulSymbols().filterIsInstance<KaNamedFunctionSymbol>().any { it.isSuspend }
                 }
             }
 
@@ -312,7 +323,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
             .map { expr ->
                 analyze(expr) {
                     @OptIn(KaExperimentalApi::class)
-                    expr.resolveSymbol()?.psi
+                    expr.resolveSuccessfulSymbol()?.psi
                 }
             }
             .toList()

@@ -1,6 +1,9 @@
 package dev.detekt.psi
 
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 
@@ -9,7 +12,8 @@ fun KtValueArgument.isString(): Boolean {
 
     analyze(argumentExpression) {
         val type = argumentExpression.expressionType
-        return argumentExpression is KtStringTemplateExpression || (type != null && type.isStringType)
+        return argumentExpression is KtStringTemplateExpression ||
+            (type != null && type.classId == KaStandardTypeClassIds.STRING)
     }
 }
 
