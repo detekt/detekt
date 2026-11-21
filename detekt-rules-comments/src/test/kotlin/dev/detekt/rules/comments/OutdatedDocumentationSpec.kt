@@ -945,6 +945,59 @@ class OutdatedDocumentationSpec {
     }
 
     @Nested
+    inner class `property with type params` {
+        @Test
+        fun `should not report when doc matches property type params`() {
+            val code = """
+                /**
+                 * @param T The type of the value.
+                 */
+                val <T> T.someValue: T get() = this
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should report when doc contains unknown type param`() {
+            val code = """
+                /**
+                 * @param S The type of the value.
+                 */
+                val <T> T.someValue: T get() = this
+            """.trimIndent()
+            assertThat(subject.lint(code))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "@param S doesn't have corresponding public declaration.",
+                    "Documentation of T is missing.",
+                )
+        }
+
+        @Test
+        fun `should not report property doc without tags`() {
+            val code = """
+                /**
+                 * Some description.
+                 */
+                val <T> T.someValue: T get() = this
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report properties without type params`() {
+            val code = """
+                /**
+                 * @param someValue The value.
+                 */
+                val someValue: String = "value"
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
     inner class `configuration exhaustive off` {
         private val configuredSubject =
             OutdatedDocumentation(TestConfig("exhaustive" to false))
