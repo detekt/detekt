@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
@@ -26,7 +27,8 @@ import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 
 /**
  * This rule will report any class, function or constructor with KDoc that does not match the declaration signature.
- * If KDoc is not present or does not contain any @param or @property tags, rule violation will not be reported.
+ * If KDoc is not present, no violation is reported. Use the `UndocumentedPublicClass`, `UndocumentedPublicFunction`
+ * and `UndocumentedPublicProperty` rules to report declarations without any documentation.
  * By default, both type and value parameters need to be matched and declarations orders must be preserved. You can
  * turn off these features using configuration options.
  *
@@ -34,6 +36,10 @@ import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
  *
  * Set `exhaustive` to `false` to only check that documented parameters are valid without requiring all
  * parameters to be documented. This is useful when documentation is used sparingly and only where it is really needed.
+ *
+ * By default, KDoc that does not contain any `@param` or `@property` tag is not validated, as the tags may have been
+ * intentionally omitted. Set `reportIfNonePresent` to `true` to also require such KDoc to document all parameters.
+ * Parameters that have their own KDoc comment directly attached do not need a `@param` or `@property` tag.
  *
  * <noncompliant>
  * /**
@@ -64,6 +70,13 @@ import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
  *  */
  * fun <T, S> myFun(someParam: String)
  *
+ * class MyDocumentedClass(
+ *     /**
+ *      * Documented with its own KDoc comment instead of a block tag
+ *      */
+ *     otherParam: String,
+ * )
+ *
  * </compliant>
  */
 @Suppress("TooManyFunctions")
@@ -84,6 +97,11 @@ class OutdatedDocumentation(config: Config) :
             "if false, only documented parameters are validated against the declaration"
     )
     private val exhaustive: Boolean by config(true)
+
+    @Configuration(
+        "if true, KDoc without any `@param` or `@property` tags is also validated against the declaration"
+    )
+    private val reportIfNonePresent: Boolean by config(false)
 
     private inline val DeclarationType.displayName
         get() = this.name.toLowerCaseAsciiOnly()
@@ -238,19 +256,39 @@ class OutdatedDocumentation(config: Config) :
         elementDeclarationsProvider: () -> List<Declaration>,
     ): List<String> {
         val doc = element.docComment ?: return emptyList()
+        val inlineDocumentedNames = element.inlineDocumentedParameterNames()
         val docDeclarations = getDocDeclarations(doc)
             .filterNot { it.name in overridePropertyNames }
-        if (docDeclarations.isEmpty()) return emptyList()
+        if (docDeclarations.isEmpty() && !reportIfNonePresent) return emptyList()
         val elementDeclarations = elementDeclarationsProvider()
-        return getDeclarationsMismatches(docDeclarations, elementDeclarations)
+        return getDeclarationsMismatches(docDeclarations, elementDeclarations, inlineDocumentedNames)
     }
+
+    /**
+     * Value parameters can be documented with their own KDoc comment instead of a `@param` or `@property` tag.
+     * Type parameters cannot, so they are never returned here.
+     */
+    private fun KtNamedDeclaration.inlineDocumentedParameterNames(): Set<String> =
+        when (this) {
+            is KtClass -> primaryConstructor?.valueParameters
+            is KtFunction -> valueParameters
+            else -> null
+        }
+            ?.filter { it.docComment != null }
+            ?.mapNotNull { it.name }
+            ?.toSet()
+            .orEmpty()
 
     private fun isInternalOrPrivate(primaryConstructor: KtPrimaryConstructor?): Boolean {
         primaryConstructor ?: return true
         return primaryConstructor.isInternal() || primaryConstructor.isPrivate()
     }
 
-    private fun getDeclarationsMismatches(doc: List<Declaration>, element: List<Declaration>): List<String> {
+    private fun getDeclarationsMismatches(
+        doc: List<Declaration>,
+        element: List<Declaration>,
+        inlineDocumentedNames: Set<String>,
+    ): List<String> {
         val docNames = doc.map { it.name }
         val elementNames = element.map { it.name }
         val (docWithMissingElement, docWithPresentElement) = doc.partition { it.name !in elementNames }
@@ -261,7 +299,9 @@ class OutdatedDocumentation(config: Config) :
                 "@${it.type.displayName} ${it.name} doesn't have corresponding public declaration."
             }
         val missingDocReasons = if (exhaustive) {
-            elementWithMissingDoc.map { "Documentation of ${it.name} is missing." }
+            elementWithMissingDoc
+                .filterNot { it.name in inlineDocumentedNames }
+                .map { "Documentation of ${it.name} is missing." }
         } else {
             emptyList()
         }
