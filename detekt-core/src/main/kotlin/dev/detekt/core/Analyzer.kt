@@ -9,6 +9,7 @@ import dev.detekt.api.Location
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.Severity
+import dev.detekt.api.getOrNull
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.valueOrDefault
 import dev.detekt.core.suppressors.isSuppressedBy
@@ -19,6 +20,12 @@ import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 
+internal const val PARALLEL_FULL_ANALYSIS_WARNED_KEY = "detekt.parallel.full.analysis.warned"
+internal const val PARALLEL_FULL_ANALYSIS_WARNING =
+    "Warning: Running full analysis with parallelAnalysis enabled may cause intermittent compiler crashes " +
+        "or hangs due to a known Kotlin Analysis API issue (https://youtrack.jetbrains.com/issue/KT-88461). " +
+        "Consider disabling parallelAnalysis (e.g. in CI) if you experience instability."
+
 internal class Analyzer(
     private val settings: ProcessingSettings,
     private val rules: List<RuleDescriptor>,
@@ -27,6 +34,14 @@ internal class Analyzer(
 ) {
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.languageVersionSettings
+
+        if (settings.spec.executionSpec.parallelAnalysis &&
+            analysisMode == AnalysisMode.Full &&
+            settings.getOrNull<Boolean>(PARALLEL_FULL_ANALYSIS_WARNED_KEY) != true
+        ) {
+            settings.register(PARALLEL_FULL_ANALYSIS_WARNED_KEY, true)
+            settings.info(PARALLEL_FULL_ANALYSIS_WARNING)
+        }
 
         return if (settings.spec.executionSpec.parallelAnalysis) {
             runAsync(ktFiles, languageVersionSettings)
