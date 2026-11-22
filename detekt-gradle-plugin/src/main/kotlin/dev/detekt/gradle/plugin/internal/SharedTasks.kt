@@ -8,7 +8,9 @@ import dev.detekt.gradle.internal.existingVariantOrBaseFile
 import dev.detekt.gradle.plugin.DetektPlugin
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.TaskProvider
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
@@ -20,10 +22,11 @@ internal fun Project.registerJvmCompilationDetektTask(
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
     source: ConfigurableFileCollection = sourceProvider(compilation),
-) {
+    classes: FileCollection = compilation.output.classesDirs,
+): TaskProvider<Detekt> {
     val taskSuffix =
         if (target != null) compilation.name + target.name.replaceFirstChar { it.uppercase() } else compilation.name
-    tasks.register(
+    return tasks.register(
         DetektPlugin.DETEKT_TASK_NAME + taskSuffix.replaceFirstChar { it.uppercase() },
         Detekt::class.java
     ) { detektTask ->
@@ -31,11 +34,11 @@ internal fun Project.registerJvmCompilationDetektTask(
 
         detektTask.source(source)
         detektTask.libraries.convention(
-            compilation.output.classesDirs,
+            classes,
             siblingTask.flatMap { it.libraries.elements }
         )
         detektTask.friendPaths.convention(
-            compilation.output.classesDirs,
+            classes,
             siblingTask.flatMap { it.friendPaths.elements }
         )
         detektTask.apiVersion.convention(
@@ -78,10 +81,11 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
     source: ConfigurableFileCollection = sourceProvider(compilation),
-) {
+    classes: FileCollection = compilation.output.classesDirs,
+): TaskProvider<DetektCreateBaselineTask> {
     val taskSuffix =
         if (target != null) compilation.name + target.name.replaceFirstChar { it.uppercase() } else compilation.name
-    tasks.register(
+    return tasks.register(
         DetektPlugin.BASELINE_TASK_NAME + taskSuffix.replaceFirstChar { it.uppercase() },
         DetektCreateBaselineTask::class.java,
     ) { createBaselineTask ->
@@ -89,11 +93,11 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
 
         createBaselineTask.source(source)
         createBaselineTask.classpath.convention(
-            compilation.output.classesDirs,
+            classes,
             siblingTask.flatMap { it.libraries.elements }
         )
         createBaselineTask.friendPaths.convention(
-            compilation.output.classesDirs,
+            classes,
             siblingTask.flatMap { it.friendPaths.elements }
         )
         createBaselineTask.apiVersion.convention(

@@ -635,9 +635,7 @@ class DetektAndroidBuiltInKotlinSpec {
                 @DisplayName("task :app:detektMain has compiled classes on the classpath")
                 fun libDetektMain() {
                     gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
-                        @Suppress("ForbiddenComment")
-                        // FIXME: The task paths should contain these
-                        assertThat(buildResult.tasks.map { it.path }).doesNotContain(
+                        assertThat(buildResult.tasks.map { it.path }).contains(
                             ":app:compileDebugKotlin",
                             ":app:compileDebugJavaWithJavac",
                             ":app:dataBindingGenBaseClassesDebug",
@@ -649,9 +647,7 @@ class DetektAndroidBuiltInKotlinSpec {
                 @DisplayName("task :app:detektTest has compiled classes on the classpath")
                 fun libDetektTest() {
                     gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
-                        @Suppress("ForbiddenComment")
-                        // FIXME: The task paths should contain these
-                        assertThat(buildResult.tasks.map { it.path }).doesNotContain(
+                        assertThat(buildResult.tasks.map { it.path }).contains(
                             ":app:compileDebugUnitTestKotlin",
                             ":app:compileDebugUnitTestJavaWithJavac",
                             ":app:compileDebugAndroidTestKotlin",
