@@ -89,6 +89,7 @@ class KtlintRuleSpec {
             )
 
             assertThat(findings).singleElement()
+                .hasTextLocation(55 to 56)
         }
     }
 
