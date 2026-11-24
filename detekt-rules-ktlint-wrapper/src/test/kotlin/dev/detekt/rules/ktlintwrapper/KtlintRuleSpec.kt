@@ -66,10 +66,10 @@ class KtlintRuleSpec {
         }
 
         @Test
-        fun `support ktlint suppression given as an array literal`() {
+        fun `support ktlint suppression among multiple names`() {
             val findings = subject.lint(
                 """
-                    @Suppress(["ktlint"])
+                    @Suppress("unused", "ktlint")
                     fun main()
                     = Unit
                 """.trimIndent()

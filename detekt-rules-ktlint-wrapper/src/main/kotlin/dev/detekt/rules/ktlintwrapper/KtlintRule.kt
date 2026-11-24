@@ -135,7 +135,7 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
             .filter { it.typeReference?.text == "Suppress" }
             .flatMap { it.valueArguments }
             .mapNotNull { it.getArgumentExpression() }
-            // Collect string literals inside the argument so that array literals like `["ktlint"]` also match.
+            // Check all string literals in each annotation argument for a matching suppression id.
             .flatMap { expression ->
                 listOf(expression) + expression.collectDescendantsOfType<KtStringTemplateExpression>()
             }
