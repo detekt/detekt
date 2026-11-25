@@ -245,6 +245,7 @@ ktlint:
   TrailingCommaOnDeclarationSite:
     active: true
     # useTrailingCommaOnDeclarationSite: If the 'code_style' ruleset property is set to 'android', the default is 'false', otherwise 'true'.
+    indentSize: 4
   TryCatchFinallySpacing:
     active: false
     indentSize: 4
