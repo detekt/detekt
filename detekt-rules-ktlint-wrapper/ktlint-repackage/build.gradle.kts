@@ -6,7 +6,10 @@ plugins {
 dependencies {
     runtimeOnly(libs.ktlint.rulesetStandard) {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
-        exclude(group = "org.jetbrains.kotlin", module = "kotlin-compiler-embeddable")
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-analysis-api-surface")
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-analysis-api-implementation")
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-analysis-api-intellij-api-surface-components")
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-analysis-api-intellij-implementation-components")
     }
 }
 
