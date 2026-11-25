@@ -53,6 +53,10 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
         originalFilePath = root.absolutePath()
         positionByOffset = KtLintLineColCalculator.calculateLineColByOffset(fileCopy.text)
 
+        wrapping.startTraversalOfAST { offset, _, errorMessage, canBeAutoCorrected ->
+            emitFinding(offset, errorMessage, canBeAutoCorrected)
+            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
+        }
         wrapping.beforeFirstNode(computeEditorConfigProperties())
         this.root.node.visitASTNodes()
         wrapping.afterLastNode()
@@ -116,29 +120,15 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
         }
     }
 
-    private fun beforeVisitChildNodes(node: ASTNode) {
-        wrapping.beforeVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
-            emitFinding(offset, errorMessage, canBeAutoCorrected)
-            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
-        }
-    }
-
-    private fun afterVisitChildNodes(node: ASTNode) {
-        wrapping.afterVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
-            emitFinding(offset, errorMessage, canBeAutoCorrected)
-            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
-        }
-    }
-
     private fun ASTNode.visitASTNodes() {
         if (isNotDummyElement()) {
-            beforeVisitChildNodes(this)
+            wrapping.beforeVisitChildNodes(this)
         }
         getChildren(null).forEach {
             it.visitASTNodes()
         }
         if (isNotDummyElement()) {
-            afterVisitChildNodes(this)
+            wrapping.afterVisitChildNodes(this)
         }
     }
 
