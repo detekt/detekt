@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    @Suppress("StringLiteralDuplication")
     runtimeOnly(libs.ktlint.rulesetStandard) {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-analysis-api-surface")
