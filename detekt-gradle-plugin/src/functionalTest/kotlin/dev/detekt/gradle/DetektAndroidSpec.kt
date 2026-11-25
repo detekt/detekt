@@ -228,67 +228,7 @@ class DetektAndroidSpec {
 
     @Nested
     inner class `android library depends on kotlin only library with configuration cache turned on` {
-        val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
-            addSubmodule(
-                name = "kotlin_only_lib",
-                numberOfSourceFilesPerSourceDir = 1,
-                numberOfFindings = 1,
-                buildFileContent = joinGradleBlocks(
-                    """
-                    plugins {
-                        kotlin("jvm")
-                        id("dev.detekt")
-                    }
-
-                    java {
-                        sourceCompatibility = JavaVersion.VERSION_11
-                        targetCompatibility = JavaVersion.VERSION_11
-                    }
-
-                    kotlin {
-                        compilerOptions {
-                            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
-                        }
-                    }
-
-                    """.trimIndent(),
-                    DETEKT_REPORTS_BLOCK,
-                ),
-                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
-                baselineFiles = listOf(
-                    "detekt-baseline.xml",
-                    "detekt-baseline-release.xml",
-                    "detekt-baseline-debug.xml",
-                    "detekt-baseline-releaseUnitTest.xml",
-                    "detekt-baseline-debugUnitTest.xml",
-                    "detekt-baseline-debugAndroidTest.xml"
-                )
-            )
-            addSubmodule(
-                name = "android_lib",
-                numberOfSourceFilesPerSourceDir = 1,
-                numberOfFindings = 1,
-                buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
-                    ANDROID_BLOCK,
-                    DETEKT_REPORTS_BLOCK,
-                    """
-                        dependencies {
-                            implementation(project(":kotlin_only_lib"))
-                        }
-                    """.trimIndent()
-                ),
-                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
-                baselineFiles = listOf(
-                    "detekt-baseline.xml",
-                    "detekt-baseline-release.xml",
-                    "detekt-baseline-debug.xml",
-                    "detekt-baseline-releaseUnitTest.xml",
-                    "detekt-baseline-debugUnitTest.xml",
-                    "detekt-baseline-debugAndroidTest.xml"
-                )
-            )
-        }
+        val projectLayout = androidLibDependsOnKotlinOnlyLibLayout()
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
             it.writeProjectFile("android_lib/src/main/AndroidManifest.xml", manifestContent)
         }
@@ -340,6 +280,23 @@ class DetektAndroidSpec {
                         ":android_lib:detektDebugUnitTest",
                         ":android_lib:detektTest",
                     )
+            }
+        }
+    }
+
+    @Nested
+    inner class `android library depends on kotlin only library without configuration cache` {
+        val gradleRunner = createGradleRunnerAndSetupProject(androidLibDependsOnKotlinOnlyLibLayout()).also {
+            it.writeProjectFile("android_lib/src/main/AndroidManifest.xml", manifestContent)
+            it.disableIP = true
+        }
+
+        @Test
+        @DisplayName("task :android_lib:detektDebug declares the transformed dependency artifacts as inputs")
+        fun libDetektDebug() {
+            gradleRunner.runTasksAndCheckResult("--warning-mode=all", ":android_lib:detektDebug") { buildResult ->
+                assertThat(buildResult.output)
+                    .doesNotContain("Querying the output of an artifact transform from a task action")
             }
         }
     }
@@ -879,6 +836,68 @@ private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
     }
     
 """.trimIndent() // Last line to prevent NewLineAtEndOfFile.
+
+@Language("gradle.kts")
+private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
+    plugins {
+        kotlin("jvm")
+        id("dev.detekt")
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+        }
+    }
+""".trimIndent()
+
+private fun androidLibDependsOnKotlinOnlyLibLayout() =
+    ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+        addSubmodule(
+            name = "kotlin_only_lib",
+            numberOfSourceFilesPerSourceDir = 1,
+            numberOfFindings = 1,
+            buildFileContent = joinGradleBlocks(KOTLIN_ONLY_LIB_PLUGIN_BLOCK, DETEKT_REPORTS_BLOCK),
+            srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+            baselineFiles = listOf(
+                "detekt-baseline.xml",
+                "detekt-baseline-release.xml",
+                "detekt-baseline-debug.xml",
+                "detekt-baseline-releaseUnitTest.xml",
+                "detekt-baseline-debugUnitTest.xml",
+                "detekt-baseline-debugAndroidTest.xml"
+            )
+        )
+        addSubmodule(
+            name = "android_lib",
+            numberOfSourceFilesPerSourceDir = 1,
+            numberOfFindings = 1,
+            buildFileContent = joinGradleBlocks(
+                LIB_PLUGIN_BLOCK,
+                ANDROID_BLOCK,
+                DETEKT_REPORTS_BLOCK,
+                """
+                    dependencies {
+                        implementation(project(":kotlin_only_lib"))
+                    }
+                """.trimIndent()
+            ),
+            srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+            baselineFiles = listOf(
+                "detekt-baseline.xml",
+                "detekt-baseline-release.xml",
+                "detekt-baseline-debug.xml",
+                "detekt-baseline-releaseUnitTest.xml",
+                "detekt-baseline-debugUnitTest.xml",
+                "detekt-baseline-debugAndroidTest.xml"
+            )
+        )
+    }
 
 private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout, dryRun: Boolean = true) =
     DslGradleRunner(

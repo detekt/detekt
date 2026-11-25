@@ -147,6 +147,8 @@ coroutines:
       - 'IO'
       - 'Default'
       - 'Unconfined'
+  MissingStackTraceRecoverable:
+    active: false
   RedundantSuspendModifier:
     active: true
   SleepInsteadOfDelay:
@@ -375,6 +377,8 @@ performance:
     active: false
   UnnecessaryPartOfBinaryExpression:
     active: false
+  UnnecessarySubjectlessWhen:
+    active: false
   UnnecessaryTemporaryInstantiation:
     active: true
   UnnecessaryTypeCasting:
@@ -401,6 +405,9 @@ potential-bugs:
     active: true
   EqualsWithHashCodeExist:
     active: true
+  EqualsWithHashCodeUseSameFields:
+    active: false
+    allowHashCodeSubset: false
   ExitOutsideMain:
     active: false
   ExplicitGarbageCollectionCall:
@@ -605,6 +612,8 @@ style:
     includeElvis: true
   ClassOrdering:
     active: false
+  CollapseAnnotationUseSiteTargets:
+    active: false
   CollapsibleIfStatements:
     active: false
   DataClassContainsFunctions:
@@ -690,6 +699,9 @@ style:
   ForbiddenOptIn:
     active: false
     markerClasses: []
+  ForbiddenSuperclass:
+    active: false
+    parentClasses: []
   ForbiddenSuppress:
     active: false
     rules: []

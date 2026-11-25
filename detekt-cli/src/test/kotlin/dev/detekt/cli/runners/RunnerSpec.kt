@@ -13,13 +13,66 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import java.io.File
 import java.io.PrintStream
+import java.nio.file.Files
 import java.nio.file.Path
+import java.util.jar.JarEntry
+import java.util.jar.JarOutputStream
+import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 
 class RunnerSpec {
 
     val inputPath = resourceAsPath("cases/Poko.kt")
+
+    private fun createConfigJar(jarPath: Path, resourcePath: String, config: String) {
+        JarOutputStream(Files.newOutputStream(jarPath)).use { jar ->
+            jar.putNextEntry(JarEntry(resourcePath))
+            jar.write(config.toByteArray())
+            jar.closeEntry()
+        }
+    }
+
+    @Test
+    fun `Can pass resource path within JAR to --config-resource`(@TempDir tempDir: Path) {
+        val content = """
+            nonexistent-ruleset:
+              active: false
+        """.trimIndent()
+
+        val tempJar = tempDir.resolve("temp.jar")
+        val detektJar = System.getProperty("detektJarPath")
+
+        createConfigJar(tempJar, "resources/config/path/failingconfig.yml", content)
+
+        val java = Path(
+            System.getProperty("java.home"),
+            "bin",
+            "java",
+        )
+
+        val process = ProcessBuilder(
+            java.toString(),
+            "-cp",
+            listOf(detektJar, tempJar.toString()).joinToString(File.pathSeparator),
+            "dev.detekt.cli.Main",
+            "--input",
+            inputPath.toString(),
+            "--config-resource",
+            "resources/config/path/failingconfig.yml",
+        )
+            .redirectErrorStream(true)
+            .start()
+
+        val output = process.inputStream
+            .bufferedReader()
+            .readText()
+
+        process.waitFor()
+
+        assertThat(output).contains("Property 'nonexistent-ruleset' is misspelled or does not exist.")
+    }
 
     @Test
     fun `executes the runner with create baseline`(@TempDir tempDir: Path) {

@@ -7,7 +7,9 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertyGetterSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySetterSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
+import org.jetbrains.kotlin.analysis.api.types.KaFlexibleType
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -49,7 +51,7 @@ sealed class FunctionMatcher {
 
             val encounteredParameters = buildList {
                 analyze(function) {
-                    addIfNotNull(function.receiverTypeReference?.run { type.asFqNameString() })
+                    function.receiverTypeReference?.let { add(it.type.asFqNameString()) }
                     addAll(
                         function.valueParameters.map {
                             if (it.isVarArg) {
@@ -81,9 +83,9 @@ sealed class FunctionMatcher {
             return encounteredParamTypes == parameters
         }
 
-        private fun getParams(symbol: KaFunctionSymbol): List<String?> {
-            val encounteredParamTypes = buildList {
-                addIfNotNull(symbol.receiverParameter?.returnType?.asFqNameString())
+        private fun getParams(symbol: KaFunctionSymbol): List<String?> =
+            buildList {
+                symbol.receiverParameter?.returnType?.let { add(it.asFqNameString()) }
                 addAll(
                     symbol.valueParameters.map { value ->
                         if (value.isVararg) {
@@ -94,8 +96,6 @@ sealed class FunctionMatcher {
                     }
                 )
             }
-            return encounteredParamTypes
-        }
 
         override fun toString(): String = "$fullyQualifiedName(${parameters.joinToString()})"
     }
@@ -146,10 +146,6 @@ sealed class FunctionMatcher {
     }
 }
 
-private fun <T> MutableCollection<T>.addIfNotNull(t: T) {
-    if (t != null) add(t)
-}
-
 // Extracted from: https://stackoverflow.com/a/16108347/842697
 private fun String.splitParams(): List<String> {
     val split: MutableList<String> = mutableListOf()
@@ -180,8 +176,12 @@ private fun KaCallableSymbol.asFqNameString() =
         callableId?.run { asSingleFqName().asString() } ?: returnType.asFqNameString()
     }
 
-private fun KaType.asFqNameString() =
-    symbol?.classId?.asFqNameString() ?: toString().replace('/', '.').removeSuffix("!")
+private fun KaType.asFqNameString(): String? =
+    when (this) {
+        is KaTypeParameterType -> name.identifier
+        is KaFlexibleType -> lowerBound.asFqNameString()
+        else -> symbol?.classId?.asFqNameString()
+    }
 
 private fun changeIfLambda(param: String): String? {
     val (paramsRaw, _) = splitLambda(param) ?: return null
@@ -191,7 +191,17 @@ private fun changeIfLambda(param: String): String? {
 }
 
 private fun splitLambda(param: String): Pair<String, String>? {
-    if (!param.startsWith("(")) return null
+    val lambdaParam = if (param.startsWith('(')) {
+        param
+    } else {
+        // Function type with receiver, e.g. `Foo.(Bar) -> Baz` or `Foo.() -> Baz`:
+        // the receiver is passed to the resulting function type as its first parameter,
+        // so `Foo.(Bar) -> Baz` matches `kotlin.Function2` and `Foo.() -> Baz` matches `kotlin.Function1`.
+        val receiverEnd = param.indexOf(".(")
+        if (receiverEnd <= 0) return null
+        val receiver = param.take(receiverEnd)
+        "($receiver, ${param.substring(receiverEnd + 2)}"
+    }
 
     var nestingLevel = 0
     val paramsRaw = StringBuilder()
@@ -201,7 +211,7 @@ private fun splitLambda(param: String): Pair<String, String>? {
      * We don't count the first `(` so as soon as the nestingLevel reaches the last `)` we know that we read all the
      * params. Then we handle the rest of the String as the result.
      */
-    param.toCharArray()
+    lambdaParam.toCharArray()
         .drop(1)
         .forEach { c ->
             if (nestingLevel >= 0) {

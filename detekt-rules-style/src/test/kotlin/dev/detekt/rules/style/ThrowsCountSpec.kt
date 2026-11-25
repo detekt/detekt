@@ -235,6 +235,26 @@ class ThrowsCountSpec {
     }
 
     @Nested
+    inner class `an annotated guard clause between other guard clauses` {
+        val codeWithGuardClause = """
+            fun test(a: Int?, b: Int?, c: Int?): Int {
+                if (a == null) throw IllegalArgumentException()
+                @Suppress("DEPRECATION")
+                if (b == null) throw IllegalArgumentException()
+                if (c == null) throw IllegalArgumentException()
+                throw IllegalStateException()
+            }
+        """.trimIndent()
+
+        @Test
+        fun `should not count an annotated guard clause or the guard clauses after it`() {
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to true)
+            val subject = ThrowsCount(config)
+            assertThat(subject.lint(codeWithGuardClause)).isEmpty()
+        }
+    }
+
+    @Nested
     inner class `reports a too-complicated if statement for being a guard clause` {
         val codeWithIfCondition = """
             fun test(x: Int): Int {

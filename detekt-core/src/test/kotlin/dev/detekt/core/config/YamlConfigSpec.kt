@@ -197,7 +197,7 @@ class YamlConfigSpec {
                 )
             }.isInstanceOf(InvalidConfigurationError::class.java)
                 .hasMessageStartingWith(
-                    "Provided configuration file is invalid: Structure must be from type Map<String, Any>!"
+                    "Provided configuration file is invalid: Structure must be of type Map<String, Any>!"
                 )
                 .hasCauseInstanceOf(ClassCastException::class.java)
         }
@@ -355,7 +355,7 @@ class YamlConfigSpec {
                             "throws IllegalArgumentException because class ${testCase.name} cannot be cast to $key"
                         ) {
                             assertThatIllegalArgumentException()
-                                .isThrownBy { testCase.read(config, key) }
+                                .isThrownBy { val _ = testCase.read(config, key) }
                                 .withMessage(
                                     """Value "$value" set for config parameter "$key" is not of required type `${testCase.name}`"""
                                 )

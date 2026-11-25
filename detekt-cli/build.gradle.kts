@@ -17,13 +17,13 @@ val pluginsJarFiles = configurations.resolvable("pluginsJarFiles") {
 
 @Suppress("MagicNumber")
 dependencies {
-    implementation(libs.jcommander)
+    implementation(libs.clikt.core)
     implementation(projects.detektApi)
     implementation(projects.detektTooling)
     implementation(projects.detektUtils)
     implementation(libs.kotlin.compiler) {
         version {
-            strictly(libs.versions.kotlin.get())
+            strictly(libs.versions.kotlin.analysisApi.get())
         }
     }
     runtimeOnly(projects.detektCore)
@@ -79,6 +79,16 @@ tasks {
     shadowDistTar { enabled = false }
     distZip { enabled = false }
     distTar { enabled = false }
+
+    test {
+        dependsOn(shadowJar)
+
+        val detektJarPath = shadowJar.map { it.archiveFile.get().asFile.absolutePath }
+
+        doFirst {
+            systemProperty("detektJarPath", detektJarPath.get())
+        }
+    }
 
     val runWithHelpFlag = register<JavaExec>("runWithHelpFlag") {
         outputs.upToDateWhen { true }

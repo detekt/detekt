@@ -467,7 +467,31 @@ class DetektTaskDslSpec {
     }
 
     @Nested
-    inner class `with an additional plugin` {
+    inner class `with an additional plugin configured using a custom dependencies block` {
+        private val config = """
+            detekt {
+                dependencies {
+                   plugin("dev.detekt:ktlint-wrapper:$defaultDetektVersion")
+                }
+            }
+        """.trimIndent()
+        private val builder = kotlin().dryRun()
+        private val gradleRunner = builder.withDetektConfig(config).build()
+        private val result = gradleRunner.runTasks("dependencies", "--configuration", "detektPlugins")
+
+        @Test
+        fun `successfully checks dependencies`() {
+            assertThat(result.task(":dependencies")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        }
+
+        @Test
+        fun `adds the ktlint-wrapper lib to the project dependencies`() {
+            assertThat(result.output).contains("dev.detekt:ktlint-wrapper:$defaultDetektVersion")
+        }
+    }
+
+    @Nested
+    inner class `with an additional plugin configured in Gradle dependencies block` {
         private val config = """
             dependencies {
                detektPlugins("dev.detekt:ktlint-wrapper:$defaultDetektVersion")

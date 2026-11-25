@@ -43,7 +43,7 @@ class LongMethod(config: Config) :
 
     override fun postVisit(root: KtFile) {
         val functionToLines = HashMap<KtNamedFunction, Int>()
-        functionToLinesCache.map { (function, lines) ->
+        functionToLinesCache.forEach { (function, lines) ->
             val isNested = function.getStrictParentOfType<KtNamedFunction>() != null
             if (isNested) {
                 functionToLines[function] = functionToBodyLinesCache[function] ?: 0

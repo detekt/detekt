@@ -21,6 +21,17 @@ class TrimMultilineRawStringSpec {
     }
 
     @Test
+    fun `raises multiline raw strings with a multi-dollar interpolation prefix without trim`() {
+        val code = """
+            val a = $$$TQ
+            Hello world!
+            $TQ
+        """.trimIndent()
+        val findings = subject.lint(code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
     fun `doesn't raise multiline raw strings with custom default configured trimIndent method`() {
         fun String.trimIndent() = this
         val code = """

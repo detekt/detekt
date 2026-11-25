@@ -1,10 +1,12 @@
 package dev.detekt.gradle.extensions
 
+import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Nested
 
 @Suppress("ComplexInterface")
 interface DetektExtension {
@@ -53,4 +55,11 @@ interface DetektExtension {
      * List of Android build flavors for which no detekt task should be created
      */
     val ignoredFlavors: ListProperty<String>
+
+    @get:Nested
+    val dependencies: DetektDependencies
+
+    fun dependencies(action: Action<in DetektDependencies>) {
+        action.execute(dependencies)
+    }
 }

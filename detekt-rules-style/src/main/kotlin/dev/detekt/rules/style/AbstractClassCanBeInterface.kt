@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  * sealed class ScreenState { // violation - no concrete members
  *     data class Success(val data: Int) : ScreenState()
- *     data class Failure(val reason: String : ScreenState()
+ *     data class Failure(val reason: String) : ScreenState()
  *     data object Empty : ScreenState()
  * }
  * </noncompliant>
@@ -66,13 +66,13 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  * sealed class SealedClass(val x: Int) {
  *     data class Success(val data: Int) : SealedClass(123)
- *     data class Failure(val reason: String : SealedClass(456)
+ *     data class Failure(val reason: String) : SealedClass(456)
  *     object Empty : SealedClass(789)
  * }
  *
  * sealed interface SealedInterface {
  *     data class Success(val data: Int) : SealedInterface
- *     data class Failure(val reason: String : SealedInterface
+ *     data class Failure(val reason: String) : SealedInterface
  *     data object Empty : SealedInterface
  * }
  * </compliant>

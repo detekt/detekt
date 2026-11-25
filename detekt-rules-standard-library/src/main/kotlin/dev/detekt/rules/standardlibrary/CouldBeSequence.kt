@@ -31,6 +31,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
  * listOf(1, 2, 3, 4).map { it*2 }.filter { it < 4 }.map { it*it }
  *
  * "a, b, c".split(",").dropWhile { it.isEmpty() }.drop(1).takeWhile { it.isNotBlank() }
+ *
+ * listOf(1, 2, 3, 4).asSequence().map { it*2 }.toList().filter { it < 4 }
  * </noncompliant>
  *
  * <compliant>
@@ -58,6 +60,11 @@ class CouldBeSequence(config: Config) :
 
         if (visitedCallExpressions.contains(expression)) return
 
+        if (expression.isSequenceToListCall()) {
+            checkCollectionCallsAfterSequenceToList(expression)
+            return
+        }
+
         if (!expression.isCallingCollectionFunPresentInSequenceReturningSequence()) return
 
         var counter = 1
@@ -83,6 +90,22 @@ class CouldBeSequence(config: Config) :
             }
         }
     }
+
+    /**
+     * Converting a sequence back to a list and then calling collection operations that sequences also have
+     * is never needed, so this is reported regardless of [allowedOperations].
+     */
+    private fun checkCollectionCallsAfterSequenceToList(toListCall: KtCallExpression) {
+        val followingCalls = generateSequence(toListCall.nextChainedCall()) { it.nextChainedCall() }.toList()
+        if (followingCalls.none { it.isCallingCollectionFunPresentInSequenceReturningSequence() }) return
+
+        visitedCallExpressions += followingCalls
+        val message = "${toListCall.text} turns the sequence into a list, " +
+            "but the chain continues with operations that sequences also have."
+        report(Finding(Entity.from(toListCall), message))
+    }
+
+    private fun KtCallExpression.isSequenceToListCall(): Boolean = isCalling(sequenceToListCallableId)
 
     private fun KtExpression.isCallingCollectionFunPresentInSequenceReturningSequence(): Boolean {
         ((this as? KtCallExpression)?.getCallNameExpression()?.getReferencedName())?.let {
@@ -120,6 +143,8 @@ class CouldBeSequence(config: Config) :
         private const val SPLIT = "split"
         private const val SPLIT_TO_SEQUENCE = "splitToSequence"
         private val splitCallableId = CallableId(StandardClassIds.BASE_TEXT_PACKAGE, Name.identifier(SPLIT))
+        private val sequenceToListCallableId =
+            CallableId(StandardClassIds.BASE_SEQUENCES_PACKAGE, Name.identifier("toList"))
         private val listOfAllowedFunFromCollections = listOf("asSequence")
     }
 }

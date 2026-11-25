@@ -41,7 +41,6 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.resolution.KtResolvable
 import org.jetbrains.kotlin.resolution.KtResolvableCall
 
 /**
@@ -187,9 +186,9 @@ class UnnecessaryAny(config: Config) :
             }
 
             itRefCountInLeft == 1 -> {
-                val itExpressionType = ((leftExpression as? KtResolvable)?.resolveSymbol() as? KaVariableSymbol)
-                    ?.returnType
-                    ?: return null
+                val itSymbol = (leftExpression as? KtNameReferenceExpression)?.resolveSymbol()
+                if (itSymbol != parameter) return null
+                val itExpressionType = (itSymbol as? KaVariableSymbol)?.returnType ?: return null
                 val valueExpressionType =
                     ((rightExpression as? KtResolvableCall)?.resolveCall() as? KaSingleCall<*, *>)
                         ?.signature

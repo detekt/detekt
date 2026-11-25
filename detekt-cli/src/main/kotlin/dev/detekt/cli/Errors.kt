@@ -6,7 +6,7 @@ package dev.detekt.cli
 class HelpRequest(val usageText: String) : RuntimeException()
 
 /**
- * Thrown when parsing arguments by JCommander and validating them further.
+ * Thrown when parsing arguments or validating them further.
  * As the parsing logic prints the --help message along other parameter errors,
  * this exception signals the main loop that no further printing is necessary.
  */

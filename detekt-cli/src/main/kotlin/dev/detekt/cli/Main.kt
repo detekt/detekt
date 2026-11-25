@@ -2,6 +2,9 @@
 
 package dev.detekt.cli
 
+import com.github.ajalt.clikt.core.CliktError
+import com.github.ajalt.clikt.core.PrintHelpMessage
+import com.github.ajalt.clikt.core.parse
 import dev.detekt.api.internal.whichKotlin
 import dev.detekt.cli.runners.ConfigExporter
 import dev.detekt.cli.runners.Executable
@@ -65,6 +68,17 @@ fun buildRunner(args: Array<String>, outputPrinter: PrintStream, errorPrinter: P
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }
 }
+
+internal fun parseArguments(args: Array<out String>) =
+    CliArgs().apply {
+        try {
+            parse(args.toList())
+        } catch (e: PrintHelpMessage) {
+            throw HelpRequest(getFormattedHelp(e).orEmpty())
+        } catch (e: CliktError) {
+            throw HandledArgumentViolation(e.message, getFormattedHelp(e).orEmpty())
+        }
+    }
 
 @Suppress("detekt.MagicNumber")
 internal fun AnalysisResult.exitCode(): Int =

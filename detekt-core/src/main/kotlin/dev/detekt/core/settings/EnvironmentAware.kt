@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
 import org.jetbrains.kotlin.cli.common.config.kotlinSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
-import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersionSettings
@@ -70,8 +69,6 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
             // Required for autocorrect support
             registerProjectService(TreeAspect::class.java)
             registerProjectService(PomModel::class.java, DetektPomModel(project))
-
-            configuration.putIfAbsent(CommonConfigurationKeys.MODULE_NAME, "<no module name provided>")
 
             buildKtModuleProvider {
                 val targetPlatform =

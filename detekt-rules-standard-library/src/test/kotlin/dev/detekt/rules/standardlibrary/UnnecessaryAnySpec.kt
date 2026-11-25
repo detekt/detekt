@@ -558,4 +558,105 @@ class UnnecessaryAnySpec(val env: KotlinEnvironmentContainer) {
             assertThat(actual).isEmpty()
         }
     }
+
+    @Test
+    fun `reports any when it is compared with a property of another object`() {
+        val code = """
+            data class Data(val value: Int)
+
+            fun test(list: List<Int>, data: Data): Boolean {
+                return list.any { it == data.value }
+            }
+        """.trimIndent()
+        val actual = subject.lintWithContext(env, code)
+        assertThat(actual)
+            .hasSize(1)
+            .allMatch {
+                it.message == "Use `contains` instead of `any {  }` call to check the presence of the element"
+            }
+    }
+
+    @Nested
+    inner class `Given a property of it is compared` {
+        @Test
+        fun `does not report any`() {
+            val code = """
+                enum class Status { Checking, Success, Failed }
+
+                data class Data(val value: Int, val status: Status)
+
+                fun isChecking(data: List<Data>): Boolean {
+                    return data.any { it.status == Status.Checking }
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).isEmpty()
+        }
+
+        @Test
+        fun `does not report any in reverse`() {
+            val code = """
+                data class Data(val value: Int)
+
+                fun test(data: List<Data>, value: Int): Boolean {
+                    return data.any { value == it.value }
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).isEmpty()
+        }
+
+        @Test
+        fun `does not report any with equals`() {
+            val code = """
+                data class Data(val value: Int)
+
+                fun test(data: List<Data>, value: Int): Boolean {
+                    return data.any { it.value.equals(value) }
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).isEmpty()
+        }
+
+        @Test
+        fun `does not report any with named parameter`() {
+            val code = """
+                data class Data(val value: Int)
+
+                fun test(data: List<Data>, value: Int): Boolean {
+                    return data.any { item -> item.value == value }
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).isEmpty()
+        }
+
+        @Test
+        fun `does not report any with safe call`() {
+            val code = """
+                data class Data(val value: Int)
+
+                fun test(data: List<Data?>, value: Int): Boolean {
+                    return data.any { it?.value == value }
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).isEmpty()
+        }
+
+        @Test
+        fun `does not report any with extension property`() {
+            val code = """
+                val String.firstChar: Char 
+                    get() = first()
+
+                fun test(list: List<String>, value: Char): Boolean {
+                    return list.any { it.firstChar == value }
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).isEmpty()
+        }
+    }
 }

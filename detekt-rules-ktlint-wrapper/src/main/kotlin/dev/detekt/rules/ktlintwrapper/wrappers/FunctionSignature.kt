@@ -26,7 +26,7 @@ internal class FunctionSignature(config: Config) :
     @Configuration("parameter count means multiline threshold")
     private val forceMultilineWhenParameterCountGreaterOrEqualThan by config(2_147_483_647)
 
-    @Configuration("indentation size")
+    @Configuration("when to wrap the body of function in case it is an expression (default, multiline, always)")
     private val functionBodyExpressionWrapping by config("default")
 
     @Configuration("maximum line length")

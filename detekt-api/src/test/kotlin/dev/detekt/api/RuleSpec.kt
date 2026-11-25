@@ -10,7 +10,7 @@ class RuleSpec {
 
     @ParameterizedTest(name = "rule set: {0}, rule: {1} -> {2}")
     @CsvSource(
-        "undefined, undefined, false",
+        "undefined, undefined, true",
         "undefined, true,      true",
         "undefined, false,     false",
         "true,      undefined, true",

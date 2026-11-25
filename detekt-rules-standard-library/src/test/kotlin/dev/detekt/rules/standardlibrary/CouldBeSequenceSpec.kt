@@ -132,7 +132,7 @@ class CouldBeSequenceSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `use of sequence then toList call preceded by the allowed count should not trigger rule`() {
+    fun `collection operations after a sequence toList call should trigger rule - #8545`() {
         val code = """
             val bar = listOf<String?>("bar")
                 .asSequence()
@@ -145,6 +145,57 @@ class CouldBeSequenceSpec(val env: KotlinEnvironmentContainer) {
                 .toList()
                 .takeLast(2)
                 .mapNotNull { it }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message).startsWith("toList() turns the sequence into a list")
+    }
+
+    @Test
+    fun `a single collection operation after a sequence toList call should trigger rule - #8545`() {
+        val code = """
+            val bar = listOf(1, 2, 3)
+                .asSequence()
+                .map { it * 2 }
+                .toList()
+                .filter { it > 2 }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `a long chain after a sequence toList call is reported once - #8545`() {
+        val code = """
+            val bar = listOf(1, 2, 3)
+                .asSequence()
+                .map { it * 2 }
+                .toList()
+                .filter { it > 2 }
+                .map { it + 1 }
+                .filterNot { it == 5 }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `operations missing from sequences after a sequence toList call should not trigger rule - #8545`() {
+        val code = """
+            val bar = listOf(1, 2, 3)
+                .asSequence()
+                .map { it * 2 }
+                .toList()
+                .takeLast(2)
+                .asReversed()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `collection operations after a list toList call should not trigger rule - #8545`() {
+        val code = """
+            val bar = listOf(1, 2, 3)
+                .toList()
+                .filter { it > 2 }
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }

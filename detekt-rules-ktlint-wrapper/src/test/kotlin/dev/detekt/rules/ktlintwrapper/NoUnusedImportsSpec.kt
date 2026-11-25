@@ -2,6 +2,7 @@ package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.wrappers.NoUnusedImports
+import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
@@ -27,7 +28,8 @@ class NoUnusedImportsSpec {
             fun f() = 5
         """.trimIndent()
 
-        val findings = NoUnusedImports(Config.empty).lint(code)
+        // autoCorrect is off so that the reported locations are not shifted by the correction itself
+        val findings = NoUnusedImports(TestConfig(Config.AUTO_CORRECT_KEY to false)).lint(code)
 
         assertThat(findings).satisfiesExactlyInAnyOrder(
             { assertThat(it).hasStartSourceLocation(3, 1) },

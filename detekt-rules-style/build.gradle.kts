@@ -17,6 +17,7 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
     testCompileOnly(libs.jetbrains.annotations)
+    testCompileOnly(libs.jsr305)
 }
 
 detektGeneratorConfig.addConfigToResources = false

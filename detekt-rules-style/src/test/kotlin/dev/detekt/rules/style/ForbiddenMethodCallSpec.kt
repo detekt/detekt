@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 private const val METHODS = "methods"
 
-@KotlinCoreEnvironmentTest
+@KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
 class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
 
     @Test
@@ -520,6 +520,25 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `should report functions with lambda params with receiver`() {
+        val code = """
+            package org.example
+
+            fun bar(b: NavOptionsBuilder.() -> Unit) = Unit
+
+            class NavOptionsBuilder
+
+            fun foo() {
+                bar { }
+            }
+        """.trimIndent()
+        val findings = ForbiddenMethodCall(
+            TestConfig(METHODS to listOf("org.example.bar(org.example.NavOptionsBuilder.() -> kotlin.Unit)"))
+        ).lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
     fun `should report extension functions`() {
         val code = """
             package org.example
@@ -905,6 +924,31 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.util.Calendar.compareTo"))
+        ).lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `test with flexible time with warnings`() {
+        val code = """
+            package dev.detekt.rules.style
+            
+            import com.example.fromjava.ClassWithMethodWithParameters
+            import java.util.concurrent.TimeUnit
+            
+            fun test() {
+                ClassWithMethodWithParameters().read(1, TimeUnit.SECONDS)
+            }
+        """.trimIndent()
+        val findings = ForbiddenMethodCall(
+            TestConfig(
+                Pair(
+                    METHODS,
+                    listOf(
+                        "com.example.fromjava.ClassWithMethodWithParameters.read(kotlin.Long, java.util.concurrent.TimeUnit)",
+                    )
+                )
+            )
         ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }

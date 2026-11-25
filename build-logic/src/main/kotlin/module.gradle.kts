@@ -59,16 +59,14 @@ kotlin {
     compilerOptions {
         extraWarnings = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
-        if (project.name != "detekt-gradle-plugin") {
-            // DGP compiles with Kotlin 2.1.21. Support for the stable version of this flag was only added in 2.2.0.
-            // See KT-73007 & KT-74590
-            jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
 
+        jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
+        freeCompilerArgs.add("-Xreturn-value-checker=check")
+
+        if (project.name != "detekt-gradle-plugin") {
             // Only enable progressive mode in non-DGP modules. DGP doesn't compile with latest language version so
             // progressive mode is not appropriate.
             progressiveMode = true
-        } else {
-            freeCompilerArgs.add("-Xjvm-default=all")
         }
     }
 }
@@ -81,36 +79,9 @@ testing {
     }
 }
 
-val jvmMajorVersion = 8
-
-// Pretend AGP API, JUnit and detekt-rules-ktlint-wrapper target JVM 8. Required while detekt itself targets JVM 8 and these dependencies target newer JVM versions.
-dependencies {
-    components {
-        setOf(
-            "com.android.tools.build:gradle-api",
-            "com.android.tools.build:gradle-common-api",
-            "org.junit.jupiter:junit-jupiter",
-            "org.junit.jupiter:junit-jupiter-api",
-            "org.junit.jupiter:junit-jupiter-engine",
-            "org.junit.jupiter:junit-jupiter-params",
-            "org.junit.platform:junit-platform-commons",
-            "org.junit.platform:junit-platform-engine",
-            "org.junit.platform:junit-platform-launcher",
-            "dev.detekt:detekt-rules-ktlint-wrapper",
-        ).forEach {
-            withModule(it) {
-                allVariants {
-                    attributes {
-                        attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, jvmMajorVersion)
-                    }
-                }
-            }
-        }
-    }
-}
-
 tapmoc {
-    java(jvmMajorVersion)
+    @Suppress("MagicNumber")
+    java(17)
 }
 
 java {

@@ -623,6 +623,25 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).hasSize(1)
         }
+
+        @Test
+        fun `does not report a private property assigned in an actual class - #8641`() {
+            val code = """
+                expect class OAuthClientSettings {
+                    actual val environment: Int
+                }
+                actual class OAuthClientSettings() {
+                    private var _environment: Int = -1
+                    actual val environment: Int
+                        get() = _environment
+
+                    fun configure(environment: Int) {
+                        _environment = environment
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+        }
     }
 
     @Nested
