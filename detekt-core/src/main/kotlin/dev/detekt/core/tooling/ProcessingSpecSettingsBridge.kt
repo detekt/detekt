@@ -2,8 +2,6 @@ package dev.detekt.core.tooling
 
 import dev.detekt.api.Config
 import dev.detekt.core.ProcessingSettings
-import dev.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY
-import dev.detekt.core.baseline.DETEKT_BASELINE_PATH_KEY
 import dev.detekt.core.config.AllRulesConfig
 import dev.detekt.core.config.CompositeConfig
 import dev.detekt.core.config.DisabledAutoCorrectConfig
@@ -26,10 +24,7 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
         workaroundConfiguration(loadConfiguration())
     }
     val settings = monitor.measure(Phase.CreateSettings) {
-        ProcessingSettings(this, configuration, monitor).apply {
-            baselineSpec.path?.let { register(DETEKT_BASELINE_PATH_KEY, it) }
-            register(DETEKT_BASELINE_CREATION_KEY, baselineSpec.shouldCreateDuringAnalysis)
-        }
+        ProcessingSettings(this, configuration, monitor)
     }
     val result = settings.use { execute(it) }
     if (loggingSpec.debug) {
