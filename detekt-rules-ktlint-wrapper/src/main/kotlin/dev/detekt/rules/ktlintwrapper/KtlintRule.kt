@@ -128,11 +128,15 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
     }
 
     private fun PsiElement.isSuppressedByKtlint(): Boolean {
-        val acceptedSuppressionIds = setOf("ktlint", "ktlint:${wrapping.ruleId.value}")
+        val acceptedSuppressionIds = setOf(
+            "ktlint",
+            "ktlint:${wrapping.ruleId.ruleSetId.value}",
+            "ktlint:${wrapping.ruleId.value}",
+        )
         return generateSequence(this) { it.parent }
             .filterIsInstance<KtAnnotated>()
             .flatMap { it.annotationEntries }
-            .filter { it.typeReference?.text == "Suppress" }
+            .filter { it.shortName?.asString() in setOf("Suppress", "SuppressWarnings") }
             .flatMap { it.valueArguments }
             .mapNotNull { it.getArgumentExpression() }
             // Check all string literals in each annotation argument for a matching suppression id.
