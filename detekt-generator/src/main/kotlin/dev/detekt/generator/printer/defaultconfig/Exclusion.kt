@@ -49,6 +49,7 @@ private object TestExclusions : Exclusions() {
         "ThrowingExceptionsWithoutMessageOrCause",
         "UndocumentedPublicClass",
         "UndocumentedPublicFunction",
+        "UndocumentedPublicFunctionReturn",
         "UndocumentedPublicProperty",
         "UnsafeCallOnNullableType",
         "KDocReferencesNonPublicProperty",
