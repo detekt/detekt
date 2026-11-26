@@ -256,10 +256,10 @@ class OutdatedDocumentation(config: Config) :
         elementDeclarationsProvider: () -> List<Declaration>,
     ): List<String> {
         val doc = element.docComment ?: return emptyList()
-        val inlineDocumentedNames = element.inlineDocumentedParameterNames()
         val docDeclarations = getDocDeclarations(doc)
             .filterNot { it.name in overridePropertyNames }
         if (docDeclarations.isEmpty() && !reportIfNonePresent) return emptyList()
+        val inlineDocumentedNames = element.inlineDocumentedParameterNames()
         val elementDeclarations = elementDeclarationsProvider()
         return getDeclarationsMismatches(docDeclarations, elementDeclarations, inlineDocumentedNames)
     }
