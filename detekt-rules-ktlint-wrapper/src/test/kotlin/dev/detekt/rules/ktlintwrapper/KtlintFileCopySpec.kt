@@ -28,15 +28,16 @@ class KtlintFileCopySpec {
     @Test
     fun `the shared copy is rebuilt after modifiedText changes (#9379)`() {
         val ktFile = compileContentForTest("fun main()\n= Unit\n", "RebuiltCopy.kt")
-        val rule = NoLineBreakBeforeAssignment(Config.empty)
+        val ruleInstance1 = NoLineBreakBeforeAssignment(Config.empty)
+        val ruleInstance2 = NoLineBreakBeforeAssignment(Config.empty)
 
         // First pass: the file has a violation and a single finding is expected.
-        assertThat(rule.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
+        assertThat(ruleInstance1.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
         val firstCopy = ktFile.ktlintFileCopy
 
         // A prior autocorrect cleaned the file; the next visit must rebuild the copy from it.
         ktFile.modifiedText = "fun main() = Unit\n"
-        val secondPass = rule.visitFile(ktFile, FakeLanguageVersionSettings())
+        val secondPass = ruleInstance2.visitFile(ktFile, FakeLanguageVersionSettings())
 
         assertThat(secondPass).isEmpty()
         assertThat(ktFile.ktlintFileCopy).isNotSameAs(firstCopy)
@@ -47,14 +48,16 @@ class KtlintFileCopySpec {
     fun `a violation reappears when modifiedText reverts to the violating text`() {
         val violating = "fun main()\n= Unit\n"
         val ktFile = compileContentForTest(violating, "Reappear.kt")
-        val rule = NoLineBreakBeforeAssignment(Config.empty)
+        val ruleInstance1 = NoLineBreakBeforeAssignment(Config.empty)
+        val ruleInstance2 = NoLineBreakBeforeAssignment(Config.empty)
+        val ruleInstance3 = NoLineBreakBeforeAssignment(Config.empty)
 
-        assertThat(rule.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
+        assertThat(ruleInstance1.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
 
         ktFile.modifiedText = "fun main() = Unit\n"
-        assertThat(rule.visitFile(ktFile, FakeLanguageVersionSettings())).isEmpty()
+        assertThat(ruleInstance2.visitFile(ktFile, FakeLanguageVersionSettings())).isEmpty()
 
         ktFile.modifiedText = violating
-        assertThat(rule.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
+        assertThat(ruleInstance3.visitFile(ktFile, FakeLanguageVersionSettings())).hasSize(1)
     }
 }

@@ -4,30 +4,24 @@ plugins {
 }
 
 val extraDepsToPackage = configurations.register("extraDepsToPackage")
-val ktlintToBundle = configurations.register("ktlintToBundle")
+configurations.implementation {
+    extendsFrom(extraDepsToPackage)
+}
 
 dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
-    // compileOnly so ktlint-repackage is not listed in the published POM (it's bundled into the JAR)
-    compileOnly(projects.detektRulesKtlintWrapper.ktlintRepackage) {
-        attributes {
-            attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
-        }
+
+    extraDepsToPackage(libs.ktlint.ruleEngine) {
+        exclude(group = "org.jetbrains.kotlin")
     }
-    ktlintToBundle(projects.detektRulesKtlintWrapper.ktlintRepackage) {
-        attributes {
-            attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
-        }
+    extraDepsToPackage(libs.ktlint.rulesetStandard) {
+        exclude(group = "org.jetbrains.kotlin")
     }
+    extraDepsToPackage(libs.ec4j)
 
     runtimeOnly(libs.slf4j.api)
 
-    testImplementation(projects.detektRulesKtlintWrapper.ktlintRepackage) {
-        attributes {
-            attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
-        }
-    }
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
@@ -45,10 +39,10 @@ dependencies {
 
 tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
-    dependsOn(ktlintToBundle, extraDepsToPackage)
+    dependsOn(configurations.runtimeClasspath, extraDepsToPackage)
     from(
-        ktlintToBundle.get().map { zipTree(it) },
-        extraDepsToPackage.get().map { zipTree(it) },
+        { configurations.runtimeClasspath.get().map { zipTree(it) } },
+        { extraDepsToPackage.get().map { zipTree(it) } },
     )
 }
 
