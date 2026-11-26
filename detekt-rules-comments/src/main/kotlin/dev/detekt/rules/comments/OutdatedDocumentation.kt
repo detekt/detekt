@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.PsiChildRange
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
@@ -118,6 +119,16 @@ class OutdatedDocumentation(config: Config) :
         super.visitNamedFunction(function)
         getOutdatedDocumentationViolations(function) { getFunctionDeclarations(function) }.forEach { message ->
             reportFinding(function, message)
+        }
+    }
+
+    override fun visitProperty(property: KtProperty) {
+        super.visitProperty(property)
+        if (!matchTypeParameters || property.typeParameters.isEmpty()) return
+        getOutdatedDocumentationViolations(property) {
+            property.typeParameters.mapNotNull { it.name.toTypedParamOrNull() }
+        }.forEach { message ->
+            reportFinding(property, message)
         }
     }
 
