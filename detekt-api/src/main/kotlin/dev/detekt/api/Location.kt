@@ -3,7 +3,6 @@ package dev.detekt.api
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import dev.drewhamilton.poko.Poko
-import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnInPsiFile
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
@@ -56,7 +55,10 @@ class Location(val source: SourceLocation, val endSource: SourceLocation, val te
 
         private fun lineAndColumn(element: PsiElement, range: TextRange): PsiDiagnosticUtils.LineAndColumn =
             if (element.containingFile.text.isNotEmpty()) {
-                getLineAndColumnInPsiFile(element.containingFile, range)
+                PsiDiagnosticUtils.offsetToLineAndColumn(
+                    element.containingFile.viewProvider.document,
+                    range.startOffset
+                )
             } else {
                 PsiDiagnosticUtils.LineAndColumn(1, 1, null)
             }
