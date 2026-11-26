@@ -1,6 +1,7 @@
 package dev.detekt.rules.ktlintwrapper
 
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.JavaDummyElement
 import com.intellij.psi.impl.source.JavaDummyHolder
 import com.pinterest.ktlint.rule.engine.core.api.AutocorrectDecision
@@ -22,7 +23,10 @@ import dev.detekt.api.modifiedText
 import dev.detekt.api.valueOrNull
 import dev.detekt.psi.absolutePath
 import org.ec4j.core.model.Property
+import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import java.nio.file.Path
 
 /**
@@ -95,9 +99,16 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
         return EditorConfig(properties)
     }
 
-    private fun emitFinding(offset: Int, message: String, canBeAutoCorrected: Boolean) {
+    /**
+     * Reports the finding unless it is suppressed by a ktlint suppression (`@Suppress("ktlint")` or
+     * `@Suppress("ktlint:<rule-set-id>:<rule-id>")`). Returns `true` when the finding is suppressed.
+     */
+    private fun emitFinding(offset: Int, message: String, canBeAutoCorrected: Boolean): Boolean {
         // Always convert KtLint offsets to lines/columns.
         // The node used to report the finding may be not the same used for the offset (e.g. in NoUnusedImports).
+        val psiElementAtOffset = checkNotNull(root.findElementAt(offset))
+        if (psiElementAtOffset.isSuppressedByKtlint()) return true
+
         val (line, column) = positionByOffset(offset)
         val location = Location(
             source = SourceLocation(line, column),
@@ -106,7 +117,6 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
             text = TextLocation(offset, offset + 1),
             path = originalFilePath
         )
-        val psiElementAtOffset = checkNotNull(root.findElementAt(offset))
         val entity = Entity.from(psiElementAtOffset, location)
 
         if (canBeAutoCorrected && autoCorrect) {
@@ -114,19 +124,42 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
         } else {
             report(Finding(entity, message))
         }
+        return false
     }
+
+    private fun PsiElement.isSuppressedByKtlint(): Boolean {
+        val acceptedSuppressionIds = setOf(
+            "ktlint",
+            "ktlint:${wrapping.ruleId.ruleSetId.value}",
+            "ktlint:${wrapping.ruleId.value}",
+        )
+        return generateSequence(this) { it.parent }
+            .filterIsInstance<KtAnnotated>()
+            .flatMap { it.annotationEntries }
+            .filter { it.shortName?.asString() in setOf("Suppress", "SuppressWarnings") }
+            .flatMap { it.valueArguments }
+            .mapNotNull { it.getArgumentExpression() }
+            // Check all string literals in each annotation argument for a matching suppression id.
+            .flatMap { expression ->
+                listOf(expression) + expression.collectDescendantsOfType<KtStringTemplateExpression>()
+            }
+            .filterIsInstance<KtStringTemplateExpression>()
+            .map { it.text.removeSurrounding("\"") }
+            .any { it in acceptedSuppressionIds }
+    }
+
+    private fun autocorrectDecision(suppressed: Boolean): AutocorrectDecision =
+        if (autoCorrect && !suppressed) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
 
     private fun beforeVisitChildNodes(node: ASTNode) {
         wrapping.beforeVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
-            emitFinding(offset, errorMessage, canBeAutoCorrected)
-            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
+            autocorrectDecision(emitFinding(offset, errorMessage, canBeAutoCorrected))
         }
     }
 
     private fun afterVisitChildNodes(node: ASTNode) {
         wrapping.afterVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
-            emitFinding(offset, errorMessage, canBeAutoCorrected)
-            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
+            autocorrectDecision(emitFinding(offset, errorMessage, canBeAutoCorrected))
         }
     }
 
