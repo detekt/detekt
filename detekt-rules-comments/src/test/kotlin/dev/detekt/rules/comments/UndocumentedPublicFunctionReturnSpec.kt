@@ -194,6 +194,34 @@ class UndocumentedPublicFunctionReturnSpec(private val env: KotlinEnvironmentCon
         }
 
         @Test
+        fun `does not report functions in local classes`() {
+            val code = """
+                fun outer() {
+                    class LocalCounter {
+                        /**
+                         * Returns a number.
+                         */
+                        fun count() = 42
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report functions in anonymous objects`() {
+            val code = """
+                private val counter = object {
+                    /**
+                     * Returns a number.
+                     */
+                    fun count() = 42
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `does not report overridden functions`() {
             val code = """
                 interface Counter {

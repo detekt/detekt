@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.isObjectLiteral
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.jetbrains.kotlin.psi.psiUtil.parents
 
@@ -86,11 +87,11 @@ class UndocumentedPublicFunctionReturn(config: Config) :
         )
     }
 
-    private fun KtNamedFunction.shouldBeDocumented(): Boolean {
-        if (isLocal) return false
-        return parents.filterIsInstance<KtClassOrObject>().all { it.isPublic } &&
-            isPublicNotOverridden()
-    }
+    private fun KtNamedFunction.shouldBeDocumented(): Boolean =
+        !isLocal && isPublicNotOverridden() &&
+            parents.filterIsInstance<KtClassOrObject>().all {
+                it.isPublic && !it.isLocal && !it.isObjectLiteral()
+            }
 
     @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
