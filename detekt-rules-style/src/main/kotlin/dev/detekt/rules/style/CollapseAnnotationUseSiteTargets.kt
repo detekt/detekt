@@ -7,14 +7,17 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.annotations.KaAnnotationTarget
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.applicableAnnotationTargets
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.analysis.api.types.type
 import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationUseSiteTarget
-import org.jetbrains.kotlin.descriptors.annotations.KotlinTarget
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -85,12 +88,13 @@ class CollapseAnnotationUseSiteTargets(config: Config) :
 
         analyze(parameter) {
             val parameterSymbol = parameter.symbol as? KaValueParameterSymbol ?: return
-            val propertySymbol = parameterSymbol.generatedPrimaryConstructorProperty ?: return
+            val propertySymbol = parameterSymbol.primaryConstructorProperty ?: return
             check(parameter, propertySymbol, isConstructorParameter = true, isMutable = parameter.isMutable)
         }
     }
 
-    private fun KaSession.check(
+    context(_: KaSession)
+    private fun check(
         declaration: KtDeclaration,
         propertySymbol: KaPropertySymbol,
         isConstructorParameter: Boolean,
@@ -101,7 +105,7 @@ class CollapseAnnotationUseSiteTargets(config: Config) :
         val annotations = declaration.annotationEntries.mapNotNull { resolvedAnnotation(it) }
         annotations.groupBy { AnnotationKey(it.classId, it.arguments) }.values.forEach { group ->
             val annotationClass = group.first().annotationClass
-            val applicableTargets = annotationClass.annotationApplicableTargets ?: return@forEach
+            val applicableTargets = annotationClass.applicableAnnotationTargets ?: return@forEach
             val propagatedTargets = propagatedTargets(
                 applicableTargets,
                 propertySymbol,
@@ -127,28 +131,29 @@ class CollapseAnnotationUseSiteTargets(config: Config) :
     }
 
     private fun propagatedTargets(
-        applicableTargets: Set<KotlinTarget>,
+        applicableTargets: Set<KaAnnotationTarget>,
         propertySymbol: KaPropertySymbol,
         isConstructorParameter: Boolean,
         isMutable: Boolean,
     ): Set<AnnotationUseSiteTarget> =
         buildSet {
-            if (KotlinTarget.PROPERTY in applicableTargets) add(AnnotationUseSiteTarget.PROPERTY)
-            if (KotlinTarget.FIELD in applicableTargets && propertySymbol.hasBackingField) {
+            if (KaAnnotationTarget.PROPERTY in applicableTargets) add(AnnotationUseSiteTarget.PROPERTY)
+            if (KaAnnotationTarget.FIELD in applicableTargets && propertySymbol.hasBackingField) {
                 add(AnnotationUseSiteTarget.FIELD)
             }
-            if (KotlinTarget.PROPERTY_GETTER in applicableTargets && propertySymbol.hasGetter) {
+            if (KaAnnotationTarget.PROPERTY_GETTER in applicableTargets && propertySymbol.hasGetter) {
                 add(AnnotationUseSiteTarget.PROPERTY_GETTER)
             }
-            if (KotlinTarget.VALUE_PARAMETER in applicableTargets && isConstructorParameter) {
+            if (KaAnnotationTarget.VALUE_PARAMETER in applicableTargets && isConstructorParameter) {
                 add(AnnotationUseSiteTarget.CONSTRUCTOR_PARAMETER)
             }
-            if (KotlinTarget.VALUE_PARAMETER in applicableTargets && isMutable && propertySymbol.hasSetter) {
+            if (KaAnnotationTarget.VALUE_PARAMETER in applicableTargets && isMutable && propertySymbol.hasSetter) {
                 add(AnnotationUseSiteTarget.SETTER_PARAMETER)
             }
         }
 
-    private fun KaSession.resolvedAnnotation(entry: KtAnnotationEntry): ResolvedAnnotation? {
+    context(_: KaSession)
+    private fun resolvedAnnotation(entry: KtAnnotationEntry): ResolvedAnnotation? {
         val annotationClass = entry.typeReference?.type?.symbol as? KaClassSymbol ?: return null
         val classId = annotationClass.classId ?: return null
         val useSiteTarget = entry.useSiteTarget?.getAnnotationUseSiteTarget()
@@ -161,7 +166,8 @@ class CollapseAnnotationUseSiteTargets(config: Config) :
         )
     }
 
-    private fun KaSession.isInJvmRecord(declaration: KtDeclaration): Boolean =
+    context(_: KaSession)
+    private fun isInJvmRecord(declaration: KtDeclaration): Boolean =
         declaration.containingClassOrObject?.annotationEntries?.any {
             it.typeReference?.type?.symbol?.classId == jvmRecordClassId
         } == true
