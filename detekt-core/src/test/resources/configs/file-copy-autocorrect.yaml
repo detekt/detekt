@@ -1,0 +1,5 @@
+test-rule-set:
+  autoCorrect: true
+  FileCopyAutoCorrectRule:
+    active: true
+    autoCorrect: true
