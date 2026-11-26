@@ -30,6 +30,25 @@ class OutdatedDocumentationSpec {
             """.trimIndent()
             assertThat(subject.lint(docWithoutParamAndPropertyTags)).isEmpty()
         }
+
+        @Test
+        fun `should not report parameter documented with its own KDoc`() {
+            val code = """
+                /**
+                 * Some class description
+                 *
+                 * @param someParam Description of param
+                 */
+                class MyClass(
+                    /**
+                     * Description of property
+                     */
+                    val someProp: String,
+                    someParam: String,
+                )
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 
     @Nested
@@ -941,6 +960,135 @@ class OutdatedDocumentationSpec {
             """.trimIndent()
             assertThat(subject.lint(code)).singleElement()
                 .hasMessage("@property a type doesn't match corresponding declaration of type param.")
+        }
+    }
+
+    @Nested
+    inner class `configuration reportIfNonePresent` {
+        private val configuredSubject =
+            OutdatedDocumentation(TestConfig("reportIfNonePresent" to true))
+
+        @Test
+        fun `should report when doc does not contain any property or param tags`() {
+            val code = """
+                /**
+                 * Some class description
+                 */
+                class MyClass(someParam: String, val someProp: String)
+            """.trimIndent()
+            assertThat(configuredSubject.lint(code))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "Documentation of someParam is missing.",
+                    "Documentation of someProp is missing.",
+                )
+        }
+
+        @Test
+        fun `should not report when doc does not contain any tags but all declarations are documented`() {
+            val code = """
+                /**
+                 * Some class description with
+                 *
+                 * @param someParam Description of param
+                 * @property someProp Description of property
+                 */
+                class MyClass(someParam: String, val someProp: String)
+            """.trimIndent()
+            assertThat(configuredSubject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should report when function doc does not contain any tags`() {
+            val code = """
+                /**
+                 * Some function description
+                 */
+                fun myFun(someParam: String) {}
+            """.trimIndent()
+            assertThat(configuredSubject.lint(code)).singleElement()
+                .hasMessage("Documentation of someParam is missing.")
+        }
+
+        @Test
+        fun `should report when type parameters are not documented`() {
+            val code = """
+                /**
+                 * Some class description
+                 */
+                class MyClass<T>(someParam: String)
+            """.trimIndent()
+            assertThat(configuredSubject.lint(code))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "Documentation of T is missing.",
+                    "Documentation of someParam is missing.",
+                )
+        }
+
+        @Test
+        fun `should not report when parameter is documented with its own KDoc`() {
+            val code = """
+                /**
+                 * Some class description
+                 */
+                class MyClass(
+                    /**
+                     * Description of param
+                     */
+                    someParam: String,
+                    /**
+                     * Description of property
+                     */
+                    val someProp: String,
+                )
+            """.trimIndent()
+            assertThat(configuredSubject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should report only params without own KDoc`() {
+            val code = """
+                /**
+                 * Some function description
+                 */
+                fun myFun(
+                    /**
+                     * Description of documented param
+                     */
+                    documentedParam: String,
+                    undocumentedParam: Int,
+                ) {}
+            """.trimIndent()
+            assertThat(configuredSubject.lint(code)).singleElement()
+                .hasMessage("Documentation of undocumentedParam is missing.")
+        }
+
+        @Test
+        fun `should not report when doc is missing`() {
+            val code = """
+                class MyClass(someParam: String)
+            """.trimIndent()
+            assertThat(configuredSubject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when exhaustive is off`() {
+            val subject = OutdatedDocumentation(
+                TestConfig(
+                    "reportIfNonePresent" to true,
+                    "exhaustive" to false,
+                )
+            )
+            val code = """
+                /**
+                 * Some class description
+                 */
+                class MyClass(someParam: String)
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
