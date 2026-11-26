@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException
 
 internal interface DetektInvoker {
 
-    fun invokeCli(arguments: List<String>, classpath: Set<File>, taskName: String, ignoreFailures: Boolean = false)
+    fun invokeCli(arguments: List<String>, classpath: Set<File>, taskName: String, ignoreFailures: Boolean)
 
     companion object {
 
