@@ -14,12 +14,20 @@ import dev.detekt.psi.isNullable
 import dev.detekt.psi.isOpen
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.pointers.restoreSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
+import org.jetbrains.kotlin.analysis.api.types.isMarkedNullable
+import org.jetbrains.kotlin.analysis.api.types.isNullable
+import org.jetbrains.kotlin.analysis.api.types.type
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -557,7 +565,7 @@ class CanBeNonNullable(config: Config) :
             val delegate = this ?: return true
             return analyze(delegate) {
                 @OptIn(KaExperimentalApi::class)
-                val functionSymbol = delegate.resolveCall()?.valueGetterCall?.symbol ?: return true
+                val functionSymbol = delegate.resolveSuccessfulCall()?.valueGetterCall?.symbol ?: return true
 
                 with(functionSymbol) {
                     if (returnType is KaTypeParameterType) {

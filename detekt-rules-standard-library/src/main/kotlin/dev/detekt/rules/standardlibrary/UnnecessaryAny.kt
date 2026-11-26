@@ -7,25 +7,24 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.firstParameterOrNull
 import dev.detekt.psi.isCalling
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.isAnyType
-import org.jetbrains.kotlin.analysis.api.components.isBooleanType
-import org.jetbrains.kotlin.analysis.api.components.isMarkedNullable
-import org.jetbrains.kotlin.analysis.api.components.isSubtypeOf
-import org.jetbrains.kotlin.analysis.api.components.resolveCall
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
-import org.jetbrains.kotlin.analysis.api.resolution.KaSingleCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaSimpleCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDestructuringDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.classId
+import org.jetbrains.kotlin.analysis.api.types.isMarkedNullable
+import org.jetbrains.kotlin.analysis.api.types.isSubtypeOf
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -82,7 +81,6 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun shouldBeReported(expression: KtCallExpression): String? {
@@ -155,7 +153,6 @@ class UnnecessaryAny(config: Config) :
             }
         }
 
-    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount")
     context(_: KaSession)
     private fun isUsageOfValueAndItEligible(
@@ -186,11 +183,11 @@ class UnnecessaryAny(config: Config) :
             }
 
             itRefCountInLeft == 1 -> {
-                val itSymbol = (leftExpression as? KtNameReferenceExpression)?.resolveSymbol()
+                val itSymbol = (leftExpression as? KtNameReferenceExpression)?.resolveSuccessfulSymbol()
                 if (itSymbol != parameter) return null
                 val itExpressionType = (itSymbol as? KaVariableSymbol)?.returnType ?: return null
                 val valueExpressionType =
-                    ((rightExpression as? KtResolvableCall)?.resolveCall() as? KaSingleCall<*, *>)
+                    ((rightExpression as? KtResolvableCall)?.resolveSuccessfulCall() as? KaSimpleCall<*, *>)
                         ?.signature
                         ?.symbol
                         ?.returnType
@@ -208,22 +205,22 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) =
         collectDescendantsOfType<KtNameReferenceExpression>().count {
             @OptIn(KaExperimentalApi::class)
-            it.resolveSymbol() == symbol
+            it.resolveSuccessfulSymbol() == symbol
         }
 
-    @OptIn(KaContextParameterApi::class)
     context(_: KaSession)
     private fun KtExpression?.isCallingEquals(): Boolean {
         if (this == null) return false
         val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol ?: return false
         return symbol.name == Name.identifier("equals") &&
-            symbol.returnType.isBooleanType &&
-            symbol.valueParameters.singleOrNull()?.returnType?.let { it.isAnyType && it.isMarkedNullable } == true
+            symbol.returnType.classId == KaStandardTypeClassIds.BOOLEAN &&
+            symbol.valueParameters.singleOrNull()?.returnType?.let {
+                it.classId == KaStandardTypeClassIds.ANY && it.isMarkedNullable
+            } == true
     }
 
     companion object {

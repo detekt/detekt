@@ -6,11 +6,14 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.resolveToSymbols
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaLocalVariableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.fullyExpandedType
+import org.jetbrains.kotlin.analysis.api.types.isFunctionType
+import org.jetbrains.kotlin.analysis.api.types.type
 import org.jetbrains.kotlin.idea.references.KtReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -157,7 +160,6 @@ class UnnecessarySubjectlessWhen(config: Config) :
         }
     }
 
-    @OptIn(KaExperimentalApi::class)
     private fun KtNameReferenceExpression.resolvesToStableValue(): Boolean =
         analyze(this) {
             val symbol = references
@@ -169,7 +171,7 @@ class UnnecessarySubjectlessWhen(config: Config) :
 
             when (symbol) {
                 is KaValueParameterSymbol ->
-                    symbol.generatedPrimaryConstructorProperty?.isVal != false
+                    symbol.primaryConstructorProperty?.isVal != false
 
                 is KaLocalVariableSymbol ->
                     symbol.isVal && (symbol.psi as? KtProperty)?.delegateExpression == null

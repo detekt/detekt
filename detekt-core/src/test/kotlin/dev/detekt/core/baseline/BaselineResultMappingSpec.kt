@@ -171,7 +171,7 @@ class BaselineResultMappingSpec {
 
         assertThat(baselineFile).hasContent(
             """
-                <?xml version="1.0" ?>
+                <?xml version='1.0' encoding='UTF-8'?>
                 <SmellBaseline>
                   <ManuallySuppressedIssues>
                     <ID>LongParameterList:TestFile.kt:Signature</ID>
@@ -195,7 +195,7 @@ class BaselineResultMappingSpec {
 
         assertThat(baselineFile).hasContent(
             """
-                <?xml version="1.0" ?>
+                <?xml version='1.0' encoding='UTF-8'?>
                 <SmellBaseline>
                   <ManuallySuppressedIssues>
                     <ID>LongParameterList:TestFile.kt:Signature</ID>

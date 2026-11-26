@@ -13,14 +13,14 @@ import dev.detekt.api.config
 import dev.detekt.psi.isActual
 import dev.detekt.psi.isLateinit
 import dev.detekt.psi.isOverride
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
+import org.jetbrains.kotlin.K1Deprecation
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.resolveSymbol
 import org.jetbrains.kotlin.analysis.api.components.resolveToCall
+import org.jetbrains.kotlin.analysis.api.resolution.resolveSuccessfulSymbol
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.session.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -104,7 +104,6 @@ class VarCouldBeVal(config: Config) :
         fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> =
             declarationCandidates.filterNot { it.hasAssignments() }
 
-        @OptIn(KaContextParameterApi::class)
         context(_: KaSession)
         private fun KtNamedDeclaration.hasAssignments(): Boolean {
             val declarationName = nameAsSafeName.toString()
@@ -165,7 +164,7 @@ class VarCouldBeVal(config: Config) :
                 if (expressionRight != null) {
                     analyze(expression) {
                         @OptIn(KaExperimentalApi::class)
-                        val symbol = (expression.left as? KtNameReferenceExpression)?.resolveSymbol()
+                        val symbol = (expression.left as? KtNameReferenceExpression)?.resolveSuccessfulSymbol()
                         if (symbol != null) {
                             evaluateAssignmentExpression(symbol, expressionRight)
                         }
@@ -202,7 +201,6 @@ class VarCouldBeVal(config: Config) :
             }
         }
 
-        @OptIn(KaContextParameterApi::class)
         context(_: KaSession)
         private fun evaluateReturnExpression(returnedExpression: KtExpression) {
             when (returnedExpression) {
@@ -214,7 +212,7 @@ class VarCouldBeVal(config: Config) :
 
                 is KtNameReferenceExpression -> {
                     @OptIn(KaExperimentalApi::class)
-                    returnedExpression.resolveSymbol()?.let {
+                    returnedExpression.resolveSuccessfulSymbol()?.let {
                         escapeCandidates[it]?.forEach(declarationCandidates::remove)
                     }
                 }
@@ -241,6 +239,7 @@ class VarCouldBeVal(config: Config) :
                 else -> {
                     // Check for whether property belongs to an anonymous object
                     // defined in a function.
+                    @OptIn(K1Deprecation::class)
                     containingClassOrObject
                         ?.takeIf { it.isObjectLiteral() }
                         ?.containingNonLocalDeclaration() != null

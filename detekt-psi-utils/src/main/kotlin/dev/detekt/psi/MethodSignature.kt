@@ -1,6 +1,9 @@
 package dev.detekt.psi
 
-import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.expressions.expressionType
+import org.jetbrains.kotlin.analysis.api.session.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaStandardTypeClassIds
+import org.jetbrains.kotlin.analysis.api.types.classId
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -50,6 +53,6 @@ fun KtNamedFunction.hasImplicitUnitReturnType(): Boolean {
     if (hasBlockBody()) return false
 
     return analyze(this) {
-        bodyExpression?.expressionType?.isUnitType == true
+        bodyExpression?.expressionType?.classId == KaStandardTypeClassIds.UNIT
     }
 }

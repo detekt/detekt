@@ -22,6 +22,8 @@ dependencies {
 
     runtimeOnly(libs.slf4j.api)
 
+    implementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
+    implementation(libs.kotlin.analysisApiIntellijImplementationComponents)
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
