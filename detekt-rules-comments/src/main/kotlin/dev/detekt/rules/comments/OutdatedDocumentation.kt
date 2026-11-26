@@ -124,7 +124,7 @@ class OutdatedDocumentation(config: Config) :
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
-        if (property.typeParameters.isEmpty()) return
+        if (!matchTypeParameters || property.typeParameters.isEmpty()) return
         getOutdatedDocumentationViolations(property) {
             property.typeParameters.mapNotNull { it.name.toTypedParamOrNull() }
         }.forEach { message ->

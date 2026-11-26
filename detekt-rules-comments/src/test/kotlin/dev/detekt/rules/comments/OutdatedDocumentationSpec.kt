@@ -741,6 +741,17 @@ class OutdatedDocumentationSpec {
             """.trimIndent()
             assertThat(configuredSubject.lint(incorrectFunctionTypeParams)).isEmpty()
         }
+
+        @Test
+        fun `should not report when property type parameters mismatch and configuration is off`() {
+            val incorrectPropertyTypeParams = """
+                /**
+                 * @param S The type of the value.
+                 */
+                val <T> T.someValue: T get() = this
+            """.trimIndent()
+            assertThat(configuredSubject.lint(incorrectPropertyTypeParams)).isEmpty()
+        }
     }
 
     @Nested
