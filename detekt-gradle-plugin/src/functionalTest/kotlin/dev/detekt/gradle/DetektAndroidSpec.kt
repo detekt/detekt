@@ -539,7 +539,7 @@ class DetektAndroidSpec {
         }
 
         @Nested
-        inner class `configures android tasks android tasks have javac intermediates on classpath` {
+        inner class `configures android tasks with compiled classes on classpath` {
             val projectLayout = ProjectLayout(
                 numberOfSourceFilesInRootPerSourceDir = 0,
             ).apply {
@@ -563,18 +563,27 @@ class DetektAndroidSpec {
             }
 
             @Test
-            @DisplayName("task :app:detektMain has javac intermediates on the classpath")
+            @DisplayName("task :app:detektMain has compiled classes on the classpath")
             fun libDetektMain() {
                 gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
-                    assertThat(buildResult.output).doesNotContain("UnreachableCode")
+                    assertThat(buildResult.tasks.map { it.path }).contains(
+                        ":app:compileDebugKotlin",
+                        ":app:compileDebugJavaWithJavac",
+                        ":app:dataBindingGenBaseClassesDebug",
+                    )
                 }
             }
 
             @Test
-            @DisplayName("task :app:detektTest has javac intermediates on the classpath")
+            @DisplayName("task :app:detektTest has compiled classes on the classpath")
             fun libDetektTest() {
                 gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
-                    assertThat(buildResult.output).doesNotContain("UnreachableCode")
+                    assertThat(buildResult.tasks.map { it.path }).contains(
+                        ":app:compileDebugUnitTestKotlin",
+                        ":app:compileDebugUnitTestJavaWithJavac",
+                        ":app:compileDebugAndroidTestKotlin",
+                        ":app:compileDebugAndroidTestJavaWithJavac",
+                    )
                 }
             }
         }

@@ -1,11 +1,16 @@
 package dev.detekt.gradle.plugin.internal
 
+import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.Component
+import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.api.variant.Variant
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.plugin.DetektPlugin
 import org.gradle.api.Project
+import org.gradle.api.file.Directory
+import org.gradle.api.file.RegularFile
+import org.gradle.kotlin.dsl.listProperty
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 
 internal object DetektAndroidCompilations {
@@ -30,16 +35,26 @@ internal object DetektAndroidCompilations {
         val source = project.objects.fileCollection().from(kotlin)
         kotlinAndroid.target.compilations.matching { it.name == name }
             .configureEach { compilation ->
-                project.registerJvmCompilationDetektTask(
+                val jars = project.objects.listProperty<RegularFile>()
+                val directories = project.objects.listProperty<Directory>()
+                val detektTask = project.registerJvmCompilationDetektTask(
                     extension = extension,
                     compilation = compilation,
                     source = source,
+                    classes = project.files(jars, directories),
                 )
-                project.registerJvmCompilationCreateBaselineTask(
+                val baselineTask = project.registerJvmCompilationCreateBaselineTask(
                     extension = extension,
                     compilation = compilation,
                     source = source,
+                    classes = project.files(jars, directories),
                 )
+
+                listOf(detektTask, baselineTask).forEach { task ->
+                    artifacts.forScope(ScopedArtifacts.Scope.PROJECT)
+                        .use(task)
+                        .toGet(ScopedArtifact.CLASSES, { jars }, { directories })
+                }
             }
     }
 
