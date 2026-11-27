@@ -51,6 +51,49 @@ class ForbiddenPositionBasedDestructuringSpec(private val env: KotlinEnvironment
     }
 
     @Test
+    fun `reports a type parameter bounded by a forbidden class`() {
+        val code = """
+            data class Point(val x: Int, val y: Int)
+            fun <T : Point> use(point: T) {
+                val [x, y] = point
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code, languageVersionSettings = settings)).hasSize(1)
+    }
+
+    @Test
+    fun `allows type parameters bounded by an allowed class`() {
+        val code = """
+            fun <T : Pair<Int, Int>> direct(pair: T) {
+                val [a, b] = pair
+            }
+            fun <T : Pair<Int, Int>, U : T> indirect(pair: U) {
+                val [a, b] = pair
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code, languageVersionSettings = settings)).isEmpty()
+    }
+
+    @Test
+    fun `honors a configured bound when a type parameter has multiple constraints`() {
+        val code = """
+            package example
+            interface Tagged
+            interface Coordinate {
+                operator fun component1(): Int
+                operator fun component2(): Int
+            }
+            fun <T> use(point: T) where T : Tagged, T : Coordinate {
+                val [x, y] = point
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code, languageVersionSettings = settings)).hasSize(1)
+
+        val rule = ForbiddenPositionBasedDestructuring(TestConfig("allowedClasses" to listOf("example.Coordinate")))
+        assertThat(rule.lintWithContext(env, code, languageVersionSettings = settings)).isEmpty()
+    }
+
+    @Test
     fun `uses fully qualified names from configuration`() {
         val code = """
             package example
