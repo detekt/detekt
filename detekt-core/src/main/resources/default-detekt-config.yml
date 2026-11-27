@@ -699,6 +699,11 @@ style:
   ForbiddenOptIn:
     active: false
     markerClasses: []
+  ForbiddenPositionBasedDestructuring:
+    active: false
+    allowedClasses:
+      - 'kotlin.Pair'
+      - 'kotlin.Triple'
   ForbiddenSuperclass:
     active: false
     parentClasses: []
